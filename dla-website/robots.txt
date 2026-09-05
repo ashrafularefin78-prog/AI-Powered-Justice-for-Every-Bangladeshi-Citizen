@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /_archive/
+Disallow: /_verify_
+
+Sitemap: https://dla.example.com/sitemap.xml

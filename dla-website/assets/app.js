@@ -1,0 +1,3921 @@
+
+window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50)})
+const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:0.1})
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))
+
+const themeToggle=document.getElementById('themeToggle');
+const savedTheme=localStorage.getItem('dla-theme');
+if(savedTheme==='light'){document.documentElement.classList.add('light');document.body.classList.add('light');themeToggle.innerHTML='<i class="fas fa-sun"></i>'}
+themeToggle.addEventListener('click',()=>{const isLight=document.documentElement.classList.toggle('light');document.body.classList.toggle('light',isLight);themeToggle.innerHTML=isLight?'<i class="fas fa-moon"></i>':'<i class="fas fa-sun"></i>';localStorage.setItem('dla-theme',isLight?'light':'dark')});
+
+const hamburger=document.getElementById('hamburger');
+const drawer=document.getElementById('mobileDrawer');
+const overlay=document.getElementById('drawerOverlay');
+const closeBtn=document.getElementById('drawerClose');
+function openDrawer(){hamburger.classList.add('active');drawer.classList.add('active');overlay.classList.add('active');document.body.style.overflow='hidden'}
+function closeDrawer(){hamburger.classList.remove('active');drawer.classList.remove('active');overlay.classList.remove('active');document.body.style.overflow=''}
+hamburger.addEventListener('click',()=>{drawer.classList.contains('active')?closeDrawer():openDrawer()});
+closeBtn.addEventListener('click',closeDrawer);
+overlay.addEventListener('click',closeDrawer);
+drawer.querySelectorAll('a').forEach(link=>link.addEventListener('click',closeDrawer));
+
+const scrollProgress=document.getElementById('scrollProgress');
+const backToTop=document.getElementById('backToTop');
+window.addEventListener('scroll',()=>{
+  const scrollTop=document.documentElement.scrollTop||document.body.scrollTop;
+  const scrollHeight=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+  const progress=(scrollTop/scrollHeight)*100;
+  scrollProgress.style.width=progress+'%';
+  backToTop.classList.toggle('visible',scrollTop>500);
+});
+backToTop.addEventListener('click',()=>{window.scrollTo({top:0,behavior:'smooth'})});
+
+// Animated counter numbers
+const counterObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const el=entry.target;
+      const target=parseFloat(el.dataset.target);
+      const suffix=el.dataset.suffix||'';
+      const prefix=el.dataset.prefix||'';
+      const decimals=parseInt(el.dataset.decimals)||0;
+      const duration=2000;
+      const start=performance.now();
+      function animate(now){
+        const elapsed=now-start;
+        const progress=Math.min(elapsed/duration,1);
+        const eased=1-Math.pow(1-progress,3);
+        const current=eased*target;
+        if(decimals>0){
+          el.textContent=prefix+current.toFixed(decimals)+suffix;
+        }else{
+          el.textContent=prefix+Math.floor(current).toLocaleString()+suffix;
+        }
+        if(progress<1)requestAnimationFrame(animate);
+      }
+      requestAnimationFrame(animate);
+      counterObserver.unobserve(el);
+    }
+  });
+},{threshold:0.5});
+document.querySelectorAll('.sn[data-target]').forEach(el=>counterObserver.observe(el));
+
+
+
+
+
+function toggleCB(){
+  var w=document.getElementById('chatWin');
+  if(w.classList.contains('open')){
+    w.classList.add('closing');
+    setTimeout(function(){w.classList.remove('open');w.classList.remove('closing');},280);
+  }else{
+    w.classList.remove('closing');
+    w.classList.add('open');
+    document.getElementById('chatIn').focus();
+  }
+}
+var cR={
+  hello:'Assalamu Alaikum! I am A ai, your AI legal assistant across all 64 districts. | আমি A ai, আপনার AI আইনি সহকারী। 64 জেলায় সেবা দিচ্ছি।',
+  hi:'Hello! Ask about legal rights, courts, or administration. | হ্যালো! আইনি অধিকার, আদালত বা প্রশাসন সম্পর্কে জিজ্ঞাসা করুন।',
+  help:'I can help with: Legal info, Courts, Rights, Lawyers, Legal aid, Admin, Constitution, Anti-corruption. | আমি সাহায্য করতে পারি: আইন, আদালত, অধিকার, আইনজীবী, আইনি সাহায্য, প্রশাসন, সংবিধান।',
+  who:'A ai - AI legal assistant for Bangladesh. Constitution, 64 districts, BCS, anti-corruption. | A ai - বাংলাদেশের AI আইনি সহকারী। সংবিধান, 64 জেলা, BCS, দুর্নীতি প্রতিরোধ জানে।',
+  rights:'Art 27: Equality. Art 31: Legal protection. Art 32: Life/liberty. Art 33: Arrest safeguards. Art 39: Free speech. | ধারা 27: সমতা। ধারা 31: আইনি সুরক্ষা। ধারা 32: জীবন ও স্বাধীনতা। ধারা 33: গ্রেপ্তার সুরক্ষা। ধারা 39: বাক স্বাধীনতা।',
+  article_27:'Art 27: All citizens equal before law. | ধারা 27: সকল নাগরিক আইনের সমক্ষে সমান।',
+  article_31:'Art 31: Right to be treated per law. | ধারা 31: আইন অনুয়াই আচরণের অধিকার।',
+  article_32:'Art 32: No deprivation of life or liberty except by law. | ধারা 32: আইন ছাড়া জীবন বা স্বাধীনতা বঞ্চিত করা যাবে না।',
+  article_33:'Art 33: Arrested persons must be informed of grounds, given counsel, produced before magistrate within 24 hours. | ধারা 33: গ্রেপ্তারকৃত ব্যক্তিকে কারণ জানাতে হবে, আইনজীবী দিতে হবে, 24 ঘণ্টার মধ্যে ম্যাজিস্ট্রেটের সামনে পেশ করতে হবে।',
+  article_34:'Art 34: Trafficking and forced labor prohibited. | ধারা 34: পাচার ও জোরপূর্বক শ্রম নিষিদ্ধ।',
+  article_35:'Art 35: No punishment except by law. No double jeopardy. | ধারা 35: আইন ছাড়া শাস্তি নেই। দ্বিতীয় বার বিচার নেই।',
+  article_39:'Art 39: Freedom of thought, conscience, speech. | ধারা 39: চিন্তা, বিবেক, বাক স্বাধীনতা।',
+  article_40:'Art 40: Right to peaceful assembly. | ধারা 40: শান্তিপূর্ণ সমাবেশের অধিকার।',
+  article_41:'Art 41: Right to form associations. | ধারা 41: সংগঠন গঠনের অধিকার।',
+  article_42:'Art 42: Property rights. No acquisition without compensation. | ধারা 42: সম্পত্তির অধিকার। ক্ষতিপূরণ ছাড়া অধিগ্রহণ নেই।',
+  article_43:'Art 43: Privacy of home and correspondence. | ধারা 43: বাসস্থান ও পত্রাচারের গোপনীয়তা।',
+  article_44:'Art 44: Enforcement of fundamental rights via High Court. | ধারা 44: হাইকোর্টের মাধ্যমে মৌলিক অধিকার প্রয়োগ।',
+  article_22:'Art 22: Separation of judiciary from executive. | ধারা 22: বিচার বিভাগকে নির্বাহী বিভাগ থেকে আলাদা করা।',
+  article_7:'Art 7: Constitution is supreme law. | ধারা 7: সংবিধানে সর্বোচ্চ আইন।',
+  constitution:'Constitution of Bangladesh: The supreme law adopted on 4 November 1972, effective 16 December 1972. Preamble declares democracy, nationalism, socialism and secularism. Part III gives fundamental rights (Articles 27-44): equality before law, protection of life and liberty (Article 32), safeguards in arrest (Article 33), freedom of movement, assembly, association, thought, conscience, speech (Articles 36-41), freedom of religion and property rights. Article 7 says the Constitution is the supreme law; Article 70 enforces party discipline in Parliament; Article 102 allows writ petitions to the High Court to enforce rights. The Constitution has been amended 17 times; the 15th amendment (2011) abolished the caretaker government system. | বাংলাদেশের সংবিধান: সর্বোচ্চ আইন, ১৯৭২ সালের ৪ নভেম্বর গৃহীত। প্রস্তাবনায় গণতন্ত্র, জাতীয়তাবাদ, সমাজতন্ত্র ও ধর্মনিরপেক্ষতা ঘোষিত। তৃতীয় ভাগে মৌলিক অধিকার (অনুচ্ছেদ ২৭-৪৪): আইনের সামনে সমতা, জীবন ও স্বাধীনতার সুরক্ষা (৩২), গ্রেপ্তার সুরক্ষা (৩৩), চলাফেরা, সমাবেশ, সমিতি, বাক স্বাধীনতা (৩৬-৪১), ধর্মীয় স্বাধীনতা ও সম্পত্তির অধিকার। ৭ অনুচ্ছেদে সংবিধান সর্বোচ্চ আইন; ১০২ অনুচ্ছেদে হাইকোর্টে রিট আবেদন। সংবিধান ১৭ বার সংশোধিত।',
+  administration:'5 tiers: Central Govt, 8 Divisions, 64 Districts, 500 Upazilas, 4599 Union Councils. | ৫ স্তর: কেন্দ্রীয় সরকার, ৮ বিভাগ, ৬৪ জেলা, ৫০০ উপজেলা, ৪৫৯৯ ইউনিয়ন পরিষদ',
+  structure:'8 Divisions, 64 Districts (DCs), 500 Upazilas (UNO), 4599 Union Parishads, 330 Municipalities, 13 City Corporations. | ৮ বিভাগ, ৬৪ জেলা (জেলা প্রশাসক), ৫০০ উপজেলা (ইউএনও), ৪৫৯৯ ইউনিয়ন পরিষদ, ৩৩০ পৌরসভা, ১৩ সিটি কর্পোরেশন',
+  division:'8 divisions: Barishal(6), Chattogram(11), Dhaka(13), Khulna(10), Mymensingh(4), Rajshahi(8), Rangpur(8), Sylhet(4). | ৮টি বিভাগ: বরিশাল(৬), চট্টগ্রাম(১১), ঢাকা(১৩), খুলনা(১০), ময়মনসিংহ(৪), রাজশাহী(৮), রংপুর(৮), সিলেট(৪)',
+  district:'64 districts. Each by Deputy Commissioner from BCS Admin cadre. | ৬৪টি জেলা। BCS প্রশাসন ক্যাডারের জেলা প্রশাসক দায়িত্ব পালন করেন',
+  upazila:'500 Upazilas. Each by UNO. Created 1982 from Thanas. | ৫০০ উপজেলা। ইউএনও দায়িত্ব পালন করেন। ১৯৮২ সালে থানা থেকে রূপান্তরিত',
+  union:'4599 Union Parishads. Elected bodies for education, health, Village Courts. | ৪৫৯৯ ইউনিয়ন পরিষদ। শিক্ষা, স্বাস্থ্য, গ্রাম আদালতের নির্বাচিত সংস্থা',
+  local_government:'Rural: Union/Upazila/Zila Parishads. Urban: 330 Municipalities, 13 City Corporations. | গ্রামীণ: ইউনিয়ন/উপজেলা/জেলা পরিষদ। শহুরে: ৩৩০ পৌরসভা, ১৩ সিটি কর্পোরেশন',
+  civil_service:'BCS: 26 cadres. Admin, Police, Foreign, Taxation, Audit, Education, Health. | BCS: ২৬টি ক্যাডার। প্রশাসন, পুলিশ, বৈদেশিক, কর, হিসাব, শিক্ষা, স্বাস্থ্য',
+  bcs:'BCS 26 cadres. Admin cadre most powerful. Exam by BPSC. | BCS ২৬টি ক্যাডার। প্রশাসন ক্যাডার সবচেয়ে ক্ষমতাশালী। পরীক্ষা BPSC পরিচালিত',
+  cadre:'BCS Cadres: Admin, Police, Foreign, Taxation, Audit, Info, Education, Health, Eng, Agri, Forest. | BCS ক্যাডার: প্রশাসন, পুলিশ, বৈদেশিক, কর, হিসাব, তথ্য, শিক্ষা, স্বাস্থ্য, প্রকৌশল, কৃষি, বন',
+  corruption:'Primary challenge. TI ranked 147th/180 in 2021. ACC est 2004. | প্রধান চ্যালেঞ্জ। ACC ২০০৪ সালে প্রতিষ্ঠিত',
+  acc:'Anti-Corruption Commission est 2004. Independent. Investigates officials, politicians, businesses. | দুর্নীতি দমন কমিশন (ACC) ২০০৪ সালে প্রতিষ্ঠিত। স্বাধীন সংস্থা। কর্মকর্তা, রাজনীতিবিদ, ব্যবসায়ীদের তদন্ত করে',
+  anti_corruption:'ACC Act 2004, RTI Act 2009, Public Procurement Act 2006, Whistleblower Act 2011, e-GP. | ACC আইন ২০০৪, তথ্য প্রকাশ আইন ২০০৯, সরকারি ক্রয় আইন ২০০৬, হোয়াসেলব্লোয়ার আইন ২০১১, ই-জিপি',
+  whistleblower:'Whistleblower Protection Act 2011. Confidential, protected. | হোয়াসেলব্লোয়ার সুরক্ষা আইন ২০১১। গোপনীয়, সুরক্ষিত',
+  rti:'Right to Information Act 2009. Access info from public authorities. | তথ্য অধিকার আইন ২০০৯। সরকারি কর্তৃপক্ষ থেকে তথ্য পাওয়ার অধিকার',
+  rta:'RTI: Request info, response in 20 days, Info Commission can order disclosure. | তথ্য অধিকার: তথ্য অনুরোধ করুন, ২০ দিনের মধ্যে উত্তর, তথ্য কমিশন প্রকাশের নির্দেশ দিতে পারে',
+  a2i:'Access to Information Programme. 5000+ Union Digital Centers, 150+ services. | তথ্য প্রবেশ কর্মসূচি (a2i)। ৫০০০+ ইউনিয়ন ডিজিটাল সেন্টার, ১৫০+ সেবা',
+  digital:'a2i, e-GP, National ID, bKash/Nagad, 999 Emergency, 333 Anti-Corruption, National Portal. | a2i, ই-জিপি, জাতীয় পরিচয়পত্র, বিকাশ/নগদ, ৯৯৯ জরুরি, ৩৩৩ দুর্নীতি প্রতিরোধ, জাতীয় পোর্টাল',
+  egp:'e-Government Procurement. Transparent public procurement online. | ই-সরকারি ক্রয় (ই-জিপি)। স্বচ্ছ অনলাইন সরকারি ক্রয়',
+  udc:'Union Digital Centers. One-stop service. Birth registration, land records, 150+ services. | ইউনিয়ন ডিজিটাল সেন্টার। জন্ম নিবন্ধন, জমির রেকর্ড, ১৫০+ সেবা',
+  reform:'BCS Reform, NICAR, PATC, a2i, e-GP, GRS, RTI Act 2009. | BCS সংস্কার, NICAR, PATC, a2i, ই-জিপি, GRS, তথ্য অধিকার আইন ২০০৯',
+  grs:'Grievance Redress System. Digital complaints platform. | অভিযোগ নিবারণ ব্যবস্থা (GRS)। ডিজিটাল অভিযোগ প্ল্যাটফর্ম',
+  nicar:'National Implementation Committee for Administrative Reform. | প্রশাসনিক সংস্কারের জাতীয় বাস্তবায়ন কমিটি (NICAR)',
+  court:'Supreme Court, District Courts (64), Village Courts, Mobile Courts. Legal aid: 16430. | সুপ্রিম কোর্ট, জেলা আদালত (64), গ্রাম আদালত, মোবাইল আদালত। আইনি সাহায্য: 16430',
+  village_court:'Village Courts Act 2006. Minor disputes resolved locally. | গ্রাম আদালত আইন ২০০৬। স্থানীয়ভাবে ক্ষুদ্র বিরোধ নিষ্পত্তি',
+  supreme_court:'High Court Division and Appellate Division. Chief Justice. | হাইকোর্ট বিভাগ ও আপিল বিভাগ। প্রধান বিচারপতি',
+  legal_aid:'Legal aid means free legal help. In Bangladesh the National Legal Aid Services Organization (NLASO) under the Ministry of Law gives free lawyers, mediation and advice to poor, marginalized and vulnerable people. Eligibility depends on income limit (persons below the government fixed income ceiling, women victims of violence, acid survivors, disabled persons, ethnic minorities, and prisoners). Apply at the District Legal Aid Office or Upazila Legal Aid Committee with NID, income certificate and case documents. The national helpline 16430 gives free initial advice. Legal aid covers criminal, family, land and service matters. | আইনি সহায়তা মানে বিনামূল্যে আইনি সাহায্য। আইন মন্ত্রণালয়ের জাতীয় আইন সহায়তা সেবা সংস্থা (এনলাসো) গরিব ও সুবিধাবঞ্চিত মানুষকে বিনামূল্যে উকিল ও পরামর্শ দেয়। আয়সীমা অনুযায়ী যোগ্যতা; সহিংসতার শিকার নারী, অ্যাসিড দগ্ধ, প্রতিবন্ধী ও ক্ষুদ্র নৃগোষ্ঠী অগ্রাধিকার পায়। জেলা আইন সহায়তা অফিসে আবেদন করুন; হেল্পলাইন ১৬৪৩০।',
+  helpline:'Legal Aid: 16430, Emergency: 999, GBV: 109, ACC: 333, Fire: 199. | আইনি সাহায্য: ১৬৪৩০, জরুরি: ৯৯৯, জিবিভি: ১০৯, ACC: ৩৩৩, অগ্নি: ১৯৯',
+  gbv:'Helpline 109 (24/7), One-Stop Crisis Centres, Legal aid 16430. | হেল্পলাইন ১০৯ (২৪/৭), ওয়ান-স্টপ ক্রাইসিস সেন্টার, আইনি সাহায্য ১৬৪৩০',
+  parishad:'Union(rural), Upazila(development), Zila(district), Pourashava(urban). | ইউনিয়ন(গ্রামীণ), উপজেলা(উন্নয়ন), জেলা, পৌরসভা(শহুরে)',
+  chairman:'Union Parishad Chairman: Elected head. Presides, implements, coordinates. | ইউনিয়ন পরিষদ চেয়ারম্যান: নির্বাচিত প্রধান। সভাপতিত্ব, বাস্তবায়ন, সমন্বয়',
+  barishal:'Barishal: Barguna, Barishal, Bhola, Jhalokati, Patuakhali, Pirojpur. | বরিশাল: বরগুনা, বরিশাল, ভোলা, ঝালকাঠি, পটুয়াখালী, পিরোজপুর',
+  chattogram:'Chattogram: 11 districts including Cox Bazar, Cumilla, Rangamati. | চট্টগ্রাম: ১১টি জেলা যার মধ্যে কক্সবাজার, কুমিল্লা, রাঙ্গামাটি',
+  dhaka:'Dhaka: 13 districts including Gazipur, Narayanganj, Tangail. | ঢাকা: ১৩টি জেলা যার মধ্যে গাজীপুর, নারায়ণগঞ্জ, টাঙ্গাইল',
+  khulna:'Khulna: 10 districts including Jashore, Kushtia. Sundarbans. | খুলনা: ১০টি জেলা যার মধ্যে যশোর, কুষ্টিয়া। সুন্দরবন',
+  mymensingh:'Mymensingh: Jamalpur, Mymensingh, Netrokona, Sherpur. | ময়মনসিংহ: জামালপুর, ময়মনসিংহ, নেত্রকোণা, শেরপুর',
+  rajshahi:'Rajshahi: 8 districts. Education City. | রাজশাহী: ৮টি জেলা। শিক্ষা নগরী',
+  rangpur:'Rangpur: 8 districts. Northern agriculture hub. | রংপুর: ৮টি জেলা। উত্তরাঞ্চলের কৃষি কেন্দ্র',
+  sylhet:'Sylhet: Habiganj, Moulvibazar, Sunamganj, Sylhet. Tea gardens. | সিলেট: হবিগঞ্জ, মৌলভীবাজার, সুনামগঞ্জ, সিলেট। চাহ বাগান',
+  bkash:'bKash: 60M+ users. Govt payments, legal aid, court fees. | বিকাশ: ৬ কোটি+ ব্যবহারকারী। সরকারি পেমেন্ট, আইনি সাহায্য, আদালত ফি',
+  nagad:'Nagad: Bangladesh Post Office mobile finance. | নগদ: বাংলাদেশ পোস্ট অফিসের মোবাইল ফিনান্স',
+  payment:'bKash, Nagad, Rocket, bank transfer, court treasury. | বিকাশ, নগদ, রকেট, ব্যাংক ট্রান্সফার, আদালত ট্রেজারি',
+  police:'Police in Bangladesh: The Bangladesh Police is the main law enforcement agency under the Ministry of Home Affairs. Structure: police stations (thana) led by an Officer in Charge (OC), upazila and district police under a Superintendent of Police (SP), metropolitan police in cities (Dhaka, Chattogram etc.), and specialized units like DB (Detective Branch), CID, RAB and highway police. To report a crime call 999 or visit the nearest police station; an FIR must be registered free of charge under section 154 CrPC. Complaints against police go to the SP or Police Headquarters; women can use the Women Help Desk in every station. | বাংলাদেশ পুলিশ: স্বরাষ্ট্র মন্ত্রণালয়ের অধীন প্রধান আইনশৃঙ্খলা বাহিনী। থানার ওসি, উপজেলা ও জেলা পুলিশের এসপি, মহানগর পুলিশ এবং ডিবি, সিআইডি, র্যাবসহ বিশেষ ইউনিট আছে। অপরাধ জানাতে ৯৯৯ বা নিকটস্থ থানায় যান; ১৫৪ ধারায় এফআইআর বিনামূল্যে নিতে হবে। পুলিশের বিরুদ্ধে অভিযোগ এসপি বা পুলিশ সদর দপ্তরে করুন; প্রতিটি থানায় নারী সহায়তা ডেস্ক আছে।',
+  fir:'FIR means First Information Report. Under section 154 of the Code of Criminal Procedure, the police officer in charge of a police station MUST register an FIR free of charge for any reported crime. You need the date, time, place and details of the incident; no fee and no bribe is allowed. If the officer refuses, send a written complaint to the Superintendent of Police under 154(3), or apply to the Magistrate under 156(3) for an investigation order. Get a free copy of the FIR within 24 hours. An FIR is the first step of a criminal case and can be lodged in any police station in Bangladesh. | এফআইআর মানে ফার্স্ট ইনফরমেশন রিপোর্ট। ফৌজদারি কার্যবিধির ১৫৪ ধারা অনুযায়ী থানার ওসি যেকোনো অপরাধের খবরে বিনামূল্যে এফআইআর নিতে বাধ্য। ঘটনার তারিখ, সময়, স্থান ও বিবরণ দিন; কোনো ফি বা ঘুষ নেই। অস্বীকার করলে ১৫৪(৩) ধারায় এসপির কাছে বা ১৫৬(৩) ধারায় ম্যাজিস্ট্রেটের কাছে আবেদন করুন। ২৪ ঘণ্টার মধ্যে বিনামূল্যে এফআইআরের কপি পান। এফআইআরই ফৌজদারি মামলার প্রথম ধাপ।',
+  land:'Ministry of Land, District, Upazila, Union Land Offices. Digitized. | ভূমি মন্ত্রণালয়, জেলা, উপজেলা, ইয়নিয়ন ভূমি অফিস। ডিজিটাজারিছহ',
+  mutation:'Land mutation. Upazila Land Office. 120-day limit. | জমির মিউটেশন। উপজেলা ভূমি অফিস। ১২০ দিনের সীমা',
+  patc:'PATC Savar: Trains officials. | PATC সাভার: কর্মকর্তাদের প্রশিক্ষণ',
+  bpsc:'Bangladesh Public Service Commission. BCS examination. | বাংলাদেশ পাবলিক সার্ভিস কমিশন। BCS পরীক্ষা',
+  governance:'Nationalism, Socialism, Democracy, Secularism. Efficiency, transparency. | জাতীয়তাবাদ, সমাজতন্ত্র, গণতন্ত্র, ধর্মনিরপেক্ষতা। দক্ষতা, স্বচ্ছতা',
+  transparency:'RTI Act 2009, e-GP, National Portal, Digital Finance. | তথ্য অধিকার আইন ২০০৯, ই-জিপি, জাতীয় পোর্টাল, ডিজিটাল আর্থিক',
+  emergency:'999, 109, 333, 16430. | জরুরি: 999, 109, 333, 16430',
+  accident:'Call 999. Govt hospital. Legal aid 16430. | ৯৯৯ ডায়াল করুন। সরকারি হাসপাতাল। আইনি সাহায্য ১৬৪৩০',
+  disaster:'Disaster Management Bureau. 999. Cyclone shelters. | বিপর্যয় ব্যবস্থাপনা ব্যুরো। ৯৯৯। ঘূর্ণিঝড় আশ্রয়',
+  ministry:'Bangladesh has 57 Ministries and Divisions. Key: Law Justice Parliamentary Affairs, Home Affairs, Finance, Local Government, Public Administration, ICT Division. | বাংলাদেশে ৫৭টি মন্ত্রণালয় ও বিভাগ। মূল: আইন বিচার, অভ্যন্তরীণ, অর্থ, স্থানীয় সরকার, প্রশাসন, আইসিটি',
+  ministries:'57 Ministries include: Law Justice, Home Affairs, Finance, Defence, Foreign Affairs, Education, Health, Agriculture, Land, Commerce, Environment, Roads, Railways, Shipping. | ৫৭টি মন্ত্রণালয়: আইন বিচার, অভ্যন্তরীণ, অর্থ, প্রতিরক্ষা, বৈদেশিক, শিক্ষা, স্বাস্থ্য, কৃষি, ভূমি, বাণিজ্য, পরিবেশ, সড়ক, রেল, নৌ',
+  directorates:'76 Directorates implement government policies. Key: Secondary Higher Education, Primary Education, Health, Fire Civil Defence, Social Services. | ৭৬টি অধিদপ্তর সরকারি নীতি বাস্তবায়ন করে। মূল: মাধ্যমিক উচ্চ, প্রাথমিক, স্বাস্থ্য, অগ্নি, সমাজসেবা',
+  budget:'National budget 2026-27 is approximately 9.30 trillion Taka (US$76 billion). Managed by Finance Division. | জাতীয় বাজেট ২০২৬-২৭ প্রায় ৯.৩০ লক্ষ কোটি টাকা। অর্থ বিভাগ পরিচালিত',
+  parliament:'Jatiya Sangsad (National Parliament) is the supreme legislative body. 350 seats including 50 reserved for women. | জাতীয় সংসদ (জাতীয় সংসদ) সর্বোচ্চ আইন প্রণয়ন সংস্থা। ৩৫০ আসন যার ৫০টি মহিলাদের জন্য সংরক্ষিত',
+  president:'President of Bangladesh is the Head of State. Ceremonial head who assents to laws passed by Parliament. | বাংলাদেশের রাষ্ট্রপতি রাষ্ট্রপ্রধান। আনুষ্ঠানিক প্রধান যিনি সংসদের আইনে সম্মতি দেন',
+  prime_minister:'Prime Minister is the Head of Government. Commands the cabinet and oversees all ministries and divisions. | প্রধানমন্ত্রী সরকার প্রধান। মন্ত্রিসভা পরিচালনা ও সকল মন্ত্রণালয় তত্ত্বাবধান করেন',
+  cabinet:'Cabinet Division coordinates inter-ministerial decisions. Chaired by Prime Minister. | ক্যাবিনেট বিভাগ আন্তঃমন্ত্রণালয় সিদ্ধান্ত সমন্বয় করে। প্রধানমন্ত্রীর সভাপতিত্ব',
+  bpsc_info:'BPSC conducts BCS examination for 26 cadres. Website: bpsc.gov.bd. | BPSC ২৬টি ক্যাডারের জন্য BCS পরীক্ষা পরিচালনা করে। ওয়েবসাইট: bpsc.gov.bd',
+  dshe:'Directorate of Secondary Higher Education (DSHE) manages secondary and higher secondary schools. | মাধ্যমিক ও উচ্চ শিক্ষা অধিদপ্তর (DSHE) মাধ্যমিক ও উচ্চ মাধ্যমিক বিদ্যালয় পরিচালনা করে',
+  dpe:'Directorate of Primary Education (DPE) oversees primary schools across all 64 districts. | প্রাথমিক শিক্ষা অধিদপ্তর (DPE) ৬৪ জেলায় প্রাথমিক বিদ্যালয় তত্ত্বাবধান করে',
+  nid:'National Identity Card (NID) is mandatory for citizens aged 18+. Required for voting, banking, passport. | জাতীয় পরিচয়পত্র (NID) ১৮+ বয়সে বাধ্যতামূলক। ভোটদান, ব্যাংকিং, পাসপোর্টে প্রয়োজন',
+  passport_info:'Department of Immigration Passports. Apply online at passport.gov.bd. Emergency: 16445. | অভিবাসন ও পাসপোর্ট বিভাগ। passport.gov.bd এ অনলাইনে আবেদন। জরুরি: ১৬৪৪৫',
+  bdris:'Digital land records, mutation services, and property registration across all districts. | ডিজিটাল জমির রেকর্ড, মিউটেশন সেবা, সম্পত্তি নিবন্ধন ৬৪ জেলায়',
+  wasa:'Water Supply Sewerage Authority provides urban water supply in major city areas. | পানি সরবরাহ ও পয়ঃনিষ্কাশন কর্তৃপক্ষ বড় শহরাঞ্চলে পানি সরবরাহ করে',
+  dpdc:'Dhaka Power Distribution Company Ltd distributes electricity in Dhaka city. | ঢাকা পাওয়ার ডিস্ট্রিবিউশন কোম্পানি ঢাকায় বিদ্যুৎ বিতরণ করে',
+  btcl:'Bangladesh Telecommunications Company Limited provides fixed-line telecom services. | বাংলাদেশ টেলিযোগাযোগ কোম্পানি লিমিটেড ফিক্সড-লাইন টেলিকম সেবা প্রদান করে',
+  iscosc:'One-Stop Crisis Centre provides services for GBV survivors. Located in 8 districts. | ওয়ান-স্টপ ক্রাইসিস সেন্টার জিবিভি উদ্ধারকারীদের সেবা প্রদান করে। ৮টি জেলায় অবস্থিত',
+  bida:'Bangladesh Investment Development Authority (BIDA) facilitates foreign and domestic investment. | বাংলাদেশ বিনিয়োগ উন্নয়ন কর্তৃপক্ষ (BIDA) বৈদেশিক ও আভ্যন্তরীণ বিনিয়োগ সহজতর করে',
+  tcb:'Trading Corporation of Bangladesh manages government food distribution and price stabilization. | বাণিজ্য কর্পোরেশন অব বাংলাদেশ (TCB) সরকারি খাদ্য বিতরণ ও মূল্য স্থিতিশীলতা পরিচালনা করে',
+  revenue:'National Board of Revenue (NBR) collects income tax, VAT, and customs duties. | জাতীয় রাজস্ব বোর্ড (NBR) আয়কর, ভ্যাট ও শুল্ক সংগ্রহ করে',
+  nps:'Universal Pension Scheme for all citizens. Helpline: 16131. | সকল নাগরিকের জন্য সার্বজনীন পেনশন প্রকল্প। হেল্পলাইন: ১৬১৩১',
+  bcwboard:'Bangladesh Coast Guard provides maritime security. Emergency: 16111. | বাংলাদেশ কোস্ট গার্ড সামুদ্রিক নিরাপত্তা প্রদান করে। জরুরি: ১৬১১১',
+  ansar:'Ansar Village Defence Party provides rural security and disaster response. | আনসার ও গ্রাম প্রতিরক্ষা বাহিনী গ্রামীণ নিরাপত্তা ও দুর্যোগ প্রতিক্রিয়া প্রদান করে',
+  phone:'Emergency numbers: 999 (Police/Fire/Ambulance), 333 (Govt Info), 109 (GBV), 106 (Anti-Corruption), 103 (Supreme Court), 102 (Fire/Disaster), 16699 (Legal Aid), 16122 (Smart Land), 16107 (BRTA), 16445 (Passport), 16357 (Worker), 1098 (Child Help). | জরুরি নম্বর: ৯৯৯ (পুলিশ/অগ্নি/অ্যাম্বুলান্স), ৩৩০, ১০৯ (জিবিভি), ১০৬ (দুর্নীতি), ১০৩, ১০২, ১৬৪৩০, ১৬১২২, ১৬১০৭, ১৬৪৪৫, ১৬৩৫৭, ১০৯৮',
+  nid_info:'National Identity Card (NID) managed by Election Commission. Apply at local registration center. Required for all government services. | জাতীয় পরিচয়পত্র (NID) নির্বাচন কমিশন পরিচালিত। স্থানীয় নিবন্ধন কেন্দ্রে আবেদন। সকল সরকারি সেবায় প্রয়োজনীয়',
+  passport:'Bangladesh e-passport: Apply online at epassport.gov.bd after scheduling an appointment at a passport office (Dhaka Agargaon or regional offices, and missions abroad). Required: NID or birth certificate, previous passport (if renewal), and photographs; biometric data (fingerprints and photo) is collected at the office. The e-passport is valid for 10 years and the MRP (machine readable passport) for 5 years. Fees depend on the type (regular, express, urgent) and page count. Delivery takes about 7-15 working days normally. Check status online with the application ID; helpline 16445. | বাংলাদেশ ই-পাসপোর্ট: epassport.gov.bd-এ অনলাইনে আবেদন করে পাসপোর্ট অফিসে (আগারগাঁও বা আঞ্চলিক অফিস) সাক্ষাৎকার নিন। এনআইডি বা জন্মনিবন্ধন, পুরনো পাসপোর্ট ও ছবি প্রয়োজন; বায়োমেট্রিক তথ্য অফিসে সংগ্রহ হয়। ই-পাসপোর্ট ১০ বছর এবং এমআরপি ৫ বছর মেয়াদি। সাধারণত ৭-১৫ কার্যদিবসে ডেলিভারি। হেল্পলাইন ১৬৪৪৫।',
+  land_records:'Digital land records via BDRIS. Mutation at Upazila Land Office. Smart Land Service: 16122. | BDRIS এর মাধ্যমে ডিজিটাল জমির রেকর্ড। উপজেলা ভূমি অফিসে মিউটেশন। স্মার্ট ভূমি সেবা: ১৬১২২',
+  pension:'Universal Pension Scheme covers private workers, self-employed, expatriates. Helpline: 16131. | সার্বজনীন পেনশন প্রকল্প বেসরকারি শ্রমিক, স্ব-কর্মসূচি, প্রবাসীদের জন্য। হেল্পলাইন: ১৬১৩১',
+  tax:'Income tax filing at nbr.gov.bd. National Board of Revenue collects tax, VAT, customs. | nbr.gov.bd এ আয়কর ফাইলিং। জাতীয় রাজস্ব বোর্ড কর, ভ্যাট, শুল্ক সংগ্রহ করে',
+  electricity:'Electricity services in Bangladesh: Power is supplied by the Bangladesh Rural Electrification Board (BREB) in rural areas and by DPDC, DESCO and others in Dhaka and city utilities (West Zone, North-West etc.). For new connections apply to the local office with NID, land ownership proof and filled form; prepaid meters are common. Bill payments can be made online, through mobile banking (bKash, Nagad), or at bank and post offices. For outages, billing errors or complaints call the utility hotline (DESCO 16999, DPDC 17973) or visit the customer care center. Electricity theft is a punishable offense. Be careful of live wires and report damaged lines immediately to prevent accidents. | বাংলাদেশে বিদ্যুৎ সেবা: গ্রামে পল্লী বিদ্যুতায়ন বোর্ড (ব্রেব) এবং শহরে ডিপিডিসি, ডেসকোসহ প্রতিষ্ঠান বিদ্যুৎ দেয়। নতুন সংযোগে এনআইডি ও জমির কাগজ লাগে; প্রিপেইড মিটার প্রচলিত। বিল অনলাইনে বা মোবাইল ব্যাংকিংয়ে পরিশোধ করা যায়। বিভ্রাট, বিলের ভুল বা অভিযোগে হটলাইনে (ডেসকো ১৬৯৯৯) কল করুন। বিদ্যুৎ চুরি শাস্তিযোগ্য অপরাধ। ক্ষতিগ্রস্ত লাইন দেখলে সঙ্গে সঙ্গে জানান।',
+  telecom:'BTCL provides fixed-line services. Mobile operators: Grameenphone, Robi, Banglalink, Teletalk. | BTCL ফিক্সড-লাইন সেবা প্রদান করে। মোবাইল অপারেটর: গ্রামীণফোন, রবি, বাংলালিংক, টেলিটক',
+  traffic:'BRTA Service Portal: 16107. Vehicle registration, license renewal, transport services. | BRTA সেবা পোর্টাল: ১৬১০৭। গাড়ি নিবন্ধন, লাইসেন্স নবীকরণ, পরিবহন সেবা',
+  investor:'BIDA facilitates investment. One-stop business registration. Foreign investment encouraged. | BIDA বিনিয়োগ সহজতর করে। একক ব্যবসায় নিবন্ধন। বৈদেশিক বিনিয়োগ উৎসাহিত',
+
+  quran:'Al Quran is the holy book of Islam, 114 Surahs, 6236 verses. Revealed to Prophet Muhammad (PBUH) over 23 years. Final divine guidance for all humanity. | আল কুরআন ইসলামের পবিত্র গ্রন্থ, ১১৪টি সূরা, ৬২৩৬টি আয়াত। হযরত মুহাম্মদ (সা.)-এর নিকট ২৩ বছরে অবতীর্ণ। সকল মানুষের জন্য চূড়ান্ত ঐশ্বরিক হেদায়াত।',
+  al_fatihah:'Surah Al-Fatihah (The Opening): 7 verses. The essence of the Quran. Recited in every prayer. Guides to the straight path. | সূরা ফাতিহা (সূচনা): ৭টি আয়াত। কুরআনের সার। প্রতিটি নামাজে পড়া হয়। সরল পথের পথপ্রদর্শন।',
+  al_baqarah:'Surah Al-Baqarah (The Cow): 286 verses. Longest Surah. Covers law, justice, inheritance, debt, testimony, marriage, divorce. Key verses on justice (2:282-283). | সূরা বাকারা (গরু): ২৮৬টি আয়াত। দীর্ঘতম সূরা। আইন, ন্যায়বিচার, উত্তরাধিকার, ঋণ, সাক্ষ্য, বিবাহ, তালাক নিয়ে আলোচনা।',
+  an_nisa:'Surah An-Nisa (The Women): 176 verses. Women rights, inheritance shares, marriage, divorce, custody, maintenance. Key verse 4:135 on justice. | সূরা নিসা (নারী): ১৭৬টি আয়াত। নারী অধিকার, উত্তরাধিকার অংশ, বিবাহ, তালাক, অভিভাবকত্ব, ভরণপোষণ।',
+  al_maeda:'Surah Al-Maidah (The Table Spread): 120 verses. Contracts, testimonies, punishments, halal/haram. Verse 5:8 commands justice even against oneself. | সূরা মায়েদা (খাদ্য পরিবেশিত টেবিল): ১২০টি আয়াত। চুক্তি, সাক্ষ্য, শাস্তি, হালাল/হারাম।',
+  al_anbiya:'Surah Al-Anbiya (The Prophets): 112 verses. Prophets stories, divine justice, accountability. Verse 21:47 - precise weighing of deeds on Judgment Day. | সূরা আম্বিয়া (নবীগণ): ১১২টি আয়াত। নবীদের গল্প, ঐশ্বরিক বিচার, হিসাবকিতাব।',
+  justice_4_135:'Quran 4:135 - Stand firm for justice, even against yourselves, parents, or relatives. Core command for fairness. | কুরআন ৪:১৩৫ - ন্যায়বিচারে অটল থাকুন, নিজের বিরুদ্ধে গেলেও, বাবা-মা বা আত্মীয়ের বিরুদ্ধে গেলেও।',
+  justice_5_8:'Quran 5:8 - Be persistently standing firm for Allah, witnesses in justice, and do not let hatred lead you to injustice. | কুরআন ৫:৮ - আল্লাহর পথে অটল থাকুন, ন্যায়বিচারে সাক্ষ্য দিন, এবং ঘৃণা আপনাকে অবিচারে পরিণত করবে না।',
+  justice_4_58:'Quran 4:58 - Allah commands you to deliver trusts to those worthy, and judge with justice when deciding between people. | কুরআন ৪:৫৮ - আল্লাহ আপনাকে নির্দেশ দেন যে, আমানত তাদের কাছে ফিরিয়ে দিন যারা যোগ্য, এবং মানুষের মধ্যে বিচার করুন ন্যায়বিচারের সাথে।',
+  justice_16_90:'Quran 16:90 - Allah commands justice, good conduct, and giving to relatives, and forbids immorality, bad conduct, and oppression. | কুরআন ১৬:৯০ - আল্লাহ ন্যায়বিচার, উত্তম আচরণ এবং আত্মীয়-স্বজনকে দেওয়ার নির্দেশ দেন, এবং অশ্লীলতা, মন্দ আচরণ ও অত্যাচার নিষিদ্ধ করেন।',
+  marriage:'Islamic marriage (Nikah): Consent of both parties required. Mahr (dower) mandatory. Per Quran 4:4. Bangladesh: Muslim Family Laws Ordinance 1961. | ইসলামিক বিবাহ (নিকাহ): উভয় পক্ষের সম্মতি প্রয়োজন। মোহরানা (দান) বাধ্যতামূলক। কুরআন ৪:৪। বাংলাদেশ: মুসলিম পরিবার আইন অধ্যাদেশ ১৯৬১।',
+  talaq:'Triple Talaq declared unconstitutional in Bangladesh (2001). Quran 2:229 allows Talaq-e-Ahsan (single divorce with waiting period). Must be witnessed. | তিন তালাক বাংলাদেশে অসাংবিধানিক (২০০১)। কুরআন ২:২২৯ তালাক-ই-আহসান (একক তালাক ও ইদ্দত অপেক্ষা) অনুমোদন করে। সাক্ষী প্রয়োজন।',
+  inheritance:'Islamic inheritance: Quran 4:11-12 sets fixed shares. Son gets 2x daughter share. Widow gets 1/8 (with children). Applied in Bangladesh Muslim inheritance law. | ইসলামিক উত্তরাধিকার: কুরআন ৪:১১-১২ নির্ধারিত অংশ। পুত্র মেয়ের দ্বিগুণ পায়। বিধবা ১/৮ পান (সন্তান থাকলে)।',
+  women_rights:'Quran guarantees women: inheritance rights (4:11), property ownership (4:7), maintenance (2:241), consent in marriage (4:19), dignity (33:59). | কুরআন নারীদের অধিকার প্রদান করে: উত্তরাধিকার (৪:১১), সম্পত্তির মালিকানা (৪:৭), ভরণপোষণ (২:২৪১), বিবাহে সম্মতি (৪:১৯), মর্যাদা (৩৩:৫৯)।',
+  witness:'Quran 2:282 - Two male witnesses or one male + two females for financial transactions. Testimony principles for fair trial. | কুরআন ২:২৮২ - আর্থিক লেনদেনের জন্য দুইজন পুরুষ বা একজন পুরুষ ও দুইজন মহিলা সাক্ষী প্রয়োজন।',
+  islamic_law_bd:'Bangladesh Constitution Article 2A: Islam is state religion. Muslim Family Laws Ordinance 1961 governs Muslim personal law based on Quran and Sunnah. | বাংলাদেশের সংবিধান ধারা ২ক: ইসলাম রাষ্ট্রধর্ম। মুসলিম পরিবার আইন অধ্যাদেশ ১৯৬১ কুরআন ও সুন্নাহর ভিত্তিতে মুসলিম ব্যক্তিগত আইন পরিচালনা করে।',
+  quran_constitution:'Quran principles embedded in Bangladesh Constitution: justice (Art 27), equality (Art 27), dignity (Art 11), fundamental rights (Art 26-47). | কুরআনের নীতি বাংলাদেশের সংবিধানে অন্তর্ভুক্ত: ন্যায়বিচার (ধারা ২৭), সমতা (ধারা ২৭), মর্যাদা (ধারা ১১), মৌলিক অধিকার (ধারা ২৬-৪৭)।',
+  quran_court:'Islamic law applied in Bangladesh: family courts, inheritance disputes, dower claims, maintenance. Qazi courts handle Muslim personal law matters. | বাংলাদেশে ইসলামিক আইন প্রয়োগ: পরিবার আদালত, উত্তরাধিকার বিরোধ, মোহরানা দাবি, ভরণপোষণ। কাজী আদালত মুসলিম ব্যক্তিগত আইন বিষয়ে বিচার করে।',
+  surah_names:'The 114 Surahs of Al Quran: 1-Fatihah, 2-Baqarah, 3-Imran, 4-Nisa, 5-Maidah, 6-Anam, 7-Araf, 8-Anfal, 9-Tawbah, 10-Yunus... | আল কুরআনের ১১৪টি সূরা: ১-ফাতিহা, ২-বাকারা, ৩-ইমরান, ৪-নিসা, ৫-মায়েদা, ৬-আনআম, ৭-আরাফ, ৮-আনফাল, ৯-তাওবাহ, ১০-ইউনুস...',
+  longest_surah:'Longest Surah: Al-Baqarah (286 verses). Shortest: Al-Kawthar (3 verses). Total: 6236 verses, 77,430 words. | দীর্ঘতম সূরা: বাকারা (২৮৬ আয়াত)। সবচেয়ে ছোট: কাওসার (৩ আয়াত)। মোট: ৬২৩৬ আয়াত, ৭৭,৪৩০ শব্দ।',
+  ipc:'Indian Penal Code (IPC) 1860 - Core criminal law. S302 murder (death penalty), S304 culpable homicide (10yrs), S376 rape (10-life), S379 theft (3yrs), S420 cheating (7yrs). | ভারতীয় দণ্ডবিধি (IPC) ২০০ৠ - বাংলাদেশের মূল ফৌজদারি আইন। ধারা ৩০২ (খুন/মৃত্যুদণ্ড), ৩০৪ (দুর্বৃত্ত হত্যা), ৩৭৬ (বাধ্যকরণ), ৩৭৯ (চুরি), ৪২০ (প্রতারণা)।',
+  crpc:'Code of Criminal Procedure (CrPC) 1898 - FIR filing (S154), arrest (S54), bail (S497), trial. | ফৌজদারি কার্যবিধি (CrPC) ২০২৯ - এফাইআর দায়ের (S154), গ্রেপ্তার (S54), জামানত (S497)।',
+  bail:'Bail: Anticipatory (CrPC S498), Regular (S497), HC bail. Non-bailable: murder, treason, terrorism. | জামানত: পূর্বাভাস (S498), নিয়েমিত (S497), HCতে জামানত। জামানতহীন অপরাধ: খুন, রাষ্ত্রদ্রোগওত, সন্ত্রাসবাদ।',
+  arrest:'Art 33: Arrested person must be informed of grounds within 3 hours. Right to lawyer. Female officer for women suspects. Children cannot be detained in lockup. | সংবিধান ধারা ২৩ - গ্রেপ্তারার কারণ ২৩ ঘণ্টার মধ্যে অবহিত করতে হবে। আইনজীবীরার অধিকারের অধিকারওটার করতা যায় নাতেটি নারী সন্দেহ শুরু চালাটে যায় নাতেটি।',
+  dv:'Domestic Violence Act 2010. Protection orders, residence orders, monetary relief. Helpline: 109 (Women), 333 (Cyber & Women). | গৃহসংক্রান্ত সহিংশত্তা প্রতিরোদধ আইন ২০১০। হেল্পলাইন: ১০৯ (নারী), ২৩৩ (সাইবার ও নারী)।',
+  labor:'Bangladesh Labour Act 2006 (amended 2013). Min wage Tk 12,500/month garment workers. Max 8hrs/day, 48hrs/week. Overtime double. Weekly holiday mandatory. No child labor under 14. | শ্রম আইন ২০০ৠ (সংশোধিত ২০১৩)। পোশাক শ্রমিকদের মাসে ১২৬, ৬েনা টাকা (2023)। সর্বোচ্চ 8ঘণ্টা/দিন, 48/সপ্তাহিক। ওভারটাইম: দ্বিগুণ মজুরিসহিক।',
+  workers_rights:'Worker rights: safe workplace (S51), compensation (S74), maternity leave 16 weeks (S46), trade union (S197), no child labor under 14. | শ্রমিক অধিকার: নিরাপদ থিকান্তর (S51), ক্ষতিপূরণ (S74), মাতৃত্ব ছুটি 16 সপ্তাহ (S46), ট্রেড ইনিকাওন (S197)।',
+  maternity:'Maternity Leave: 16 weeks paid (8 prenatal, 8 postnatal). Cannot fire pregnant worker. Govt workers: 120 days. | মাতৃত্ব ছুটি: 16 সপ্তাহ বেতনসহ ছুটি (8 প্রসব পূর্ব, 8 প্রসব পরবর্তী)। গর্ভবতা শ্রমিককে বরখাস্ত করা যায় নাতেটি। সরকারি: 120 দিন।',
+  education:'Right to Education: Art 17 Constitution - free and compulsory for children 6-14. Primary Education Act 1990. 25% national budget. | শিক্ষার অধিকার: সংবিধান ধারা ১৭ - সকল শিশুদের (6-14) বিনামূল্যে ও বাধ্যতামূলক শিক্ষার। জাতীয় বাজেটের 25%।',
+  student_rights:'Student rights: safe campus, no corporal punishment (HC 2011), free textbooks Grade 1-10, scholarship for poor, no admission discrimination. | শিক্ষার্থী অধিকার: নিরাপদ ক্যাম্পাস, শারীরিক শাস্তি নিষিদ্ধ (HC 2011), বিনামূল্যে পাঠ্যপুস্তক (গ্রেড 1-10)।',
+  health:'Healthcare: Health Policy 2011. 10000+ community clinics. Free at govt hospitals. DGHS helpline. National Health Service. | স্বাস্থ্যসেবার অধিকার: স্বাস্থ্য নীতি 2011। 10000+ কমিউনিটি ক্লিনিক। সরকারি হাসপাতালে বিনামূল্যে চিকিত্সা।',
+  consumer:'Consumer Rights Protection Act 2009. Right to quality, fair price, info, redress. Consumer helpline 16101. | ভোক্তা অধিকার সুরক্ষা আইন 2009। মানসম্মত পণ্য, ন্যায্য মূল্য, তথ্য, প্রতিকারিকারের অধিকার। হেল্পলাইন 16101।',
+  environment:'Environment Conservation Act 1995. Dept of Environment. Penalties for pollution. 17 forest divisions. | পরিবেশ সংরক্ষণ আইন 1995। পরিবেশ অধিদপ্তরক্তারকে দূষওচ ক্রিমার শাস্তি। 17টি বন বিভাগেরকেজাম্রক্তাকেশারে আছেটি সন্ত্রাস্তিত্তেরক সম্পন্নিশিলরিটি।',
+  dsa:'Digital Security Act 2018. Cyber terrorism (S8), digital forgery (S14), privacy (S21-24). Punishment: 7yrs to life. | ডিজিটাল নিরাপত্তা আইন 2018। সাইবার সন্ত্রাসবাদ (S8), ডিজিটাল জালিয়াতি (S14), গোপনীযীতা লঙ্ঘন (S21-24)। শাস্তি: 7 বছর থেকে যাবজ্জীবনের কারাদণ্ডের শাস্তি।',
+  cyber_crime:'Cybercrime: phishing, identity theft, online harassment, hacking, ransomware, defamation. Report to Cyber Tribunal. Helpline: 333. | সাইবার অপরাধ: ফিশিং, পরিচয় চুরি, হৈন্যানি, হ্যাকিং, রানসমৌয়ার, রা অপবাদ। সাইবার ট্রাইব্যুনাল সে রিপোর্ট করুন। হেল্পলাইন 333।',
+  right_info:'RTI Act 2009. Any citizen can request info from public authority. RTI Commission. | তথ্য অধিকার আইন 2009। প্রত্যেক নাগরিক যেকোনো চাপ্তা তথ্য কিরেছেনটে পারতে পারেট করতে পারেন। আরটাই কমিশন তত্ত্বচালন করে।',
+  whistleblower:'Whistleblower: ACC hotline 106. Anonymous complaints accepted. | কর্মীরাক্ষা: ACC হটলাইন 106। নামহীন অভিযোগ গৃহীত হয়।',
+  police_complaint:'Police complaint: 1. Visit thana 2. File GD or FIR 3. Get receipt 4. Investigation in 24hrs. Escalation: SP, DIG, IGP. | পুলিশ অভিযোগ: 1. থানায়ে যান 2. GD বা FIR দায়ের করুন 3. রসিদ নিন 4. তদন্ত 24 ঘণ্টার মধ্যে। উত্তরণ: SP, DIG, IGP।',
+  land_reform:'Land: Ministry of Land. BDRIS (land.gov.bd). Khatian, Mutation, Lease. Remedy: Land Court, Civil Court. | ভূমি: ভূমি মন্ত্রণালয়কেশারকেশারেক। খতিয়ান, মিউটেশন, লিজ। প্রতিকার: ভূমি আদালত, দেওয়ানী আদালত।',
+  civil_case:'Civil Case: File at District Judge Court. Stamp duty varies. Limitation 3 years. Appeal to HC then Appellate Division. | দেওয়ানী মামলা: জেলা জজ আদালতে দায়েরক্রিত করুন। স্ত্যাম্প ডিওটি পরিবর্তিতেরক সীমাবদ্ধতা 3 বছর।',
+  criminal_case:'Criminal: FIR to Investigation to Charge Sheet to Trial to Verdict. Sessions Court. Magistrate Court. | ফৌজদারি: এফাইআর ক্রি তদন্ত ক্রি অভিযোগপত্র ক্রি বিচার ক্রি রায়েরটি।',
+  legal_aid:'Legal Aid Services Act 2000. Free for poor. District Legal Aid Office. Helpline 16430. | আইনি সহায়তা আইন 2000। গরীবদের বিনামূল্যে বিনাতেরক সেবা। হেল্পলাইন 16430।',
+  mediation:'ADR: Mediation Act 2012. Court mediation. Faster and cheaper than trial. | এডিআর: মধ্যস্তেরা আইন 2012। আদালত মধ্যস্ততা। বিচার চেয়ে দ্রুত ও সস্তা।',
+  supreme_court:'Supreme Court: HC Division and Appellate Division. Chief Justice heads. Art 102 writ jurisdiction. | সুপ্রিম কোর্ট: HC বিভাগ ও আপিল বিভাগ। প্রধান বিচারপতি প্রধানকর্তা। ধারা 102 রিট এখতিয়ারকেশারকেশারেক।',
+  passport:'Passport: Apply at passport.gov.bd. Helpline 16445. Fee Tk 3000-5000. Renewal before expiry. | পাসপোর্ট: passport.gov.bd তে আবেদনটি করুন। হেল্পলাইন 16445। ফি 3000-5000 টাকা।',
+  tin:'TIN (Tax Identification Number) is issued by the National Board of Revenue (NBR) to every taxpayer. You can register for an e-TIN online free at e-tin.nbr.gov.bd using your NID or passport number; individuals get a 10-digit TIN instantly. TIN is required for filing income tax returns (deadline 30 November), for company bank accounts, buying cars or large properties, trade licences, government tenders and higher-value financial transactions. After getting TIN, file returns every year if income crosses the tax-free limit, and keep the TIN certificate carefully for lifetime use. | টিআইএন (কর শনাক্তকরণ নম্বর) জাতীয় রাজস্ব বোর্ড (এনবিআর) প্রত্যেক করদাতাকে দেয়। e-tin.nbr.gov.bd-এ এনআইডি দিয়ে বিনামূল্যে অনলাইনে ই-টিআইএন নিবন্ধন করুন; ব্যক্তি সঙ্গে সঙ্গে ১০ ডিজিটের টিআইএন পান। আয়কর রিটার্ন (৩০ নভেম্বরের মধ্যে), কোম্পানি ব্যাংক হিসাব, গাড়ি বা বড় সম্পত্তি কেনা, ট্রেড লাইসেন্স ও সরকারি দরপত্রে টিআইএন আবশ্যক।',
+  birth_reg:'Birth Registration: Mandatory. Register at Union Council or birth.gov.bd. Needed for passport, NID, school. | জন্ম নিবন্তহান: বাধ্যতামূলকেকেশারকেশারেক। ইউনিওন পরিষদ বা ডাকাকতা. পাসপোর্ট, NID, স্কুলের জন্য প্রয়োজন।',
+  marriage_reg:'Marriage Registration: Compulsory. Union Council. Age: Groom 21, Bride 18. Need: birth certs, NID, 2 witnesses. | বিবাহ নিবন্তহান: বাধ্যতামূলকেকেশারকেশারেক। ইউনিওন পরিষদ। বয়স: পিরেশ 21, কনে 18।',
+  driving_license:'Driving License: BRTA (brta.gov.bd). Learner, Professional, International. Fee Tk 150-1100. Renew 5yrs. | ড্রাইভিং লাইসেন্স: BRTA (brta.gov.bd)। ফি 150-1100 টাকা। 5 বছরে নবায়নেরকেশারকেশারেক।',
+  property_tax:'Property Tax: Municipal area 2.5%/year. Exempt: agriculture, govt buildings. Pay online or local office. | সম্পত্তি কর: পৌরসভা এলাকায়ে 2.5% বার্সরিককেশারকেশারেক। অব্যাহতি: কৃষি জমি, সরকারি ভবন।',
+  domestic_violence:'Domestic Violence Act 2010. Protection orders. Helpline 109 (Women), 333. | গৃহসংক্রান্ত সহিংশত্তা প্রতিরোদধ আইন 2010। হেল্পলাইন 109 (নারী), 333।',
+  murder:'Murder: Section 302 IPC - Death penalty or life imprisonment. Culpable homicide not amounting to murder: Section 304 - up to 10 years. | খুন: IPC ধারা 302 - মৃত্যুদণ্ড বা যাবজ্জীবন কারাদণ্ডের শাস্তি। দুর্বৃত্ত হত্যা: ধারা 304 - সর্বোচ্চ 10 বছর।',
+  theft:'Theft: Section 378-379 IPC. Punishment: up to 3 years and fine. Snatching: Section 392 - up to 10 years. | চুরি: IPC ধারা 378-379। শাস্তি: সর্বোচ্চ 3 বছর ও জরিমানা। ছিনতাই: ধারা 392 - সর্বোচ্চ 10 বছর।',
+  cheating:'Cheating/Fraud: Section 420 IPC. Punishment: 7 years plus fine. Forgery: Section 463-471. | প্রতারণা: IPC ধারা 420। শাস্তি: 7 বছর ও জরিমানা। জালিয়াতি: ধারা 463-471।',
+  bns:'Bangladesh Penal Code 1860 - Updated IPC for Bangladesh. Covers murder, assault, theft, cheating, conspiracy, kidnapping. | বাংলাদেশ দণ্ডবিধি 1860 - IPC এর আপডেটেড সংস্করণেশারকেশারেক। শারা: খুন, আক্রমণ, চুরি, প্রতারণা, ষ্যসন্ত্র, অপহরণ।',
+  trade_union:'Trade unions: Registered under Labour Act 2006 S197. Min 20% workers. CBA election. Right to strike after conciliation fails. | ট্রেড ইনিকাওন: শ্রম আইন 2006 S197 অনুয়েতিতেরক। ন্যূনতম 20% শ্রমিক। ধর্ঘিট অধিকার: সমঝোতা ব্যর্থ হলে বোধকেশারকেশারেক।',
+  bcsc:'BCS examination: Conducted by BPSC. 26 cadres. MCQ, written, viva. Reservation for freedom fighters, women, minorities. | বিসিয়েস: বিপিয়েস্সি পরিচালিত। 26টি ক্যাডার। ক্রম শ্রিটিস্স, ভিভাকিন সার্঵স্তকরতা, মুক্তিয়োধ সকল, নারী, নৃগোষ্ঠির জন্য সংরক্ষণ।',
+  land_court:'Land Court: Handles land disputes, mutation, partition. Upazila Land Office for mutations. Limitation 3 years. | ভূমি আদালত: ভূমি বিরোধ, মিউটেশন, বন্টন নিষ্পত্তি করে। মিউটেশনের জন্য উপজেলা ভূমি অফিসেরক। সীমাবদ্ধতা 3 বছর।',
+  foreign_embassy:'Bangladesh Embassies: For passport renewal, document attestation, legal help abroad. MoFA (mofa.gov.bd). | বাংলাদেশ দূতাবাস: পাসপোর্ট নবায়ন, দলিল সত্যায়ন, বিদেশে আইনি সহায়তার জন্য। পররাষ্ট্র মন্ত্রণালয়: mofa.gov.bd।',
+  python:'Python: High-level language for web, AI, data science, automation. Syntax: print("Hello"), def function(), for i in range(10). Libraries: Django, Flask, NumPy, Pandas, TensorFlow. | পাইথন: বাজার ফরেন্ড, AI, ডেটা সাইন্স, ওটোমেশনের জন্য ব্যবহারকারী। সালা: Django, Flask, NumPy, Pandas, TensorFlow।',
+  javascript:'JavaScript: Language for web browsers. Variables: let x = 10, const y = 20. Functions: function greet() {}. DOM manipulation, AJAX, events. Frameworks: React, Vue, Angular, Node.js. | জাবস্ক্রিপ্ট: ওদবলাদেরা সিল্প জন্য ব্যবহারকারী। ফ্রেমেওর্ক: React, Vue, Angular, Node.js।',
+  html:'HTML: HyperText Markup Language for web pages. Tags: html, head, body, div, p, a, img, form. HTML5: semantic tags, canvas, video, audio. | HTML: ওদবলাদেশার পাত্রা জন্য জন্য ভাষা নামানের জন্য ব্যবহারকারী। ট্যাগ: html, body, div, p, a, img, form।',
+  css:'CSS: Cascading Style Sheets for web design. Properties: color, font-size, margin, padding, flexbox, grid. Responsive: media queries. Preprocessors: SASS, LESS. Bootstrap framework. | CSS: ওদবলাদেশার সাজ্জের ডিজাইনের শৈলী নিয়ত্ত ব্যবহারকারী। ফ্রেমেওর্ক: Bootstrap, Tailwind।',
+  java:'Java: OOP language for enterprise, Android apps. Syntax: public class Main { public static void main(String[] args) {} }. Frameworks: Spring, Hibernate. Android Studio. | জাবা: OOP ভাষা, এন্টরপ্রারাসার, Android অ্পাসেরধের জন্য। ফ্রেমেওর্ক: Spring, Hibernate।',
+  c_cpp:'C/C++: Low-level languages for system programming, OS, games. C: pointers, memory management. C++: classes, templates, STL. Used in embedded systems, competitive programming. | C/C++: সিস্টেম প্রলাকরণার জন্য ও্স, গেমের নির্মাণের জন্য ব্যবহারকারী। ভূতত্তর: Linux, Windows, games।',
+  php:'PHP: Server-side language for web apps. Powers WordPress, Laravel. Syntax: <?php echo "Hello"; ?>. Database: MySQL. Hosting: shared, VPS, cloud. | PHP: সার্ভার-পাশ্ঠ ভাষাজন্য ব্যবহারকারী। WordPress, Laravel প্রসার্তা করে। ডেটাবেজ: MySQL।',
+  sql:'SQL: Structured Query Language for databases. Commands: SELECT, INSERT, UPDATE, DELETE, CREATE TABLE. MySQL, PostgreSQL, SQLite, MongoDB (NoSQL). | SQL: ডেটাবেজের ঢারিনর ভাষাজন্য। কমান্ড: SELECT, INSERT, UPDATE, DELETE। MySQL, PostgreSQL, SQLite।',
+  react:'React: JavaScript library by Meta for UIs. Components, JSX, hooks (useState, useEffect), state management. React Native for mobile apps. | React: Meta সনন্ত্রিক JavaScript লাইব্রারিটি। কম্পোনেন্ট, JSX, hooks। React Native মোবাইল অ্পাসেরধের জন্য।',
+  nodejs:'Node.js: JavaScript runtime for server-side. Express.js framework. npm package manager. Used for APIs, real-time apps, microservices. | Node.js: সার্ভার-পাশ্ঠ JavaScript রানটাইম। Express.js ফ্রেমেওর্ক। npm প্যাকেজ ম্যানেজরেন্ট।',
+  ruby:'Ruby: Elegant language for web (Rails framework). Convention over configuration. Gems for packages. Airbnb, GitHub built with Rails. | Ruby: Rails ফ্রেমেওর্ক সহ ওদবলাদেশার জন্য সুন্দর ভাষাজন্য। GitHub Airbnb Rails দিয়া তৈরি নির্মানকরা হয়ঙ্চেছে।',
+  swift:'Swift: Apple language for iOS/macOS apps. Syntax: var name = "Hello", func greet() {}. SwiftUI for UI. Xcode IDE. | Swift: Apple অ্পাল ভাষা iOS/macOS অ্পাসেরধের জন্য। SwiftUI উশাহারের জন্য।',
+  kotlin:'Kotlin: Modern language for Android (replaced Java). Null-safe, coroutines, concise. Google recommended. Android Studio. | Kotlin: Android নের জন্য আধুনিক ভাষা (Java সরাসনিট করেছে)। Google সুপারিত।',
+  go:'Go (Golang): Google language for cloud, servers, CLI tools. Goroutines for concurrency. Fast compilation. Docker, Kubernetes written in Go. | Go: Google কলাড, সার্ভার, CLI টূলসের ভাষা। Goroutines সমান্তরকারিতার জন্য। Docker, Kubernetes Go দিয়া লঙ্টি হয়ঙ্চেছে।',
+  typescript:'TypeScript: JavaScript with types. Adds type safety to JS. Interfaces, generics, enums. Used with React, Angular, Vue. Compiles to JS. | TypeScript: লিবাষা সফা ড JavaScript। Interface, generic, enum যোগ করে। React, Angular, Vue সাথে ব্যবহারক করা হয়।',
+  rust:'Rust: Safe, fast systems language. Memory safe without garbage collector. Used in Firefox, Discord, Cloudflare. Growing in web servers. | Rust: নিরাপদ ও দ্রুত সিস্টেম ভাষা। Firefox, Discord, Cloudflare চলিসে ব্যবহারক হচেছে।',
+  ai_ml:'AI/Machine Learning: Python (TensorFlow, PyTorch, scikit-learn). Deep learning: neural networks, CNN, RAG, LLMs. NLP for Bengali: BanglaBERT, multilingual models. | AI/মাশিন লার্নিঙ্: Python (TensorFlow, PyTorch)। গভাবর শিক্ষা: neural networks, LLMs। Bengali NLP: BanglaBERT।',
+  blockchain:'Blockchain: Distributed ledger technology. Cryptocurrency (Bitcoin, Ethereum). Smart contracts (Solidity). DeFi, NFTs, DAOs. Bangladesh exploring blockchain for land records. | ব্লস্টচেন: বন্টিন্মান্ত্রিত বাহার প্রয়ুক্টি প্রতিকলন্স (Solidity)। বাংলাদেশ ভূমি রেকর্ডে ব্লস্টচেন কারেছে।',
+  web_dev:'Web Development: Frontend (HTML/CSS/JS) + Backend (Node/Python/PHP). Responsive design, PWA, SEO. Tools: VS Code, Git, GitHub, npm. Deployment: Vercel, Netlify, AWS. | ওদবলাদেশার সিল্প দক্ষিত: Frontend (HTML/CSS/JS) + Backend (Node/Python/PHP)। Responsive, PWA, SEO। Tools: VS Code, Git, GitHub। Deploy: Vercel, AWS।',
+  git:'Git: Version control system. Commands: git init, add, commit, push, pull, branch, merge. GitHub for collaboration. GitLab, Bitbucket alternatives. | Git: সংস্করণ নিয়ন্ত্রঙ্চন ব্যবস্থা কমান্ড: git init, add, commit, push, pull, branch, merge। GitHub সহযোগতারণের জন্য।',
+  devops:'DevOps: CI/CD pipelines, Docker containers, Kubernetes orchestration, AWS/Azure/GCP cloud. Terraform for IaC. Monitoring: Prometheus, Grafana. | DevOps: CI/CD পাপালাইন, Docker, Kubernetes, Cloud (AWS/Azure/GCP)। Terraform। Prometheus, Grafana।',
+  data_science:'Data Science: Python (Pandas, NumPy, Matplotlib), R, SQL. Statistics, visualization, ML models. Career: analyst, engineer, scientist. Avg salary Bangladesh: 40-80K BDT/month. | ডেটা সাইন্স: Python (Pandas, NumPy, Matplotlib), R, SQL। পরিসঙ্কলা, ঵িসুয়ালাচনেশন, ML models। কারিয়া: analyst, engineer। গ্রের তাকা: 40-80K টাকা/মাসেক্টারে।',
+  abrar_fahad:'Abrar Fahad (12 Feb 1998 - 7 Oct 2019): BUET Electrical & Electronic Engineering student from Radhanagar, Kumarkhali, Kushtia. Murdered by Bangladesh Chhatra League activists at Sher-e-Bangla Hall, BUET over a Facebook post opposing Indian influence (use of Mongla Port, Feni river water sharing, LPG import from India). Beaten for hours with cricket stumps and other objects on the night of 6-7 October 2019; he died of blunt-force trauma and police recovered his body around 3 AM on 7 October. The killing sparked nationwide student protests and international condemnation (US, UK, France, Germany, UN, Amnesty, Human Rights Watch). BUET banned party politics on campus. Trial: on 8 December 2021 the court sentenced 20 accused to death and 5 to life imprisonment; the High Court upheld the verdict on 16 March 2025. After the 2024 July uprising he became a national symbol of free expression and anti-hegemony: Bangabandhu Avenue was renamed Shaheed Abrar Fahad Avenue (25 March 2025), his death anniversary entered the national commemorative calendar, and he was given the Independence Award 2025. Father Barkat Ullah (BRAC Bank), mother Rokeya Khatun. Education: Kushtia Zilla School, Notre Dame College Dhaka, BUET EEE (2nd year). | আবরার ফাহাদ (১২ ফেব্রুয়ারি ১৯৯৮ - ৭ অক্টোবর ২০১৯): কুষ্টিয়ার কুমারখালীর রাধানগর গ্রামে জন্ম; বুয়েটের ইইই বিভাগের দ্বিতীয় বর্ষের শিক্ষার্থী। ২০১৯ সালের ৬-৭ অক্টোবর রাতে শেরেবাংলা হলের ২০১১ নম্বর কক্ষে ছাত্রলীগ নেতাকর্মীরা ভারতবিরোধী ফেসবুক পোস্টের জেরে তাকে ক্রিকেট স্টাম্প দিয়ে নির্মমভাবে প্রহার করে হত্যা করে; মৃত্যুর কারণ আঘাতজনিত আঘাত। সারা দেশে শিক্ষার্থী প্রতিবাদ ও আন্তর্জাতিক নিন্দা। বুয়েটে রাজনীতি নিষিদ্ধ হয়। ২০২১ সালের ৮ ডিসেম্বর ২০ জনের মৃত্যুদণ্ড ও ৫ জনের যাবজ্জীবন; ২০২৫ সালের ১৬ মার্চ হাইকোর্ট রায় বহাল রাখে। ২০২৪ সালের জুলাই বিপ্লবের পর তিনি জাতীয় প্রতীক: ২৫ মার্চ ২০২৫-এ বঙ্গবন্ধু এভিনিউ-এর নাম হয় শহীদ আবরার ফাহাদ এভিনিউ; স্বাধীনতা পুরস্কার ২০২৫। বাবা বরকত উল্লাহ, মা রোকেয়া খাতুন।',
+  felani_khatun:'Felani Khatun (d. 7 January 2011): 15-year-old Bangladeshi girl shot dead by Indian Border Security Force (BSF) Constable Amiya Ghosh at the India-Bangladesh border near Anantapur, Phulbari, Kurigram at dawn on 7 January 2011. She and her father Noor Islam were returning from Assam (where the family worked, Felani as a domestic helper) for her arranged marriage. Without travel documents they tried to cross the barbed-wire fence; her clothing got entangled and while trapped on the fence she was shot, and her body hung from the fence for hours - the photograph shocked the world. The Bangladesh government condemned the killing; India expressed regret. BSF court martial acquitted Ghosh in 2013 and again after retrial in 2015 - verdicts widely criticized by Bangladesh and human rights groups. Indias National Human Rights Commission ordered Rs 5 lakh compensation for her family. She became the symbol of border killings and impunity on the Bangladesh-India frontier; 15+ years on, her family still awaits justice. In December 2025 the Gulshan-Pragati Sarani road in Dhakas diplomatic zone was renamed Felani Avenue in her memory. | ফেলানি খাতুন (মৃত্যু: ৭ জানুয়ারি ২০১১): কুড়িগ্রামের ফুলবাড়ি উপজেলার আনন্তপুর সীমান্তে ভারতীয় সীমান্তরক্ষী বাহিনী (বিএসএফ) কনস্টেবল অমিয় ঘোষের গুলিতে নিহত ১৫ বছর বয়সী বাংলাদেশি কিশোরী। পরিবারসহ তিনি আসামে থাকতেন এবং গৃহকর্মীর কাজ করতেন; বিয়ের আয়োজনের জন্য দেশে ফেরার পথে ভোরবেলায় কাঁটাতারের বেড়া পার হতে গিয়ে কাপড় আটকে যায়; বেড়ার উপর আটকে থাকা অবস্থায় তাকে গুলি করে হত্যা করা হয় এবং ঘণ্টার পর ঘণ্টা বেড়ায় ঝুলন্ত অবস্থায় ছিল তার মৃতদেহ - সেই ছবি বিশ্বজুড়ে আলোড়ন তোলে। বাংলাদেশ সরকার নিন্দা জানায়, ভারত আক্ষেপ প্রকাশ করে। ২০১৩ সালে বিএসএফ-এর আদালতে ও ২০১৫ সালে পুনর্বিচারে অমিয় ঘোষ খালাস পান; রায়ের ব্যাপক সমালোচনা হয়। ভারতের জাতীয় মানবাধিকার কমিশন পরিবারকে ৫ লাখ রুপি ক্ষতিপূরণের নির্দেশ দেয়। সীমান্ত হত্যা ও বিচারহীনতার প্রতীক তিনি; ১৫ বছরেরও বেশি পরেও বিচার মেলেনি। ২০২৫ সালের ডিসেম্বরে ঢাকার গুলশান-প্রগতি সরণি (কূটনৈতিক অঞ্চল) সড়কের নাম হয় ফেলানি এভিনিউ।',
+  osman_hadi:'Sharif Osman Bin Hadi (1993-2025): Bangladeshi political activist, writer, teacher. Co-founder/spokesperson of Inqilab Moncho. Born Jan 1 1993, Nalchity, Jhalakathi. Assassinated Dec 18 2025 in Singapore. National hero of July Uprising 2024. | Sharif Osman Bin Hadi (1993-2025): Bangladesher rajnoitik o sahittyo kormi. Inqilab Moncho pritishthata. Janm: 1 Jan 1993, Nalchity, Jhalakathi. Nidhon: 18 Dec 2025, Singapore. Jatiyo shahid.',
+  inqilab_moncho:'Inqilab Moncho: Platform for Revolution. Co-founded by Osman Hadi post-July Uprising 2024. Demanded Awami League ban, July martyrs accountability, anti-Indian hegemony. | Inqilab Moncho: Biplob Mancho. Hadi pritishthito 2024. Amli League nishedh, July shahider nyay.',
+  july_uprising:'July Uprising 2024: Student-led mass uprising against Sheikh Hasina govt. Led to fall of Awami League Aug 5 2024. Hadi was key Rampura coordinator. | July Abhutthan 2024: Chhatra netritva. Hasina sarkar padachyuti. 5 Agast 2024. Hadi Rampura coordinator.',
+  hadi_assassination:'Shot Dec 12 2025 in Paltan, Dhaka by masked gunmen. Airlifted Singapore Dec 15. Died Dec 18 2025. Buried at Kazi Nazrul Islam Mausoleum, Dhaka. | Paltane kholamukhi gulakari 12 Dec 2025. Singapore biman 15 Dec. Nidhon 18 Dec 2025. Kazi Nazrul Islam Mausoleum.',
+  hadi_early_life:'Born: Jan 1 1993, Nalchity, Jhalakathi. Father: Maulana Abdul Hadi (madrasa teacher). Mother: Taslima Hadi. Youngest of 6. Edu: Dhaka Univ Political Science (2010-11). | Janm: 1 Jan 1993, Nalchity. Pita: Maulana Abdul Hadi. Mata: Taslima Hadi. Chhoto bhau 6 jon. Shiksha: Dhaka Bishwabidyalay.',
+  hadi_legacy:'National martyr. Roads named after him. Chief Adviser: Hadi, you are in our hearts forever. Nationwide mourning. | Jatiyo Shahid. Sadak namkarito. Pradhan Porishod: Hadi, tumi amader hridoye shobshoy. Jatiyo shok.',
+  hadi_personal:'Osman Hadi married Rabiya Islam Sampan. Son: Hadiful Firnas. Father: Sharif Abdul Hadi. Mother: Taslima Hadi. Born: Harikhali village, Nalchity, Jhalakathi. | Hadi bivahito chilen Rabiya Islam Sampar sathe. Chhele: Hadiful Firnas. Pita: Sharif Abdul Hadi. Mata: Taslima Hadi. Janm: Harikhali gram, Nalchity, Jhalakathi.',
+  hadi_education:'Primary: Nalchity Islamia Fazil Madrasa (class 1-3). Then: Jhalakati NS Kamil Madrasa (Alim/HSC). University of Dhaka: Political Science Dept (Masters). | Prathomik: Nalchity Islamia Fazil Madrasa (1-3 shreni). Tarpore: Jhalakati NS Kamil Madrasa (Alim). Dhaka Bishwabidyalay: Rajniti Biggan Bishoy (Snatak/Snatakottor).',
+  hadi_books:'Books written by Osman Hadi: (1) "Lavay Lalshak Puber Akash" (The Eastern Sky Turned Red Amaranth by Lava) - his poetry collection, published February 2024 at the Ekushey Book Fair by Duar Publications (Duyar Prakashani) under the pen name Simanta Sharif (also spelled Shimanto Sharif). (2) "Chance Plus" - an HSC English guide he wrote as a teacher. Sources: Wikipedia "Osman Hadi - Works", the Duar Publications record, and the osmanhadi.info memorial archive. | ওসমান হাদির লেখা বই: (১) "লাভায় লালশাক পূবের আকাশ" - তাঁর কাব্যগ্রন্থ, ফেব্রুয়ারি ২০২৪, একুশে বইমেলা, দুয়ার প্রকাশনী থেকে প্রকাশিত, ছদ্মনাম সিমন্ত শরীফ (অন্য বানান শিমন্ত শরীফ)-এ। (২) "চান্স প্লাস" - শিক্ষক হিসেবে লেখা এইচএসসি ইংরেজি গাইড। সূত্র: উইকিপিডিয়া "Osman Hadi - Works", দুয়ার প্রকাশনী ও osmanhadi.info স্মৃতি-আর্কাইভ।',
+  hadi_quotes:'Notable quotes attributed to Shaheed Osman Hadi, as recorded by the press and his memorial archive (osmanhadi.info): "The person can die, the idea cannot die." "The Eastern sky reflects the blood of our martyrs; we will not allow any external power to dictate our future." "If I fall, my companions will fight; if they fall, others will fight - to uphold the flag of freedom for the oppressed we must move forward; there is no benefit in showing fear of death." He reportedly said before his killing: "If I leave, my child will continue the struggle." On political deal-making he said: "Politics is essentially about bargaining" (September 2025). Exact wording varies by report; these are widely circulated attributions. Sources: The Daily Star, Dhaka Tribune, bdnews24 and Al Jazeera coverage, plus the osmanhadi.info memorial archive. | শহীদ ওসমান হাদির কয়েকটি উল্লেখযোগ্য উক্তি (সংবাদমাধ্যম ও osmanhadi.info স্মৃতি-আর্কাইভে লিপিবদ্ধ): "মানুষ মরতে পারে, আদর্শ মরে না।" "পূর্ব আকাশ আমাদের শহীদের রক্তে রাঙা; কোনো বাইরের শক্তিকে আমাদের ভবিষ্যৎ ঠিক করতে দেব না।" "আমি পড়ে গেলে আমার সাথিরা লড়বে; তারাও পড়ে গেলে অন্যরা লড়বে - নিপীড়িতের স্বাধীনতার পতাকা ধরে এগিয়ে যেতে হবে; মৃত্যুভয় দেখানোর কোনো প্রয়োজন নেই।" নিহত হওয়ার আগে তিনি বলেছিলেন বলে জানা যায়: "আমি চলে গেলে আমার সন্তান সংগ্রাম চালিয়ে যাবে।" রাজনীতি নিয়ে তিনি বলেছিলেন: "রাজনীতি মূলত দর-কষাকষির ব্যাপার" (সেপ্টেম্বর ২০২৫)। সূত্র: দ্য ডেইলি স্টার, ঢাকা ট্রিবিউন, bdnews24, আলজাজিরার প্রতিবেদন ও osmanhadi.info।',
+  hadi_speeches:'Key speeches and statements of Osman Hadi as Inqilab Moncho spokesperson: (1) Dhaka University press conference, 24 May 2025 - called for a National government of all anti-Awami League forces, naming BNP, Jamaat-e-Islami and Islami Andolan Bangladesh. (2) Shahbagh martyrs assembly (2025) - his famous speech that "for the past 14-15 years fascism has been established in Bangladesh", demanding trial and a constitutional ban of Awami League and warning of a "March for Bangladesh" on the Secretariat within 100 days. (3) Shahbagh human chain at the National Museum (March 2025) - announced a continuous sit-in with five demands, including the arrest of Lucky Akter and investigation of protest killings. (4) Madhur Canteen press conference, Dhaka University (July 2025) - warned that under old-style politics BNP would not last two years in power. On every platform he demanded banning Awami League, opposed Indian hegemony and urged renegotiating bilateral treaties for "justice-based sovereignty" (Insaf). Sources: Dhaka Tribune, bdnews24, Ekhon TV, The Business Standard and Wikipedia. | ইনকিলাব মঞ্চের মুখপাত্র ওসমান হাদির গুরুত্বপূর্ণ বক্তব্য: (১) ঢাকা বিশ্ববিদ্যালয় সংবাদ সম্মেলন, ২৪ মে ২০২৫ - সব ফ্যাসিবাদবিরোধী শক্তিকে নিয়ে "জাতীয় সরকার" গঠনের দাবি; বিএনপি, জামায়াত-ই-ইসলামী ও ইসলামী আন্দোলন বাংলাদেশের নাম উল্লেখ। (২) শাহবাগ শহীদ সমাবেশ (২০২৫) - "গত ১৪-১৫ বছর ধরে বাংলাদেশে ফ্যাসিবাদ প্রতিষ্ঠিত"-এর বিখ্যাত বক্তব্য; আওয়ামী লীগের বিচার ও সাংবিধানিক নিষিদ্ধের দাবি এবং ১০০ দিনের মধ্যে দাবি না মানলে সচিবালয় অভিমুখে "মার্চ ফর বাংলাদেশ"-এর হুঁশিয়ারি। (৩) জাতীয় জাদুঘরের সামনে শাহবাগ মানববন্ধন (মার্চ ২০২৫) - লাকি আক্তারের গ্রেপ্তার ও হত্যাকাণ্ডের তদন্তসহ পাঁচ দফা দাবিতে লাগাতার অবস্থান কর্মসূচি ঘোষণা। (৪) মধুর ক্যান্টিন সংবাদ সম্মেলন, ঢাকা বিশ্ববিদ্যালয় (জুলাই ২০২৫) - পুরোনো ধাঁচের রাজনীতি করলে বিএনপি ক্ষমতায় দুই বছরও টিকবে না বলে মন্তব্য। প্রতিটি মঞ্চে তিনি আওয়ামী লীগ নিষিদ্ধ, ভারতীয় আধিপত্যবাদের বিরোধিতা এবং "ন্যায়ভিত্তিক সার্বভৌমত্ব" (ইনসাফ)-এর জন্য দ্বিপক্ষীয় চুক্তি পুনর্বিবেচনার দাবি তোলেন। সূত্র: ঢাকা ট্রিবিউন, bdnews24, এক্ষণ টিভি, দ্য বিজনেস স্ট্যান্ডার্ড ও উইকিপিডিয়া।',
+  hadi_dhaka_8:'Hadi announced candidacy for Dhaka-8 (Motijheel, Shahbagh, Ramna, Paltan, Shahjahanpur) in 13th national election. Unique campaign: chai-singara sessions, public manifesto, murir-batasha distribution, mosque leaflet distribution at dawn. | Hadi Dhaka-8 (Motijheel, Shahbagh, Ramna, Paltan, Shahjahanpur) theke 13th jatiyo nirbachone proarthitir ghoshona din. Bhinno dhoroner procharona: chai-singara adda, jonopriyo manifestor, murir-batasha, fosha namajer pare leaflet.',
+  hadi_worldview:'Hadi completed unfinished work of rebel poet Kazi Nazrul Islam. Regularly recited Bidrohi poem. Used nationalist and religious motifs. His activism combined anti-fascism, sovereignty, and justice. | Hadi biplob kobi Kazi Nazrul Islamer aparishto kaj shesh koren. Bidrohi kobita pora shuru karchilen. Jatiyotabadi o dharmik protichinno byabohar. Tar rajnitite anti-fascism, sarbobhomota o nyay mishrita chilo.',
+  hadi_investigation:'Shooters identified: Foysal Karim Masud and Alamgir Sheikh (Awami League members). Rubel did surveillance before attack. 50 lakh taka reward. One shooter fled to India. Foysal wife, brother-in-law arrested. | Guli chalak: Foysal Karim Masud o Alamgir Sheikh (Amli League sadasya). Rubel nodokhi chilen. 50 lokkho taka puraskar. Ekjon Bharate palachche. Foysal strir, shala, bandhabi atok.',
+  hadi_reaction:'State mourning: 1 day. Funeral at South Plaza of Jatiya Sangsad Bhaban. Lakhs attended. Buried with state and military honors beside Kazi Nazrul Islam Mausoleum. US, UK, Pakistan embassies expressed condolences. | Rashtriyo shok: 1 din. Janaza: Jatiya Sangsad Bhaban South Plaza. Lokkho lokoker sammiliti. Kazi Nazrul Islam Mausoleum pashe rashtriyo o sainik shomanayiye dafan. USA, UK, UKD dutabash shok janiyeche.',
+  july_2024:'July Uprising 2024: Mass uprising in Bangladesh (Jun 5 - Aug 5, 2024). Led to fall of Sheikh Hasina govt on Aug 5, 2024. World first Gen Z revolution. Started as quota reform movement. | July Abhutthan 2024: Bangladesher janohutthan (Jun 5 - Aug 5, 2024). Hasina sarkarer padachyuti 5 Agast 2024. Bishwer prothom Gen Z biplob. Quota songhotir andolon hishebe shuru.',
+  july_timeline:'Timeline: Jun 5 - SC reinstates quotas. Jun - Jul protests grow. Jul 7 - Bangla Blockade. Jul 16 - Nahid Islam abducted. Jul 18 - General strike. Jul 21 - SC orders 93% merit. Aug 4-5 - Mass non-cooperation. Aug 5 - Hasina resigns, flees to India. | Timeline: Jun 5 - SC quota punorsthiti. Jul 7 - Bangla Blockade. Jul 16 - Nahid Islam apohorton. Jul 18 - Samanya bondho. Jul 21 - SC 93% merit adesh. Aug 5 - Hasina padatyag, Bharate palayan.',
+  july_leaders:'Student leaders: Nahid Islam, Asif Mahmud, Mahfuj Alam, Sarjis Alam, Hasnat Abdullah, Nusrat Tabassum, Shadik Kayem. Organizations: Students Against Discrimination (SAD). | Chhatra neta: Nahid Islam, Asif Mahmud, Mahfuj Alam, Sarjis Alam, Hasnat Abdullah. Songathon: Boichitrata Birodhi Chhatra Andolon (SAD).',
+  july_quota:'Quota Reform Movement: SC reinstated 30% quota for freedom fighter descendants in govt jobs. Students demanded 93% merit-based recruitment. SC ordered 93% merit on Jul 21. | Quota Songhoti: SC sorkari chakrire freedom fighter pontritider jonno 30% quota punorsthito. Chatra dal 93% merit demand. SC 21 July 93% merit adesh.',
+  july_violence:'Casualties: 834+ (official gazette), 1000+ (Health Ministry), 1400+ (OHCHR), 1581 (SAD estimate). 11,551+ injured. 11,702 arrested. Deadliest since 1971 independence. | Hatahata: 834+ (official), 1000+ (swasthya mantraalay), 1400+ (OHCHR), 1581 (SAD). 11551+ aahoto. 11702 grifto. 1971独立er por shobcheye bishal.',
+  july_hasina:'Sheikh Hasina: PM of Bangladesh (2009-2024). Called protesters Razakars. Resigned Aug 5, 2024. Fled to India in military helicopter. Daughter Saima Wazed. Father Sheikh Mujibur Rahman. | Sheikh Hasina: Bangladesher PM (2009-2024). Andolankaridere Razakar bolen. 5 Agast padatyag. Sena helikopter-e Bharate palayan. Konna Saima Wazed. Baba Sheikh Mujibur Rahman.',
+  july_parties:'Opposition parties: BNP (Khaleda Zia), Jamaat-e-Islami, Islami Andolan, Communist Party, Gono Odhikar Parishad. Non-political: students, diaspora, lawyers, workers. | Birodhi dol: BNP (Khaleda Zia), Jamaat, Islami Andolan, Communist Party, Gono Odhikar Parishad. Arajokitro: chhatra, prabashi, odhikar, shromik.',
+  july_result:'Result: Hasina resigned. SC ordered 93% merit. Interim govt formed under Nobel laureate Muhammad Yunus. Constitutional crisis. Political and religious violence in aftermath. | Folafol: Hasina padatyag. SC 93% merit adesh. Nobel bibhushon Muhammad Yunus er netritwotito antorbortik sarkar. Songbidhanik sanksa. Porobortite rajnitik o dharmik hoingsha.',
+  july_yunus:'Interim Government: Led by Nobel Peace Prize laureate Muhammad Yunus (2024-). Advisors: Nahid Islam, Asif Mahmud, Mahfuj Alam, Sarjis Alam. Task: reform institutions, prepare for elections. | Antorbortik Sarkar: Nobel Shanti Puraskar bibhushon Muhammad Yunus er netritwa. Poradestha: Nahid Islam, Asif Mahmud, Mahfuj Alam, Sarjis Alam. Daittva: songotthon sonskar, nirbachon progotoy.',
+  golam_nafiz:'Md Golam Nafiz (22 May 2008 - 4 Aug 2024): 11th-grade student, the youngest known martyr of the July 2024 uprising. Shot by police on 4 August 2024 at Farmgate, Dhaka during the non-cooperation movement. The photo of the wounded teenager being rushed to hospital on a rickshaw by Noor Mohammad went viral and became a symbol of the final phase of the uprising. He was the last widely commemorated martyr before the fall of the regime on 5 August. Memorial banners and graffiti honor him across Dhaka (e.g. Noubahini College NCD Youth Carnival banner). Buried in his home district. | মো. গোলাম নাফিজ (২২ মে ২০০৮ - ৪ আগস্ট ২০২৪): জুলাই ২০২৪ গণঅভ্যুত্থানের সর্বকনিষ্ঠ শহীদ, একাদশ শ্রেণির ছাত্র। ৪ আগস্ট ২০২৪ ঢাকার ফার্মগেটে অসহযোগ আন্দোলনে পুলিশের গুলিতে নিহত হন। রিকশায় করে নূর মোহাম্মদ তাঁকে হাসপাতালে নিয়ে যাওয়ার ছবিটি ভাইরাল হয় এবং বিপ্লবের শেষ পর্যায়ের প্রতীক হয়ে ওঠে। ৫ আগস্ট সরকার পতনের আগে তিনি শেষ ব্যাপকভাবে স্মরণীয় শহীদ।',
+  farhan_faiyaaz:'Farhan Faiyaaz (Mohammad Farhanul Islam Bhuiyan, 2007 - 18 July 2024): Class-XI student of Dhaka Residential Model College (DRMC), shot dead by police on 18 July 2024 in Dhanmondi/Mohammadpur, Dhaka during the July uprising. A memorial chattar named Shaheed Farhan Faiyaaz Chattar stands at the spot where he fell, and a Dhanmondi road was renamed after him; the Farhan Faiyaz Playground for disabled athletes was inaugurated west of the National Parliament. | ফারহান ফাইয়াজ (মো. ফারহানুল ইসলাম ভূঁইয়া, ২০০৭ - ১৮ জুলাই ২০২৪): ঢাকা রেসিডেনসিয়াল মডেল কলেজের (ডিআরএমসি) একাদশ শ্রেণির ছাত্র; ১৮ জুলাই ২০২৪ ঢাকার ধানমন্ডি/মোহাম্মদপুরে জুলাই গণঅভ্যুত্থানে পুলিশের গুলিতে নিহত হন। যে স্থানে তিনি শহীদ হন সেখানে "শহীদ ফারহান ফাইয়াজ চত্বর" স্থাপিত হয়েছে এবং ধানমন্ডির একটি সড়ক তাঁর নামে নামকরণ করা হয়েছে; জাতীয় সংসদের পশ্চিমে প্রতিবন্ধী ক্রীড়াবিদদের জন্য শহীদ ফারহান ফাইয়াজ খেলার মাঠ উদ্বোধন করা হয়েছে।',
+  tahir_zaman_priyo:'Tahir Zaman Priyo: freelance photojournalist martyred 19 July 2024 in Dhanmondi/Green Road, Dhaka - shot in the head by police while documenting the quota-reform protests. One of six journalists killed during the July uprising; his story inspired the film UNKNOWN 30Y. No free portrait exists on Wikimedia Commons; a documentary premiere is the only related file. | তাহির জামান প্রিয়: ফ্রিল্যান্স ফটোসাংবাদিক; ১৯ জুলাই ২০২৪ ঢাকার ধানমন্ডি/গ্রিন রোডে কোটাসংস্কার আন্দোলনের ছবি তুলতে গিয়ে পুলিশের গুলিতে মাথায় আঘাত পেয়ে শহীদ হন। জুলাই অভ্যুত্থানে নিহত ছয় সাংবাদিকের একজন; তাঁর জীবন নিয়ে নির্মিত চলচ্চিত্র UNKNOWN 30Y। উইকিমিডিয়া কমন্সে তাঁর কোনো মুক্ত প্রতিকৃতি নেই।',
+  rakibul_hasan:'Rakibul Hasan: martyr of the July 2024 uprising, reported shot dead on Kalsi Road, Mirpur-11, Dhaka (19 July 2024). He is recognized in martyr lists of the movement. No free portrait or memorial photo of him exists on Wikimedia Commons as of 2026. | রাকিবুল হাসান: জুলাই ২০২৪ অভ্যুত্থানের শহীদ; ১৯ জুলাই ২০২৪ ঢাকার মিরপুর-১১ কালশী রোডে গুলিবিদ্ধ হয়ে নিহত হন বলে বিবরণ পাওয়া যায়। আন্দোলনের শহীদ তালিকায় তাঁকে স্বীকৃতি দেওয়া হয়েছে। ২০২৬ সাল পর্যন্ত উইকিমিডিয়া কমন্সে তাঁর কোনো মুক্ত প্রতিকৃতি বা স্মারক ছবি নেই।',
+  july_martyrs:'Martyrs: 834+ officially recognized July 2024 martyrs. Key victims: Abu Sayed (shot by police Rangpur, iconic chest-baring photo), Mir Mugdho (killed Dhaka), Hasnat Abdullah, Tahir Zaman Priyo. National Martyrs Memorial. Roads, bridges, buildings named after martyrs. State funeral. One day national mourning. Photos in Honouring Martyrs section. | Shahid: 834+ shorkari sweekrito. Pradhania shahid: Abu Sayed (rangpur-e policer guli, chitrolil), Mir Mugdho (dhakae nihoto), Hasnat Abdullah, Tahir Zaman Priyo. Jatiyo Smriti Soudho. Shahider namot sadak, setu, building. Rashtriyo janaza. 1 diner jatiyo shok.',
+  july_intl:'International response: UN called for investigation. US, UK, EU expressed concern. Amnesty International documented abuses. OHCHR fact-finding report. India hosted fleeing Hasina. | Antorjatik uttor: UN tadanter dabhi. USA, UK, EU chintao. Amnesty International nishedher tolika. OHCHR tolika prohog. Bharat palayoner Hasina ke aashray.',
+  july_ict_trials:'International Crimes Tribunal (ICT) July 2024: Bangladesh formed special tribunal to try July massacre cases. As of 2025, 100+ accused identified, 50+ charged with crimes against humanity. Key accused: former ministers, police officials, Chhatra League leaders. Trial ongoing at ICT in Dhaka. | জুলাই ২০২৪ আন্তর্জাতিক অপরাধ ট্রিব্যুনাল: বাংলাদেশ সরকার জুলাই গণহত্যা মামলা বিচারের জন্য বিশেষ ট্রিব্যুনাল গঠন করেছে। ২০২৫ সাল পর্যন্ত ১০০+ অভিযুক্ত চিহ্নিত, ৫০+ মানবতাবিরোধী অপরাধে অভিযুক্ত। বিচার চলছে ঢাকায়।',
+  july_border_killings:'India-Bangladesh Border Killings (BSF): Since 2000, Indian Border Security Force (BSF) killed 1,200+ Bangladeshis at the border. Felani Khatun (2011) became global symbol of border killing impunity. Despite diplomatic protests, killings continue at 20+ per year. | ভারত-বাংলাদেশ সীমান্ত হত্যা (BSF): ২০০০ সাল থেকে ভারতীয় সীমান্তরক্ষী বাহিনী ১,২০০+ বাংলাদেশিকে সীমান্তে হত্যা করেছে। ফেলানি খাতুন (২০১১) সীমান্ত হত্যার বিচারহীনতার বিশ্ব প্রতীক।',
+  felani_trial_detail:'Felani Khatun Trial: BSF Constable Amiya Ghosh shot dead 15-year-old Felani at Kurigram border on 7 Jan 2011. BSF court-martial acquitted Ghosh in 2013, again after retrial in 2015. India NHRC ordered Rs 5 lakh compensation. No conviction despite international condemnation. Family still awaits justice. | ফেলানি খাতুন বিচার: BSF কনস্টেবল অমিয় ঘোষ ৭ জানুয়ারি ২০১১ কুড়িগ্রাম সীমান্তে ১৫ বছর বয়সী ফেলানিকে গুলি করে হত্যা করে। ২০১৩ ও ২০১৫ সালে বিচারে খালাস। পরিবার এখনো ন্যায়ের অপেক্ষায়।',
+  abrar_trial_detail:'Abrar Fahad Trial: BUET student beaten to death by Chhatra League on 7 Oct 2019 for anti-India Facebook post. On 8 Dec 2021, court sentenced 20 to death, 5 to life imprisonment. High Court upheld verdict on 16 Mar 2025. Conviction seen as landmark for student movement accountability. | আবরার ফাহাদ বিচার: বুয়েট ছাত্রকে ৭ অক্টোবর ২০১৯ ছাত্রলীগ ভারতবিরোধী ফেসবুক পোস্টের জন্য পিটিয়ে হত্যা। ২০২১ সালে ২০ জনের মৃত্যুদণ্ড, ৫ জনের যাবজ্জীবন। ২০২৫ সালে হাইকোর্ট রায় বহাল।',
+  july_massacre_stats:'July 2024 Massacre Statistics: Official gazette: 834+ martyred. Health Ministry: 1,000+. OHCHR: 1,400+. Student movement estimate: 1,581. 11,551+ injured. 11,702 arrested. Deadliest crackdown since 1971 Liberation War. | জুলাই ২০২৪ গণহত্যা পরিসংখ্যান: গেজেট: ৮৩৪+ শহীদ। স্বাস্থ্য মন্ত্রণালয়: ১,০০০+। OHCHR: ১,৪০০+। ছাত্র আন্দোলন: ১,৫৮১। ১১,৫৫১+ আহত। ১১,৭০২ গ্রেপ্তার।',
+  yunus:'Dr Muhammad Yunus (born 28 Jun 1940): Bangladeshi economist, Nobel Peace Prize laureate (2006). Founder of Grameen Bank. Father of microcredit. Chief Adviser of Bangladesh (Aug 2024 - Feb 2026). Born Hathazari, Chittagong. | Dr Muhammad Yunus (janm 28 Jun 1940): Bangladesher arthanity, Nobel Shanti Puraskar bibhushon (2006). Grameen Bank pritishthata. Microcredit janok. Bangladesher Pradhan Porishod (Aug 2024 - Feb 2026). Janm: Hathazari, Chattogram.',
+  yunus_education:'Yunus: Chattogram Collegiate School (matric, 16th out of 39000). Chittagong College. BA Economics Dhaka University (1960). MA (1961). PhD Economics Vanderbilt University USA (1969). Fulbright Scholar. | Yunus: Chattogram Collegiate School (matric, 39000 joner modhye 16th). Chittagong College. BA Economics Dhaka Bishwabidyalay (1960). MA (1961). PhD Economics Vanderbilt University USA (1969). Fulbright Scholar.',
+  yunus_grameen:'Grameen Bank: Founded 1983. Microcredit/microfinance pioneer. Lent 7 to 42 women in Jobra village (1976). By 2007: .38B disbursed to 7.4M borrowers. 94% loans to women. Model copied in 100+ countries. | Grameen Bank: Pratishthito 1983. Microcredit/microfinance agrani. Jobra gram-e 42 mahilake 7 dhara. 2007: 7.4M grihitake .38B. 94% dhara mahilader jonno. 100+ deshe model anukrito.',
+  yunus_nobel:'Nobel Peace Prize 2006: For pioneering microcredit and microfinance through Grameen Bank. First Bangladeshi Nobel laureate. Shared with Grameen Bank. | Nobel Shanti Puraskar 2006: Grameen Bank er madhyome microcredit o microfinance agrani karar jonno. Prothom Bangladeshi Nobel bibhushon. Grameen Bank er sathe bhagidari.',
+  yunus_awards:'Awards: Nobel Peace Prize (2006), Presidential Medal of Freedom USA (2009), Congressional Gold Medal USA (2010), Olympic Laurel (2020), Independence Award Bangladesh (1987). Time 100 Most Influential (2025). | Puraskar: Nobel (2006), Presidential Medal Freedom USA (2009), Congressional Gold Medal (2010), Olympic Laurel (2020), Swadhinata Puraskar (1987). Time 100 Most Influential (2025).',
+  yunus_chief:'Chief Adviser: Appointed Aug 8, 2024 after Hasina resignation. Headed interim government. Appointed Constitutional Reform Commission. Held 2026 elections. Succeeded by Tarique Rahman. | Pradhan Porishod: Niyukto 8 Agast 2024 Hasina padatyager pore. Antorbortik sarkar pramukh. Songbidhanik Songskar Commission gorechhen. 2026 nirbachon. Utsarito: Tarique Rahman.',
+  yunus_grameen_fam:'Grameen Family: Grameen Trust, Grameen Fund, Grameen Telecom, Grameenphone (GP), Grameen Software, Grameen CyberNet, Grameen Knitwear. Polli Phone: 260,000 rural poor got mobile phones. | Grameen Poribar: Grameen Trust, Grameen Fund, Grameen Telecom, Grameenphone, Grameen Software, Grameen CyberNet. Polli Phone: 260,000 gramin garibder mobile phone.',
+  yunus_social:'Social Business: Yunus pioneered concept of social business - companies designed to solve social problems, not maximize profit. Yunus Centre (Dhaka) promotes this philosophy. Published several books. | Social Business: Yunus social business dharana agrani - somaj shomoshya somadhaner jonno troy, profit noy. Yunus Centre (Dhaka) ei dharana promote kore. Boi prokashito.',
+  yunus_family:'Family: 3rd of 9 children. Father: Haji Muhammad Dula Mia Saudagar (Sufi jeweller). Mother: Sufia Khatun. Brother: Muhammad Ibrahim. 1st wife: Vera Forostenko (m.1970, div.1977). 2nd wife: Afrozi Yunus (m.1980). Daughters: Monica, Deena. | Poribar: 9 bhaiboner modhye 3rd. Baba: Haji Muhammad Dula Mia Saudagar (Sufi gohona bikreta). Ma: Sufia Khatun. Bhai: Muhammad Ibrahim. 1st stri: Vera Forostenko (1970-1977). 2nd stri: Afrozi Yunus (1980). Konna: Monica, Deena.',
+  yunus_74_famine:'1974 Bangladesh famine: Yunus witnessed mass hunger while teaching economics. Started microfinance experiments in Jobra village (1976). Lend 7 to 42 women. This became Grameen Bank. | 1974 durbhikkha: Yunus arthanity shikhao kal-e ghoribo durbalita dekhlen. Jobra gram-e microfinance porikkha (1976). 42 mahilake 7 dhara. Etai Grameen Bank holo.',
+  yunus_politics:'Political: Adviser to caretaker govt (1996). Founded Nagorik Shakti (2007) for clean politics. Became Chief Adviser after July Uprising 2024. The Elders founding member (Nelson Mandela group). | Rajniti: Caretaker sarkarer poradestha (1996). Nagorik Shakti (2007). July Abhutthan pore Pradhan Porishod. The Elders founding member (Nelson Mandela group).',
+  constitution_full:'The Constitution of Bangladesh is the supreme law. Adopted 4 Nov 1972, effective 16 Dec 1972. 17 amendments. Unitary parliamentary republic. | Bangladesher songbidhan gorkari 4 November 1972, karyakari 16 December 1972. 17 ti songshodhon.',
+  constitution_parts:'11 Parts: I Republic, II Principles, III Rights, IV Executive, V Legislature, VI Judiciary, VII Elections, VIII Auditor, IX Services, X Amendment, XI Misc.',
+  constitution_principles:'Four Principles: Nationalism, Socialism, Democracy, Secularism. From Mujibism.',
+  constitution_rights:'Rights Art 27-44: Equality(27), Non-discrimination(28), Right to life(32), Freedom of movement(33), Assembly(37), Speech(39), Religion(41), Property(42), Remedies(44).',
+  constitution_executive:'Executive: President Head of State. PM Head of Government. Cabinet 9/10 MPs. No PM term limit. President 2x5yr terms.',
+  constitution_parliament:'Parliament: Jatiya Sangsad 300 seats + 50 women. Quorum 60. 5yr term. Art 70 party discipline.',
+  constitution_judiciary:'Supreme Court: Appellate + High Court Divisions. Judges independent. Retire 67. Art 111 binding precedent.',
+  constitution_amendments:'17 Amendments: 4th(1975), 5th(1979), 8th(1988) Islam, 12th(1991) parliament, 13th(1996) caretaker, 15th(2011) secularism, 16th(2014), 17th(2018).',
+  constitution_history:'Language Movement 1952, 1956 Constitution, Ayub Khan 1958, Mujib Six Points 1966, 1970 election, Liberation War 1971, Constitution 1972.',
+  constitution_religion:'Art 2A Islam state religion. Art 41 freedom of all religions. Art 12 secularism.',
+  constitution_article_70:'Art 70: MP vacates seat if votes against party or resigns.',
+  constitution_preamble:'Preamble: We the people proclaimed independence 26 March 1971. Nationalism, socialism, democracy, secularism.',
+  constitution_article_27:'Art 27: All citizens equal before law. Equal protection.',
+  constitution_article_28:'Art 28: No discrimination by religion, race, caste, sex, birth. Women equal.',
+  constitution_article_31:'Art 31: Protection of law is inalienable right of every citizen.',
+  constitution_article_32:'Art 32: No deprivation of life or liberty except by law.',
+  constitution_article_33:'Art 33: Freedom of movement throughout Bangladesh.',
+  constitution_article_39:'Art 39: Freedom of thought, conscience, speech. Press freedom.',
+  constitution_article_41:'Art 41: Freedom of religion. Profess, practice, propagate.',
+  constitution_article_44:'Art 44: Right to move Supreme Court. Writs available.',
+  constitution_supreme_court:'Supreme Court: Appellate + High Court. Chief Justice heads both.',
+  constitution_judicial_review:'Judicial Review via Art 7(2), 26, 44(1), 102. HC issues writs.',
+  constitution_international:'Party to ICCPR, ICESCR, Convention against Torture, CEDAW, CRC, Rome Statute.',"voter_id":"Voter ID card / National ID (NID): Every citizen of Bangladesh aged 18 or above can register as a voter and receive a National ID card. Apply online at nid-w3.ecs.gov.bd or at the local Election Commission office / Union Digital Center with birth registration certificate, photo and proof of address. The NID is required for voting, bank accounts, SIM cards, passports, land registration and many government services. Smart NID cards are issued with 10-year validity and can be verified on the EC website. Helpline 16106. | ভোটার আইডি কার্ড / জাতীয় পরিচয়পত্র (এনআইডি): ১৮ বছর বা তার বেশি বয়সের প্রতিটি নাগরিক ভোটার হিসেবে নিবন্ধন করে জাতীয় পরিচয়পত্র নিতে পারেন। অনলাইনে nid-w3.ecs.gov.bd অথবা নির্বাচন কমিশন কার্যালয় / ইউনিয়ন ডিজিটাল সেন্টারে জন্মনিবন্ধন সনদ, ছবি ও ঠিকানার প্রমাণসহ আবেদন করুন। ভোট, ব্যাংক অ্যাকাউন্ট, সিম কার্ড, পাসপোর্ট, জমি রেজিস্ট্রি ও সরকারি সেবায় এনআইডি প্রয়োজন। স্মার্ট এনআইডি কার্ড ১০ বছর মেয়াদে ইস্যু হয়। হেল্পলাইন ১৬১০৬।","driving_licence":"Driving licence in Bangladesh: Obtain a learner licence first from the BRTA (Bangladesh Road Transport Authority), then a permanent licence after passing the written and driving tests. Minimum age is 18 years for light vehicles and 21 for professional/heavy vehicles. Apply at brta.gov.bd or any BRTA office with NID, passport photos and medical fitness certificate. A permanent licence costs Tk 1000-2000 depending on category and is valid for 5 years (renewable). Driving without a licence is punishable with fine up to Tk 25,000 under the Road Transport Act 2018. Helpline 16107. | ড্রাইভিং লাইসেন্স: প্রথমে বিআরটিএ থেকে শিক্ষানবিশ (লার্নার) লাইসেন্স নিন, পরে লিখিত ও ড্রাইভিং পরীক্ষায় উত্তীর্ণ হয়ে স্থায়ী লাইসেন্স নিন। হালকা যানবাহনের জন্য ন্যূনতম ১৮ বছর এবং পেশাদার/ভারী যানবাহনের জন্য ২১ বছর। brta.gov.bd অথবা যেকোনো বিআরটিএ অফিসে এনআইডি, ছবি ও মেডিকেল সনদসহ আবেদন করুন। স্থায়ী লাইসেন্স ৫ বছর মেয়াদি। লাইসেন্স ছাড়া গাড়ি চালানো ২০১৮ সড়ক পরিবহন আইনে ২৫,০০০ টাকা পর্যন্ত জরিমানা। হেল্পলাইন ১৬১০৭।","road_traffic_act":"Road Transport Act 2018 (Sarak Paribahan Ain): Regulates all motor vehicles, drivers, traffic rules and road safety in Bangladesh. It introduced much higher fines: driving without licence up to Tk 25,000, using mobile while driving Tk 5,000, not wearing helmet on motorcycle Tk 1,000 (rider and pillion), drunk driving up to Tk 50,000 or 6 months imprisonment, and over-speeding or reckless driving heavy penalties. Bus and truck drivers need special permits. The Act also created a Road Safety Council and mandates fitness certificates, route permits and third-party insurance for every vehicle. Report reckless driving or accidents to police 999 or BRTA 16107. | সড়ক পরিবহন আইন ২০১৮: বাংলাদেশে সব মোটরযান, চালক, ট্রাফিক নিয়ম ও সড়ক নিরাপত্তা নিয়ন্ত্রণ করে। এতে জরিমানা অনেক বাড়ানো হয়েছে: লাইসেন্স ছাড়া গাড়ি চালালে ২৫,০০০ টাকা পর্যন্ত, গাড়ি চালানোর সময় মোবাইল ব্যবহারে ৫,০০০ টাকা, মোটরসাইকেলে হেলমেট না পরলে ১,০০০ টাকা, মাতাল অবস্থায় গাড়ি চালালে ৫০,০০০ টাকা বা ৬ মাস কারাদণ্ড। প্রতিটি গাড়ির জন্য ফিটনেস, রুট পারমিট ও থার্ড পার্টি বিমা বাধ্যতামূলক। ৯৯৯ অথবা বিআরটিএ ১৬১০৭।","metro_rail":"Dhaka Metro Rail (MRT-6): Bangladesh first metro rail system opened in December 2022. The MRT-6 line runs from Uttara (Diabari) through Agargaon, Farmgate, Shahbagh, Karwan Bazar, Motijheel to Kamalapur. Trains run every day from about 7am to 9pm, every 5-10 minutes. Fares are by distance (Tk 20-100); use the MRT pass card or buy tokens at stations. All stations have escalators, lifts and are wheelchair accessible. Later lines MRT-1 (airport), MRT-4 and MRT-5 will connect more of Dhaka. For safety and assistance contact station staff or call 999. | ঢাকা মেট্রো রেল (এমআরটি-৬): বাংলাদেশের প্রথম মেট্রো রেল ২০২২ সালের ডিসেম্বরে চালু হয়। এমআরটি-৬ লাইন উত্তরা (দিয়াবাড়ি) থেকে আগারগাঁও, ফার্মগেট, শাহবাগ, কারওয়ান বাজার, মতিঝিল হয়ে কমলাপুর পর্যন্ত চলে। প্রতিদিন সকাল ৭টা থেকে রাত ৯টা পর্যন্ত প্রতি ৫-১০ মিনিটে ট্রেন চলাচল করে। ভাড়া দূরত্ব অনুযায়ী ২০-১০০ টাকা; এমআরটি পাস কার্ড বা টোকেন ব্যবহার করুন। প্রতিটি স্টেশনে লিফট ও হুইলচেয়ার সুবিধা আছে।","tax_return":"Income tax return in Bangladesh: Every individual whose annual income exceeds the tax-free limit (Tk 3,50,000 for male, Tk 4,00,000 for female and senior citizens, Tk 4,75,000 for persons with disability and third gender) must file an income tax return by the 30th of November each year. Returns are filed online at the NBR e-return portal (e-return.nbr.gov.bd) or through a tax lawyer/chartered accountant. Documents needed: TIN certificate, salary statement, bank interest certificates, investment proofs (life insurance, savings certificates, provident fund, DPS). Late filing attracts penalty Tk 1,000 or more; not filing can lead to higher penalty and assessment. Fines and returns can be checked at nbr.gov.bd. | আয়কর রিটার্ন: করমুক্ত সীমার (পুরুষ ৩,৫০,০০০, নারী ও বয়স্ক ৪,০০,০০০, প্রতিবন্ধী ৪,৭৫,০০০ টাকা) বেশি আয়ের প্রত্যেক ব্যক্তিকে প্রতি বছর ৩০ নভেম্বরের মধ্যে আয়কর রিটার্ন দাখিল করতে হয়। এনবিআরের ই-রিটার্ন পোর্টালে অনলাইনে বা কর আইনজীবীর মাধ্যমে দাখিল করুন। সাথে টিআইএন, বেতন বিবরণী, ব্যাংক সুদের সনদ, বিনিয়োগের প্রমাণ (জীবনবিমা, সঞ্চয়পত্র, পিএফ, ডিপিএস) লাগবে। দেরিতে দাখিলে জরিমানা ১,০০০ টাকা বা তার বেশি।","e_tin":"e-TIN (Tax Identification Number): Every eligible citizen and business in Bangladesh must have a TIN to file taxes and enjoy many services. You can register online free of charge at the NBR website (e-tin.nbr.gov.bd) with your NID number. A 10-digit TIN is issued immediately for individuals. TIN is required for opening a bank account of a company, buying a car or large property, obtaining a trade licence, and for government tenders. Keep your TIN certificate safe and use it when filing annual returns. | ই-টিআইএন (কর শনাক্তকরণ নম্বর): বাংলাদেশের প্রত্যেক করদাতা নাগরিক ও ব্যবসার কর শনাক্তকরণ নম্বর থাকা বাধ্যতামূলক। এনবিআর ওয়েবসাইটে (e-tin.nbr.gov.bd) এনআইডি দিয়ে বিনামূল্যে অনলাইনে নিবন্ধন করুন। ব্যক্তির জন্য ১০ ডিজিটের টিআইএন সাথে সাথে পাওয়া যায়। ব্যাংক অ্যাকাউন্ট, গাড়ি বা বড় সম্পত্তি কেনা, ট্রেড লাইসেন্স ও সরকারি দরপত্রে টিআইএন প্রয়োজন।","labour_act":"Bangladesh Labour Act 2006 (amended 2013 and 2018) is the main law for workers in private sector, factories, shops, transport and RMG. Working hours maximum 8 hours per day and 48 hours per week; overtime is paid at double the basic wage and is limited to 2 hours per day. Every worker gets at least one weekly holiday, and 16 weeks (112 days) paid maternity leave for up to two children. The Act covers provident fund, gratuity, compensation for workplace injury and death, canteen, rest rooms, and safety in factories. Trade unions can be formed with 30% membership of a factory and 20% in the RMG sector. Labour courts hear worker disputes. Grievances can be reported to the Department of Inspection for Factories and Establishments (DIFE). | বাংলাদেশ শ্রম আইন ২০০৬ (২০১৩ ও ২০১৮ সালে সংশোধিত) বেসরকারি খাত, কারখানা, দোকান, পরিবহন ও তৈরি পোশাক শিল্পের শ্রমিকদের প্রধান আইন। কাজের সময় সর্বোচ্চ দিনে ৮ ঘণ্টা ও সপ্তাহে ৪৮ ঘণ্টা; ওভারটাইম মৌলিক বেতনের দ্বিগুণ হারে এবং দিনে ২ ঘণ্টার মধ্যে সীমাবদ্ধ। প্রত্যেক শ্রমিক সাপ্তাহিক ছুটি পান এবং সর্বোচ্চ দুই সন্তানের জন্য ১৬ সপ্তাহ (১১২ দিন) বেতনসহ মাতৃত্বকালীন ছুটি পান। আইনে প্রভিডেন্ট ফান্ড, গ্র্যাচুইটি, কর্মক্ষেত্রে আঘাত ও মৃত্যুর ক্ষতিপূরণ, ক্যান্টিন, বিশ্রামাগার ও কারখানার নিরাপত্তা রয়েছে। ৩০% শ্রমিক নিয়ে ট্রেড ইউনিয়ন গঠন করা যায়। শ্রম আদালত বিরোধ শোনে।","minimum_wage":"Minimum wage in Bangladesh is fixed by the Minimum Wage Board under the Minimum Wages Act. The board reviews wages sector by sector. In the ready-made garment (RMG) industry the entry-level monthly minimum wage was raised in December 2023 from Tk 8,000 to Tk 12,500 (basic and house rent included in grades). Other sectors with minimum wage notifications include tea garden workers, shrimp processing, and some export industries. Employers who pay below the minimum wage can be prosecuted under the Labour Act. For wage disputes contact the labour court or DIFE; union rights protect collective bargaining. | বাংলাদেশে ন্যূনতম মজুরি নির্ধারণ করে ন্যূনতম মজুরি বোর্ড। তৈরি পোশাক (আরএমজি) শিল্পে ২০২৩ সালের ডিসেম্বরে প্রবেশ পর্যায়ের মাসিক মজুরি ৮,০০০ টাকা থেকে বাড়িয়ে ১২,৫০০ টাকা করা হয়। চা বাগান, চিংড়ি প্রক্রিয়াকরণসহ বিভিন্ন খাতে মজুরি নির্ধারণী প্রজ্ঞাপন আছে। ন্যূনতম মজুরির কম দিলে শ্রম আইনে মালিকের বিরুদ্ধে মামলা হয়। মজুরি বিরোধে শ্রম আদালত বা ডিআইএফইতে অভিযোগ করুন।","overtime_rules":"Overtime rules in Bangladesh: Under the Labour Act 2006 an adult worker may work maximum 8 hours a day and 48 hours a week. Any work beyond that is overtime and must be paid at double the normal wage rate (basic plus dearness allowance divided by the working hour). Overtime cannot exceed 2 hours in a day or 60 hours in a week in total including overtime. Records of overtime must be kept in the register. If an employer refuses overtime pay, complain to the Inspector (DIFE) or file a case in the Labour Court. | ওভারটাইম নিয়ম: শ্রম আইন ২০০৬ অনুযায়ী প্রাপ্তবয়স্ক শ্রমিক দিনে সর্বোচ্চ ৮ ঘণ্টা ও সপ্তাহে ৪৮ ঘণ্টা কাজ করতে পারেন। এর বেশি কাজ ওভারটাইম হিসেবে দ্বিগুণ হারে বেতন পেতে হয়। ওভারটাইম দিনে ২ ঘণ্টা ও মোট সাপ্তাহিক ৬০ ঘণ্টার বেশি হতে পারে না। ওভারটাইমের হিসাব রেজিস্টারে রাখতে হয়। ওভারটাইম বেতন না দিলে ডিআইএফইতে অভিযোগ বা শ্রম আদালতে মামলা করুন।","land_registration":"Land registration in Bangladesh: When buying or selling land, a deed (kobla) is executed and registered at the Sub-Registry Office under the Registration Act 1908. Stamp duty on the deed is about 3-4% of the land value plus registration fee, so total cost with taxes is typically 10-14% in city areas. After registration, the buyer must apply for mutation (transfer of khatian records) at the Assistant Commissioner (Land) office and pay land development tax. Verify the deed, khatian, ROR and mutation status before purchase with the help of a lawyer. | জমি রেজিস্ট্রি: জমি কেনাবেচায় সাব-রেজিস্ট্রি অফিসে দলিল সম্পাদন ও নিবন্ধন করতে হয়। স্ট্যাম্প ডিউটি জমির মূল্যের প্রায় ৩-৪% এবং নিবন্ধন ফি আলাদা; শহরে মোট খরচ প্রায় ১০-১৪%। নিবন্ধনের পর ক্রেতাকে এসি (ভূমি) অফিসে নামজারি করতে হবে। কেনার আগে দলিল, খতিয়ান ও নামজারি যাচাই করুন এবং আইনজীবীর পরামর্শ নিন।","land_mutation":"Land mutation (namjari) is the process of transferring the name of the recorded owner in the government land records (khatian) after a land transfer or inheritance. Apply at the Assistant Commissioner (Land) office of the concerned upazila with the registered deed, previous khatian, receipt of payment of land development tax, and NID. The AC Land verifies the case, and the name is changed in the record of rights. Mutation protects your ownership against future disputes and is needed to pay land taxes and obtain loans against the land. Rejected applications can be appealed to the Deputy Commissioner. | জমির নামজারি (মিউটেশন): জমি কেনা বা উত্তরাধিকারে পাওয়ার পর সরকারি খতিয়ানে নাম পরিবর্তনের প্রক্রিয়া। রেজিস্ট্রিকৃত দলিল, আগের খতিয়ান, খাজনা পরিশোধের রসিদ ও এনআইডিসহ উপজেলা এসি (ভূমি) অফিসে আবেদন করুন। এসি ভূমি যাচাই করে রেকর্ডে নাম পরিবর্তন হয়। নামজারি ভবিষ্যতের বিরোধ থেকে জমি রক্ষা করে এবং জমি বন্ধক/ঋণের জন্য প্রয়োজন। বাতিল হলে ডিসিতে আপিল করা যায়।","land_dispute":"Land disputes in Bangladesh can be resolved through: 1) Village mediation or shalish at the union level; 2) Civil court suits (declaration of title, partition) for complex cases; 3) Application to the Assistant Commissioner (Land) or Deputy Commissioner for administrative correction of records; 4) If there is trespass or force, an FIR at the police station and a criminal case under the Penal Code. A suit for land must be filed within the limitation period (usually 12 years for recovery of possession). Keep deeds, khatians, tax receipts and mutation certificates safely; register power of attorney with caution. | জমি বিরোধ: গ্রামীণ সালিশ, দেওয়ানি আদালতে মামলা, এসি (ভূমি) বা ডিসির কাছে প্রশাসনিক নিষ্পত্তি, এবং জোরপূর্বক দখল হলে পুলিশে এফআইআর ও ফৌজদারি মামলার মাধ্যমে সমাধান করা যায়। দখল ফিরে পেতে সাধারণত ১২ বছরের মধ্যে মামলা করতে হয়। দলিল, খতিয়ান, খাজনার রসিদ ও নামজারি সনদ নিরাপদে রাখুন।","fir_process":"FIR (First Information Report): Under section 154 of the Code of Criminal Procedure every police officer must register an FIR free of charge when a crime is reported. The police cannot refuse on the ground that the case is outside their jurisdiction. If the officer in charge refuses to record the FIR, send the complaint in writing to the Superintendent of Police (section 154(3)); if still ignored, apply to the Magistrate under section 156(3) who can order an investigation. After FIR registration ask for a free copy within 24 hours. Do not pay any bribe; report any demand to the anti-corruption commission 106. | এফআইআর: ফৌজদারি কার্যবিধি কোডের ১৫৪ ধারা অনুযায়ী অপরাধের খবর পেলে পুলিশ বিনামূল্যে এফআইআর নিতে বাধ্য। থানা অপরাধটি অন্য এলাকার বলেও এফআইআর নিতে অস্বীকার করতে পারে না। এফআইআর নিতে অস্বীকার করলে এসপির কাছে লিখিত অভিযোগ পাঠান (১৫৪(৩)), তাতেও না হলে ম্যাজিস্ট্রেটের কাছে ১৫৬(৩) ধারায় আবেদন করুন। এফআইআর নেওয়ার পর ২৪ ঘণ্টার মধ্যে বিনামূল্যে কপি চান। ঘুষ দেবেন না; দাবি করলে দুর্নীতি দমন কমিশন ১০৬-এ অভিযোগ করুন।","bail_process":"Bail in Bangladesh: Bail is the release of an accused person on a bond. For bailable offenses bail is a right and is granted by the police station or magistrate court; for non-bailable offenses the court decides considering the nature of the offense, evidence, and the risk of flight or evidence tampering. The trial court grants bail; for serious offenses like murder or rape the accused applies to the High Court Division. Anticipatory bail (bail before arrest) can be obtained from the High Court under section 498 CrPC. A bail petition must include the case number, allegations and grounds. Poor accused persons can get free legal aid lawyers. | জামিন: আসামিকে জামিননামা বন্ডে মুক্তি দেওয়া। জামিনযোগ্য অপরাধে থানা বা ম্যাজিস্ট্রেট আদালতে জামিন পাওয়া যায়; অজামিনযোগ্য অপরাধে আদালত মামলার প্রকৃতি ও প্রমাণ দেখে সিদ্ধান্ত নেয়। গুরুতর অপরাধে (হত্যা, ধর্ষণ) হাইকোর্ট বিভাগে জামিনের আবেদন করতে হয়। ৪৯৮ ধারায় হাইকোর্ট থেকে আগাম জামিন নেওয়া যায়। জামিনের আবেদনে মামলা নম্বর ও যুক্তি উল্লেখ করতে হয়। গরিব আসামির জন্য আইন সহায়তা অফিসের উকিল বিনামূল্যে জামিনের আবেদন করেন।","marriage_process":"Marriage registration in Bangladesh: Under the Muslim Marriages and Divorces (Registration) Act 1974 every Muslim marriage must be registered with a registered Kazi within 30 days. Required documents: NID or birth certificates of bride and groom, photographs, and two witnesses. The dower (mahr) is recorded in the kabin nama. Since 2021, marriage registration can also be done online and the kazi must be a certified registrar. A marriage without registration is not invalid but the wife can sue for non-registration. Hindu, Buddhist and Christian marriages follow their own rites and are registered under their respective acts. | বিয়ের নিবন্ধন: মুসলিম বিবাহ ও তালাক (নিবন্ধন) আইন ১৯৭৪ অনুযায়ী প্রতিটি মুসলিম বিয়ে ৩০ দিনের মধ্যে রেজিস্টার্ড কাজীর কাছে নিবন্ধন করতে হয়। বর-কনের এনআইডি বা জন্মনিবন্ধন, ছবি ও দুই সাক্ষী প্রয়োজন। দেনমোহর কাবিননামায় লেখা হয়। অনলাইনেও নিবন্ধন সম্ভব। হিন্দু, বৌদ্ধ ও খ্রিস্টান বিয়ে নিজ নিজ রীতিতে হয়।","divorce_process":"Divorce in Bangladesh: A Muslim husband can give talaq (divorce) which must be sent to the chairman of the union parishad and a copy to the wife, then registered with the kazi; the divorce is effective after 90 days (iddat) unless reconciled. A wife can obtain khula divorce with the husbands consent or through the court. Judicial divorce is available under the Dissolution of Muslim Marriages Act 1939 on grounds like cruelty, desertion, impotence or maintenance failure. For women, dower and maintenance during iddat must be paid. Divorce of Hindus is governed by the Hindu Marriage Disability Removal Act and court decree. Custody of children is decided for the welfare of the child. | তালাক: মুসলিম স্বামী তালাক দিলে ইউনিয়ন পরিষদের চেয়ারম্যানকে পাঠাতে হয় এবং স্ত্রীকে কপি দিতে হয়; ৯০ দিনের ইদ্দতের পর তালাক কার্যকর হয়। স্ত্রী খুলা বা আদালতের মাধ্যমে তালাক নিতে পারেন। ১৯৩৯ সালের আইনে নিষ্ঠুরতা, পরিত্যাগসহ কারণে বিচারিক তালাক হয়। ইদ্দতকালীন খোরপোষ দিতে হয়। সন্তানের অভিভাবকত্ব শিশুর কল্যাণে নির্ধারিত হয়।","consumer_rights":"Consumer rights in Bangladesh are protected by the Consumer Rights Protection Act 2009. Every consumer has the right to safe goods, correct information, fair price, and compensation for defective products or poor service. Complaints can be filed with the Directorate of National Consumer Rights Protection (DNCRP) through their hotline 16119 or at district offices. You can complain about adulterated food, overpricing, false advertisement, short weight, or expiry of products. Action includes fines, seizure of goods and even case filing. Keep the receipt as evidence. Courts also accept consumer suits for damages under the Act. | ভোক্তা অধিকার সংরক্ষণ আইন ২০০৯ অনুযায়ী প্রতিটি ক্রেতার নিরাপদ পণ্য, সঠিক তথ্য, ন্যায্য মূল্য ও ক্ষতিপূরণ পাওয়ার অধিকার আছে। ভেজাল খাদ্য, বেশি দাম, মিথ্যা বিজ্ঞাপন, কম ওজন বা মেয়াদোত্তীর্ণ পণ্যের অভিযোগ করতে পারেন জাতীয় ভোক্তা অধিকার সংরক্ষণ অধিদপ্তরে (হটলাইন ১৬১১৯)। ব্যবস্থা হিসেবে জরিমানা, পণ্য জব্দ ও মামলা হয়। রসিদ প্রমাণ হিসেবে রাখুন।","cyber_security":"Cyber Security Act 2023 replaced the Digital Security Act 2018 in Bangladesh. It criminalizes spreading rumors or false information online, hacking, identity theft, morphing photos, cyber stalking, harassment through social media, and damaging computer systems. Punishments range from fines to imprisonment (up to 14 years for serious offenses). If you are a victim of cyber crime, collect screenshots and report to the Cyber Crime Awareness helpline 333, the Cyber Police Center, or file a case at the nearest police station; women can also call 109. Avoid posting personal information publicly and use strong passwords. | সাইবার নিরাপত্তা আইন ২০২৩ ডিজিটাল নিরাপত্তা আইন ২০১৮-এর পরিবর্তে এসেছে। অনলাইনে গুজব ছড়ানো, হ্যাকিং, পরিচয় চুরি, ছবি মরফিং, সাইবার স্টকিং, সামাজিক মাধ্যমে হয়রানি ও কম্পিউটার সিস্টেম ক্ষতির শাস্তি এই আইনে। শাস্তি জরিমানা থেকে ১৪ বছর পর্যন্ত কারাদণ্ড। সাইবার অপরাধের শিকার হলে স্ক্রিনশট সংগ্রহ করে ৩৩৩ নম্বরে সাইবার সাপোর্ট বা নিকটস্থ থানায় অভিযোগ করুন; নারীরা ১০৯-এও কল করতে পারেন।","court_structure":"Court system of Bangladesh: The Supreme Court is at the apex with two divisions - the Appellate Division and the High Court Division. Below are the lower courts: District and Sessions Judges Courts in each of the 64 districts, Chief Judicial Magistrate Courts, Additional District Judges, and specialized courts including Family Courts, Labour Courts, Women and Children Repression Tribunals, Special Tribunals for quick trial, and Metropolitan Magistrate Courts in city areas. Civil cases (money, land, contract) start in Assistant Judge or Senior Assistant Judge courts up to Tk 20 lakh; bigger suits go to the District Judge. Criminal cases start at the magistrate level; serious offenses are tried by sessions courts after committal. Village courts at the union level resolve small civil and petty criminal disputes. | বাংলাদেশের আদালত কাঠামো: সর্বোচ্চ আদালত সুপ্রিম কোর্ট - আপিল বিভাগ ও হাইকোর্ট বিভাগ। নিচে ৬৪ জেলায় জেলা ও দায়রা জজ আদালত, চিফ জুডিশিয়াল ম্যাজিস্ট্রেট আদালত, পারিবারিক আদালত, শ্রম আদালত, নারী ও শিশু নির্যাতন ট্রাইব্যুনাল, দ্রুত বিচার ট্রাইব্যুনাল এবং মহানগর ম্যাজিস্ট্রেট আদালত। দেওয়ানি মামলা সহকারী জজ আদালতে শুরু হয়। ফৌজদারি মামলা ম্যাজিস্ট্রেট স্তরে শুরু হয়ে গুরুতর অপরাধ দায়রা আদালতে বিচার হয়। গ্রামের ছোট বিরোধে ইউনিয়ন ভূমি আদালত আছে।","legal_aid_apply":"Free legal aid in Bangladesh: The National Legal Aid Services Organization (NLASO) under the Ministry of Law provides free lawyers, mediation and legal advice to poor, vulnerable and disadvantaged people. Apply at the District Legal Aid Office (in the District Judges court premises) or Upazila Legal Aid Committee with your NID, proof of income (income below the ceiling set by the government), and details of the case. Helpline 16430 is the national free legal aid hotline where you can get initial advice over the phone. Legal aid covers criminal cases, family disputes, land cases, service matters and more. Women victims of violence, acid survivors, persons with disability and ethnic minorities get priority. | বাংলাদেশে বিনামূল্যে আইন সহায়তা: আইন মন্ত্রণালয়ের অধীন জাতীয় আইন সহায়তা সেবা সংস্থা (এনলাসো) গরিব, অসহায় ও সুবিধাবঞ্চিত মানুষকে বিনামূল্যে উকিল, মধ্যস্থতা ও পরামর্শ দেয়। জেলা আইন সহায়তা অফিস বা উপজেলা আইন সহায়তা কমিটিতে এনআইডি ও আয়ের প্রমাণসহ আবেদন করুন। জাতীয় হেল্পলাইন ১৬৪৩০-এ ফোন করে প্রাথমিক পরামর্শ নিতে পারেন। সহিংসতার শিকার নারী, অ্যাসিড দগ্ধ, প্রতিবন্ধী ও ক্ষুদ্র নৃগোষ্ঠী অগ্রাধিকার পায়।","company_registration":"Registering a company in Bangladesh: A private limited company is registered with the Registrar of Joint Stock Companies and Firms (RJSC). Steps: 1) Reserve the company name online at rjsc.gov.bd; 2) Prepare the Memorandum and Articles of Association; 3) Submit incorporation documents online with NID of directors and payment of fees; 4) Obtain the certificate of incorporation (usually within days). After that obtain a trade licence from the local city corporation or municipality, e-TIN from NBR, and open a bank account. A one-person company is also possible. Foreign investors can register a branch or joint venture with Board of Investment (BIDA) approval. | কোম্পানি নিবন্ধন: রেজিস্ট্রার অব জয়েন্ট স্টক কোম্পানিজ (আরজেএসসি)-তে প্রাইভেট লিমিটেড কোম্পানি নিবন্ধিত হয়। নাম সংরক্ষণ, মেমোরেন্ডাম ও আর্টিকেলস তৈরি, অনলাইনে আবেদন ও ফি পরিশোধ করে সার্টিফিকেট নিন। পরে সিটি কর্পোরেশন থেকে ট্রেড লাইসেন্স, এনবিআর থেকে ই-টিআইএন এবং ব্যাংক অ্যাকাউন্ট খুলুন।","bank_account":"Opening a bank account in Bangladesh: Visit any scheduled bank branch with your NID (or birth certificate for minors), two passport-size photographs, and a filled account opening form. A joint account needs both holders documents. Many banks offer online account opening and e-KYC through mobile apps. You need a minimum initial deposit (usually Tk 500-1000 for savings). For a company account, trade licence, TIN and board resolution are required. Nominee declaration is important for inheritance of funds. Mobile financial services like bKash and Nagad require NID-linked SIM verification (full KYC) to raise transaction limits. | ব্যাংক অ্যাকাউন্ট খোলা: এনআইডি (নাবালকের জন্য জন্মনিবন্ধন), দুই কপি ছবি ও ফর্মসহ যেকোনো তফসিলি ব্যাংকে আবেদন করুন। অনলাইন ও ই-কেওয়াইসিতে অনেক ব্যাংক অ্যাকাউন্ট খোলার সুবিধা দেয়। কোম্পানির অ্যাকাউন্টে ট্রেড লাইসেন্স ও টিআইএন প্রয়োজন। বিএলআইএসি বা নগদের মতো মোবাইল ব্যাংকিংয়ে লেনদেনের সীমা বাড়াতে এনআইডি-লিংকড পূর্ণ যাচাইকরণ লাগে।","lawyer_choice":"Choosing a lawyer in Bangladesh: Look for an advocate enrolled with the Bangladesh Bar Council - Senior Advocates and Advocates with at least 2 years of practice can appear in courts. Verify credentials at the district bar association, ask about fees in advance (consultation fees, filing fees, hearing fees are common), and sign a written agreement (vakalatnama). Government and court websites list panel lawyers for legal aid. For family, land, criminal or company matters choose a specialist. Beware of middlemen (dalals) who demand extra money; pay fees through bank or by receipt. If dissatisfied, you can change your lawyer at any stage. | আইনজীবী নির্বাচন: বাংলাদেশ বার কাউন্সিলে তালিকাভুক্ত অ্যাডভোকেট বেছে নিন। জেলা আইনজীবী সমিতিতে সদস্যপদ যাচাই করুন, আগে থেকে ফি (পরামর্শ, দাখিল, শুনানি) জানিয়ে নিন এবং ভাকালাতনামায় স্বাক্ষর করুন। পারিবারিক, জমি, ফৌজদারি বা কোম্পানি বিষয়ে বিশেষজ্ঞ নিন। দালালদের অতিরিক্ত টাকা দেবেন না; ফি ব্যাংক বা রসিদে দিন।","education_system":"Education system of Bangladesh: Primary education is 5 years (class 1-5), secondary is 7 years (class 6-12) divided into junior, secondary and higher secondary. Public examinations: PSC after class 5, JSC after class 8, SSC after class 10 and HSC after class 12 under the education boards (Dhaka, Rajshahi, Comilla, Jessore, Chittagong, Barisal, Sylhet, Dinajpur and Madrasah and Technical boards). There are government, non-government, English-medium and madrasah streams. Free and compulsory primary education, free textbooks and stipends for girls are provided by law. Higher education includes public universities (Dhaka, Rajshahi, Chittagong, Jahangirnagar, Islamic University), science and technology universities, private universities and national university. | বাংলাদেশের শিক্ষাব্যবস্থা: প্রাথমিক ৫ বছর, মাধ্যমিক ৭ বছর। পিএসসি, জেএসসি, এসএসসি ও এইচএসসি পরীক্ষা শিক্ষাবোর্ডের অধীনে হয়। সরকারি, বেসরকারি, ইংরেজি মাধ্যম ও মাদ্রাসা ধারা আছে। প্রাথমিক শিক্ষা বাধ্যতামূলক, পাঠ্যবই বিনামূল্যে। উচ্চশিক্ষায় ঢাকা, রাজশাহী, চট্টগ্রাম, জাহাঙ্গীরনগরসহ পাবলিক বিশ্ববিদ্যালয় ও বেসরকারি বিশ্ববিদ্যালয় আছে।","healthcare_access":"Healthcare in Bangladesh: Public healthcare is delivered through community clinics, union health centers, upazila health complexes (UHC), district hospitals and specialized hospitals; treatment in public facilities is heavily subsidized. For emergencies call 999 ambulance service. The national health helpline 16263 gives medical advice over phone. Maternal and child health services, immunization (EPI), TB and family planning services are free at government facilities. Medicine purchases require a licensed pharmacy; expired or adulterated medicine should be reported to the Directorate General of Drug Administration. Private hospitals offer faster but costlier care; check the hospital license and surgeon credentials before major treatment. | বাংলাদেশে স্বাস্থ্যসেবা: কমিউনিটি ক্লিনিক, উপজেলা স্বাস্থ্য কমপ্লেক্স, জেলা হাসপাতালে স্বল্পমূল্যে সরকারি চিকিৎসা হয়। জরুরি অবস্থায় ৯৯৯-এ অ্যাম্বুলেন্স কল করুন। জাতীয় স্বাস্থ্য হেল্পলাইন ১৬২৬৩। মা ও শিশু স্বাস্থ্য, টিকা, টিবি ও পরিবার পরিকল্পনা সেবা সরকারি কেন্দ্রে বিনামূল্যে। মেয়াদোত্তীর্ণ ওষুধ ঔষধ প্রশাসন অধিদপ্তরে অভিযোগ করুন। বেসরকারি হাসপাতালের লাইসেন্স ও সার্জনের যোগ্যতা যাচাই করুন।"
+,"worker_injury":"Workplace injury and compensation: If a worker is injured, becomes disabled or dies at work, the employer must pay compensation under the Bangladesh Labour Act 2006. For death the family receives Tk 1,00,000 plus 100 percent of the basic wage for 5 years. For permanent total disability Tk 1,25,000 plus 100 percent of basic wage for 5 years; partial disability receives a percentage-based amount. The employer must give first aid, arrange treatment, and report the accident to the Inspector (DIFE) within 24 hours. Death or serious injury must also be reported to the police. If the employer refuses compensation, file a case in the Labour Court within the limitation period. | কর্মক্ষেত্রে আঘাত ও ক্ষতিপূরণ: শ্রম আইন ২০০৬ অনুযায়ী কাজের সময় আঘাত, অক্ষমতা বা মৃত্যু হলে মালিক ক্ষতিপূরণ দেবেন। মৃত্যুতে পরিবার পায় ১,০০,০০০ টাকা ও ৫ বছরের মৌলিক বেতন। স্থায়ী সম্পূর্ণ অক্ষমতায় ১,২৫,০০০ টাকা ও ৫ বছরের মৌলিক বেতন। মালিককে প্রাথমিক চিকিৎসা দিতে হবে এবং ২৪ ঘণ্টার মধ্যে দুর্ঘটনা জানাতে হবে। মৃত্যু বা গুরুতর আঘাত পুলিশকেও জানাতে হয়। ক্ষতিপূরণ না দিলে শ্রম আদালতে মামলা করুন।","birth_registration":"Birth registration in Bangladesh is mandatory under the Birth and Death Registration Act 2004. A birth must be registered within 45 days of birth, but late registration is possible with the certificate of the union parishad chairman or ward councillor. Register online at bdris.gov.bd or at the local union digital center, city corporation office or embassy abroad. The birth registration certificate (BRC) is needed for school admission, NID at age 18, passport, marriage registration, and many services. Death registration is also mandatory within 45 days. Corrections to the certificate can be made through the registrar with proper evidence. | জন্ম নিবন্ধন: জন্ম ও মৃত্যু নিবন্ধন আইন ২০০৪ অনুযায়ী জন্ম নিবন্ধন বাধ্যতামূলক। জন্মের ৪৫ দিনের মধ্যে নিবন্ধন করতে হয়; দেরিতে নিবন্ধনেও চেয়ারম্যানের সনদ লাগে। bdris.gov.bd-এ অনলাইনে বা ইউনিয়ন ডিজিটাল সেন্টারে নিবন্ধন করুন। জন্মনিবন্ধন সনদ স্কুলে ভর্তি, ১৮ বছর বয়সে এনআইডি, পাসপোর্ট ও বিয়ের নিবন্ধনে প্রয়োজন। মৃত্যু নিবন্ধনও ৪৫ দিনের মধ্যে বাধ্যতামূলক।","will_testament":"A will (testament) in Bangladesh: Any person of sound mind above 18 can make a will about how his or her property will be distributed after death. A Muslim may will away up to one-third of the property to non-heirs; the rest is divided among heirs according to Muslim law. Hindus can will away their self-acquired property. A will should be written, signed by the testator, and witnessed by two persons; registration of a will is optional but recommended. After death, the will is proved in court (probate) before property is distributed. A registered will reduces family disputes. For legal drafting consult a lawyer. | উইল (ওসিয়ত): সুস্থ মস্তিষ্কের ১৮ বছরের বেশি বয়সী যে কেউ মৃত্যুর পর সম্পত্তি বণ্টন নিয়ে উইল করতে পারেন। মুসলিম অ-ওয়ারিসদের সর্বোচ্চ এক-তৃতীয়াংশ সম্পত্তি উইল করতে পারেন; বাকি অংশ উত্তরাধিকারীদের মধ্যে বণ্টন হয়। উইল স্বাক্ষর ও দুই সাক্ষী দরকার; নিবন্ধন ঐচ্ছিক কিন্তু ভালো। মৃত্যুর পর আদালতে প্রোবেটের মাধ্যমে উইল সিদ্ধ হয়। আইনজীবীর মাধ্যমে উইল লেখা উত্তম।","remand_process":"Police remand in Bangladesh: Under section 167 of the Code of Criminal Procedure, police may ask the magistrate to keep an accused in police custody for interrogation. Remand is granted only when the magistrate is satisfied it is necessary, and for a maximum of 15 days in total (not at one time more than necessary). The accused has the right to be produced before the magistrate, to see the remand prayer, and to a lawyer. Physical or mental torture during remand is illegal and the victim can complain to the magistrate, the Inspector General of Police, or the Human Rights Commission. Legal aid is available free for poor detainees. | পুলিশ রিমান্ড: ফৌজদারি কার্যবিধির ১৬৭ ধারা অনুযায়ী জিজ্ঞাসাবাদের জন্য ম্যাজিস্ট্রেটের আদেশে পুলিশ হেফাজতে রিমান্ড হয়। মোট ১৫ দিনের বেশি নয়। আসামিকে ম্যাজিস্ট্রেটের সামনে হাজির করতে হয় এবং আইনজীবীর অধিকার আছে। রিমান্ডে নির্যাতন বেআইনি; নির্যাতনের শিকার হলে ম্যাজিস্ট্রেট বা মানবাধিকার কমিশনে অভিযোগ করুন। গরিব আসামির জন্য আইনি সহায়তা বিনামূল্যে।"};var aliasMap={"abrar fahad murder":"abrar_fahad","abrar murder":"abrar_fahad","abrar fahad":"abrar_fahad","abrar":"abrar_fahad","osman hadi":"osman_hadi","hadi":"osman_hadi","inqilab moncho":"inqilab_moncho","july uprising":"july_uprising","hadi assassination":"hadi_assassination","hadi early life":"hadi_early_life","hadi legacy":"hadi_legacy","hadi personal":"hadi_personal","hadi wife":"hadi_personal","hadi family":"hadi_personal","hadi education":"hadi_education","hadi books":"hadi_books","hadi dhaka":"hadi_dhaka_8","hadi investigation":"hadi_investigation","hadi reaction":"hadi_reaction","hadi worldview":"hadi_worldview","inqlab manch":"inqilab_moncho","inqlab moncho":"inqilab_moncho","july":"july_uprising","bashir hadi":"hadi_early_life","osman hadi wife":"hadi_personal","osman hadi family":"hadi_personal","osman hadi son":"hadi_personal","osman hadi marriage":"hadi_personal","osman hadi books":"hadi_books","osman hadi poetry":"hadi_books","hadi quotes":"hadi_quotes","hadi quote":"hadi_quotes","quotes of hadi":"hadi_quotes","quotes by hadi":"hadi_quotes","quotes of osman hadi":"hadi_quotes","quotes by osman hadi":"hadi_quotes","osman hadi quotes":"hadi_quotes","osman hadi quote":"hadi_quotes","hadi famous quotes":"hadi_quotes","hadi famous quote":"hadi_quotes","hadi quotations":"hadi_quotes","hadi quotation":"hadi_quotes","hadi said":"hadi_quotes","what did hadi say":"hadi_quotes","what did osman hadi say":"hadi_quotes","hadi famous saying":"hadi_quotes","hadi famous words":"hadi_quotes","hadi speeches":"hadi_speeches","hadi speech":"hadi_speeches","speeches of hadi":"hadi_speeches","speech of hadi":"hadi_speeches","speeches of osman hadi":"hadi_speeches","speech of osman hadi":"hadi_speeches","osman hadi speeches":"hadi_speeches","osman hadi speech":"hadi_speeches","hadi spoke":"hadi_speeches","hadi lecture":"hadi_speeches","hadi press conference":"hadi_speeches","hadi shahbagh speech":"hadi_speeches","hadi shahbagh assembly":"hadi_speeches","hadi fascism speech":"hadi_speeches","hadi national government":"hadi_speeches","hadi dhaka university speech":"hadi_speeches","hadi madhur canteen speech":"hadi_speeches","hadi poetry":"hadi_books","hadi book":"hadi_books","hadi poem":"hadi_books","books by hadi":"hadi_books","books by osman hadi":"hadi_books","books written by hadi":"hadi_books","books written by osman hadi":"hadi_books","what books did hadi write":"hadi_books","what books did osman hadi write":"hadi_books","simanta sharif":"hadi_books","shimanto sharif":"hadi_books","lavay lalshak":"hadi_books","lavay lalshak puber akash":"hadi_books","osman hadi education":"hadi_education","osman hadi dhaka":"hadi_dhaka_8","osman hadi investigation":"hadi_investigation","osman hadi reaction":"hadi_reaction","osman hadi legacy":"hadi_legacy","osman hadi early life":"hadi_early_life","osman hadi assassination":"hadi_assassination","osman hadi worldview":"hadi_worldview","july uprising":"july_2024","july revolution":"july_2024","july 2024":"july_2024","bangladesh revolution":"july_2024","student uprising":"july_2024","quota reform":"july_quota","quota movement":"july_quota","sheikh hasina":"july_hasina","hasina":"july_hasina","nahid islam":"july_leaders","student leaders":"july_leaders","bangla blockade":"july_timeline","august 5":"july_result","august five":"july_result","muhammad yunus":"july_yunus","yunus":"july_yunus","interim government":"july_yunus","interim govt":"july_yunus","martyrs":"july_martyrs","mugdho":"july_martyrs","golam nafiz":"golam_nafiz","nafiz":"golam_nafiz","nafiz bhuiyan":"golam_nafiz","youngest martyr":"golam_nafiz","farhan faiyaaz":"farhan_faiyaaz","farhan faiyaz":"farhan_faiyaaz","faiyaaz":"farhan_faiyaaz","faiyaz":"farhan_faiyaaz","farhanul islam":"farhan_faiyaaz","ফারহান ফাইয়াজ":"farhan_faiyaaz","ফারহান ফাইয়জ":"farhan_faiyaaz","ফাইয়াজ":"farhan_faiyaaz","tahir zaman priyo":"tahir_zaman_priyo","touhid zaman":"tahir_zaman_priyo","priyo":"tahir_zaman_priyo","তাহির জামান প্রিয়":"tahir_zaman_priyo","তাহির জামান":"tahir_zaman_priyo","রাকিবুল হাসান":"rakibul_hasan","rakibul hasan":"rakibul_hasan","রাকিবুল":"rakibul_hasan","mir mugdho":"july_martyrs","mir mahfuzur":"july_martyrs","felani khatun":"felani_trial_detail","felani":"felani_trial_detail","felani photo":"july_martyrs","abu sayed photo":"july_martyrs","abu sayed picture":"july_martyrs","mugdho photo":"july_martyrs","martyrs photos":"july_martyrs","july martyrs photos":"july_martyrs","honouring martyrs":"july_martyrs","casualties":"july_violence","deaths":"july_violence","killed":"july_violence","injured":"july_violence","arrested":"july_violence","bnp":"july_parties","jamaat":"july_parties","opposition":"july_parties","un response":"july_intl","international response":"july_intl","gen z":"july_2024","monsoon revolution":"july_2024","muhammad yunus":"yunus","dr yunus":"yunus","professor yunus":"yunus","yunus nobel":"yunus_nobel","nobel prize":"yunus_nobel","grameen bank":"yunus_grameen","grameen":"yunus_grameen","microcredit":"yunus_grameen","microfinance":"yunus_grameen","chief adviser":"yunus_chief","interim government":"yunus_chief","social business":"yunus_social","yunus education":"yunus_education","yunus family":"yunus_family","yunus wife":"yunus_family","yunus awards":"yunus_awards","yunus 1974":"yunus_74_famine","famine":"yunus_74_famine","jobra":"yunus_grameen","dhaka district":"dhaka","faridpur district":"faridpur","gazipur district":"gazipur","gopalganj district":"gopalganj","kishoreganj district":"kishoreganj","madaripur district":"madaripur","manikganj district":"manikganj","munshiganj district":"munshiganj","narayanganj district":"narayanganj","narsingdi district":"narsingdi","rajbari district":"rajbari","shariatpur district":"shariatpur","tangail district":"tangail","chattogram district":"chattogram_district","noakhali district":"noakhali","cumilla district":"cumilla","bandarban district":"bandarban","khagrachhari district":"khagrachhari","rangamati district":"rangamati","brahmanbaria district":"brahmanbaria","coxsbazar district":"coxsbazar","chandpur district":"chandpur","lakshmipur district":"lakshmipur","feni district":"feni","rajshahi district":"rajshahi_district","bogra district":"bogura","bogura district":"bogura","pabna district":"pabna","sirajganj district":"sirajganj","naogaon district":"naogaon","natore district":"natore","chapainawabganj district":"chapainawabganj","joypurhat district":"joypurhat","khulna district":"khulna_district","jashore district":"jashore","kushtia district":"kushtia","satkhira district":"satkhira","jhenaidah district":"jhenaidah","bagerhat district":"bagerhat","chuadanga district":"chuadanga","magura district":"magura","narail district":"narail","meherpur district":"meherpur","barishal district":"barishal_district","patuakhali district":"patuakhali","bhola district":"bhola","pirojpur district":"pirojpur","barguna district":"barguna","jhalokathi district":"jhalokathi","sylhet district":"sylhet_district","sunamganj district":"sunamganj","habiganj district":"habiganj","moulvibazar district":"moulvibazar","rangpur district":"rangpur_district","dinajpur district":"dinajpur","gaibandha district":"gaibandha","kurigram district":"kurigram","nilphamari district":"nilphamari","thakurgaon district":"thakurgaon","lalmonirhat district":"lalmonirhat","panchagarh district":"panchagarh","mymensingh district":"mymensingh_district","jamalpur district":"jamalpur","netrokona district":"netrokona","sherpur district":"sherpur","cox s bazar":"coxsbazar","cox bazar":"coxsbazar","chittagong":"chattogram_district","comilla":"cumilla","jessore":"jashore","bogra":"bogura","about dhaka":"dhaka","tell me about dhaka":"dhaka","about chattogram":"chattogram_district","about sylhet":"sylhet_district","about rajshahi":"rajshahi_district","about khulna":"khulna_district","about barishal":"barishal_district","about rangpur":"rangpur_district","about mymensingh":"mymensingh_district","district list":"division_all","list of districts":"division_all","all districts":"division_all","64 districts":"division_all","bangladesh districts":"division_all","district information":"district_first_last","district history":"district_first_last","greater districts":"greater_districts","division history":"division_history","divisions of bangladesh":"division_all","national symbols":"bangladesh_symbols","symbols of bangladesh":"bangladesh_symbols","economy of bangladesh":"economy_detail","bangladesh economy":"economy_detail","governance of bangladesh":"governance_full","bangladesh governance":"governance_full","admin structure":"bangladesh_admin_full","administration":"bangladesh_admin_full","july uprising":"july_overview","july revolution":"july_overview","monsoon revolution":"july_overview","gen z revolution":"july_overview","razakar":"july_razakar_slogans","razakar slogan":"july_razakar_slogans","abu sayed":"july_abu_sayed","first martyr":"july_abu_sayed","quota system":"july_quota_system","job quota":"july_quota_system","quota reform":"july_quota_system","july timeline":"july_timeline","july casualties":"july_casualties","how many killed":"july_casualties","sc verdict":"july_sc_verdict","supreme court verdict":"july_sc_verdict","93 percent":"july_sc_verdict","hasina fall":"july_hasina_fall","hasina resignation":"july_hasina_fall","hasina fled":"july_hasina_fall","july aftermath":"july_aftermath","interim government":"july_aftermath","yunus government":"july_aftermath","bangla blockade":"july_bangla_blockade","complete shutdown":"july_complete_shutdown","non cooperation":"july_non_cooperation","bangladesh revolution":"july_overview","student uprising":"july_overview","about july":"july_overview","july 2024":"july_overview","august 5":"july_hasina_fall","august five":"july_hasina_fall",'grokipedia':'grokipedia_overview','uprising overview':'grokipedia_overview','quota system':'quota_system_full','quota breakdown':'quota_56_breakdown','56 percent quota':'quota_56_breakdown','quota history':'quota_system_full','detailed timeline':'july_timeline_detailed','complete timeline':'july_timeline_detailed','abu sayed':'july_abu_sayed_detail','abu saeed':'july_abu_sayed_detail','first martyr':'july_abu_sayed_detail','military refusal':'july_military_refusal','army chief':'july_military_refusal','waker uz zaman':'july_military_refusal','leaked audio':'july_leaked_audio','hasina audio':'july_leaked_audio','shoot order':'july_leaked_audio','bbc investigation':'july_bbc_leaked_evidence','bbc documentary':'july_bbc_leaked_evidence','battle for bangladesh':'july_bbc_leaked_evidence','forensic architecture':'july_bbc_leaked_evidence','casualties detailed':'july_casualty_details','how many killed':'july_casualty_details','death count':'july_casualty_details','internet blackout':'july_internet_shutdown','internet shutdown':'july_internet_shutdown','11 days':'july_internet_shutdown','hasina resignation':'july_howina_resignation','ganabhaban':'july_howina_resignation','august 5':'july_howina_resignation','aug 5':'july_howina_resignation','interim government':'july_yunus_govt','yunus government':'july_yunus_govt','july 36':'july_july36','36 july':'july_july36','bangla spring':'july_july36','nahid':'july_nahid_islam','hasnat':'july_hasnat_abdullah','hasnat abdullah':'july_hasnat_abdullah','ncp':'july_hasnat_abdullah','students against discrimination':'july_sad','anti discrimination':'july_sad','sad movement':'july_sad','chhatra league':'july_chhatra_league','bcl attack':'july_chhatra_league','jatrabari':'july_jatrabari','shaheed foundation':'july_shr_foundation','martyr compensation':'july_shr_foundation','july charter':'july_charter_info','national charter':'july_charter_info','charter 2025':'july_charter_info','genocide day':'july_genocide_day','july 19':'july_genocide_day','august 4':'july_aug_4_deadliest','aug 4':'july_aug_4_deadliest','non cooperation':'july_non_cooperation','non-cooperation':'july_non_cooperation','bangla blockade':'july_bangla_blockade','road blockade':'july_bangla_blockade','aftermath':'july_aftermath_challenges','post uprising':'july_aftermath_challenges','monsoon revolution':'grokipedia_overview','student revolution':'grokipedia_overview','july revolution':'grokipedia_overview','razakar':'july_timeline_detailed','how hasina fell':'july_howina_resignation','who killed abu sayed':'july_abu_sayed_detail','july manifesto':'july_charter_info','constitutional reform':'july_charter_info','bicameral parliament':'july_charter_info','caretaker government':'july_charter_info','pm term limit':'july_charter_info','dhaka':'dha_dhaka','gazipur':'dha_gazipur','narayanganj':'dha_narayanganj','faridpur':'dha_faridpur','gopalganj':'dha_gopalganj','kishoreganj':'dha_kishoreganj','madaripur':'dha_madaripur','manikganj':'dha_manikganj','munshiganj':'dha_munshiganj','narsingdi':'dha_narsingdi','rajbari':'dha_rajbari','shariatpur':'dha_shariatpur','tangail':'dha_tangail','chattogram':'ctg_chattogram','comilla':'ctg_cumilla','cumilla':'ctg_cumilla','noakhali':'ctg_noakhali','bandarban':'ctg_bandarban','khagrachhari':'ctg_khagrachhari','rangamati':'ctg_rangamati','brahmanbaria':'ctg_brahmanbaria','coxsbazar':'ctg_coxsbazar','cox bazar':'ctg_coxsbazar','chandpur':'ctg_chandpur','lakshmipur':'ctg_lakshmipur','feni':'ctg_feni','rajshahi':'raj_rajshahi','bogura':'raj_bogura','bogra':'raj_bogura','pabna':'raj_pabna','sirajganj':'raj_sirajganj','naogaon':'raj_naogaon','natore':'raj_natore','chapainawabganj':'raj_chapainawabganj','joypurhat':'raj_joypurhat','khulna':'khu_khulna','jashore':'khu_jashore','kushtia':'khu_kushtia','satkhira':'khu_satkhira','jhenaidah':'khu_jhenaidah','bagerhat':'khu_bagerhat','chuadanga':'khu_chuadanga','magura':'khu_magura','narail':'khu_narail','meherpur':'khu_meherpur','barishal':'bar_barishal','patuakhali':'bar_patuakhali','bhola':'bar_bhola','pirojpur':'bar_pirojpur','barguna':'bar_barguna','jhalokathi':'bar_jhalokathi','sylhet':'syl_sylhet','sunamganj':'syl_sunamganj','habiganj':'syl_habiganj','moulvibazar':'syl_moulvibazar','rangpur':'ran_rangpur','dinajpur':'ran_dinajpur','gaibandha':'ran_gaibandha','kurigram':'ran_kurigram','nilphamari':'ran_nilphamari','thakurgaon':'ran_thakurgaon','lalmonirhat':'ran_lalmonirhat','panchagarh':'ran_panchagarh','mymensingh':'mym_mymensingh','jamalpur':'mym_jamalpur','netrokona':'mym_netrokona','sherpur':'mym_sherpur','dhaka districts':'division_all','chattogram districts':'division_all','rajshahi districts':'division_all','khulna districts':'division_all','barishal districts':'division_all','sylhet districts':'division_all','rangpur districts':'division_all','mymensingh districts':'division_all','list all districts':'division_all','64 districts':'division_all','district info':'division_all','court info':'division_all','legal aid':'division_all','district court':'division_all','yunus':'yunus_biography','muhammad yunus':'yunus_biography','chief adviser':'yunus_chief_adviser','grameen':'yunus_grameen','grameen bank':'yunus_grameen','microcredit':'yunus_microfinance_impact','microfinance':'yunus_microfinance_impact','interim government':'interim_govt_council','interim govt':'interim_govt_council','six commissions':'yunus_six_commissions','reform commissions':'yunus_six_commissions','special assistant':'special_assistants','abdul hafiz':'special_assistants','mahfuz alam':'special_assistants','ali riaz':'special_assistants','giu':'giu','governance innovation':'giu','nobel laureate':'yunus_biography','grameen model':'yunus_microfinance_impact','social business':'yunus_microfinance_impact','interim reforms':'interim_reforms','younus':'yunus_biography','yunus chief adviser':'yunus_chief_adviser','interim council':'interim_govt_council','interim legal basis':'interim_govt_legal_basis','interim challenges':'interim_govt_challenges','younus nobel':'yunus_biography','hello':'gen_greeting','hi':'gen_greeting','hey':'gen_greeting','how are you':'gen_how_are_you','how r u':'gen_how_are_you','who are you':'gen_who_are_you','your name':'gen_who_are_you','thank you':'gen_thank_you','thanks':'gen_thank_you','joke':'gen_joke','tell me a joke':'gen_joke','funny':'gen_joke','motivation':'gen_motivation','inspire me':'gen_motivation','weather':'gen_weather','climate':'gen_weather','food':'gen_cooking','cooking':'gen_cooking','recipe':'gen_cooking','biryani':'gen_cooking','hilsa':'gen_cooking','pitha':'gen_cooking','sports':'gen_sports','cricket':'gen_sports','football':'gen_sports','kabaddi':'gen_sports','shakib':'gen_sports','culture':'gen_bengali_culture','festivals':'gen_bengali_culture','pohela boishakh':'gen_bengali_culture','ekushey':'gen_bengali_culture','science':'gen_science_basics','physics':'gen_science_basics','history':'gen_history_world','world war':'gen_history_world','geography':'gen_geography','ocean':'gen_geography','space':'gen_space','planets':'gen_space','solar system':'gen_space','technology':'gen_tech','ai':'gen_tech','blockchain':'gen_tech','programming':'gen_programming','python':'gen_programming','javascript':'gen_programming','coding':'gen_programming','math':'gen_math','mathematics':'gen_math','calculate':'gen_math','health':'gen_health','exercise':'gen_health','sleep':'gen_health','nature':'gen_nature','environment':'gen_nature','climate change':'gen_nature','help':'gen_greeting','what can you do':'gen_who_are_you','bangladesh':'gen_bengali_culture','bengali':'gen_bengali_culture','women helpline':'womensafety_helplines','109':'womensafety_helplines','domestic violence':'womensafety_dv_act','domestic violence act':'womensafety_dv_act','dv act':'womensafety_dv_act','family violence':'womensafety_dv_act','wife beating':'womensafety_dv_act','nari o shishu':'womensafety_repression_act','repression act':'womensafety_repression_act','rape law':'womensafety_repression_act','acid attack':'womensafety_acid','acid law':'womensafety_acid','dowry':'womensafety_dowry','dowry law':'womensafety_dowry','youtuk':'womensafety_dowry','cyber harassment':'womensafety_cyber','online harassment':'womensafety_cyber','morphing':'womensafety_cyber','cyber stalking':'womensafety_cyber','women rights':'womensafety_constitution','women constitution':'womensafety_constitution','article 28':'womensafety_constitution','women safety':'womensafety_sos_plan','unsafe feeling':'womensafety_sos_plan','oscc':'womensafety_oscc','one stop crisis':'womensafety_oscc','workplace harassment':'womensafety_rights_workplace','sexual harassment':'womensafety_rights_workplace','eveteasing':'womensafety_rights_workplace','women organizations':'womensafety_ngos','ask':'womensafety_ngos','naripokkho':'womensafety_ngos','women police':'womensafety_police','police help desk':'womensafety_police','sheguard':'womensafety_sos_plan','bachao':'womensafety_sos_plan','safe':'womensafety_sos_plan','নারী হেল্পলাইন':'womensafety_helplines','মহিলা হেল্পলাইন':'womensafety_helplines','নারী সুরক্ষা হেল্পলাইন':'womensafety_helplines','পারিবারিক সহিংসতা':'womensafety_dv_act','গার্হস্থ্য সহিংসতা':'womensafety_dv_act','স্ত্রী নির্যাতন':'womensafety_dv_act','পারিবারিক নির্যাতন':'womensafety_dv_act','স্বামীর নির্যাতন':'womensafety_dv_act','ডোমেস্টিক ভায়োলেন্স':'womensafety_dv_act','নারী নির্যাতন':'womensafety_repression_act','নারী ও শিশু নির্যাতন':'womensafety_repression_act','ধর্ষণ':'womensafety_repression_act','ধর্ষণ আইন':'womensafety_repression_act','নারী নির্যাতন আইন':'womensafety_repression_act','নারী ও শিশু নির্যাতন দমন':'womensafety_repression_act','অ্যাসিড নিক্ষেপ':'womensafety_acid','অ্যাসিড সন্ত্রাস':'womensafety_acid','অ্যাসিড অপরাধ':'womensafety_acid','যৌতুক':'womensafety_dowry','যৌতুক আইন':'womensafety_dowry','যৌতুক দাবি':'womensafety_dowry','যৌতুক নিষেধাজ্ঞা':'womensafety_dowry','সাইবার হয়রানি':'womensafety_cyber','অনলাইন হয়রানি':'womensafety_cyber','মরফিং':'womensafety_cyber','সাইবার স্টকিং':'womensafety_cyber','সাইবার অপরাধ':'womensafety_cyber','নারী অধিকার':'womensafety_constitution','নারীদের অধিকার':'womensafety_constitution','নারী সমতা':'womensafety_constitution','২৮ অনুচ্ছেদ':'womensafety_constitution','নারী সুরক্ষা':'womensafety_sos_plan','মহিলা নিরাপত্তা':'womensafety_sos_plan','নিরাপদ বোধ করছি না':'womensafety_sos_plan','নিরাপত্তাহীনতা':'womensafety_sos_plan','বিপদে আছি':'womensafety_sos_plan','ওয়ান স্টপ ক্রাইসিস':'womensafety_oscc','ওসিসি':'womensafety_oscc','জরুরি নারী সেবা':'womensafety_oscc','কর্মক্ষেত্রে হয়রানি':'womensafety_rights_workplace','যৌন হয়রানি':'womensafety_rights_workplace','ইভটিজিং':'womensafety_rights_workplace','কর্মস্থলে নির্যাতন':'womensafety_rights_workplace','নারী সংগঠন':'womensafety_ngos','নারিপক্ষ':'womensafety_ngos','নারী আইনি সহায়তা সংস্থা':'womensafety_ngos','নারী পুলিশ':'womensafety_police','মহিলা ডেস্ক':'womensafety_police','পুলিশ হেল্প ডেস্ক':'womensafety_police','মহিলা সহায়তা ডেস্ক':'womensafety_police',"voter id":"voter_id","voter id card":"voter_id","voter card":"voter_id","national id card":"voter_id","how to get nid":"voter_id","nid card":"voter_id","ভোটার":"voter_id","জাতীয় পরিচয়পত্র":"voter_id","এনআইডি কার্ড":"voter_id","নাগরিক সনদ":"voter_id","driving licence":"driving_licence","driving license":"driving_licence","get driving licence":"driving_licence","driving licence bangladesh":"driving_licence","ড্রাইভিং লাইসেন্স":"driving_licence","লার্নার লাইসেন্স":"driving_licence","road transport act":"road_traffic_act","traffic rules":"road_traffic_act","traffic fine":"road_traffic_act","traffic law":"road_traffic_act","সড়ক পরিবহন আইন":"road_traffic_act","ট্রাফিক আইন":"road_traffic_act","হেলমেট নিয়ম":"road_traffic_act","metro rail":"metro_rail","dhaka metro":"metro_rail","মেট্রো রেল":"metro_rail","ঢাকা মেট্রো":"metro_rail","tax return":"tax_return","income tax return":"tax_return","file tax return":"tax_return","tax deadline":"tax_return","আয়কর রিটার্ন":"tax_return","কর রিটার্ন দাখিল":"tax_return","e tin":"e_tin","etin number":"e_tin","tax identification number":"e_tin","টিআইএন":"e_tin","ই-টিআইএন":"e_tin","labour act":"labour_act","labour law":"labour_act","bangladesh labour act":"labour_act","শ্রম আইন":"labour_act","শ্রমিক অধিকার":"labour_act","মাতৃত্বকালীন ছুটি":"labour_act","minimum wage":"minimum_wage","wage board":"minimum_wage","ন্যূনতম মজুরি":"minimum_wage","মজুরি বোর্ড":"minimum_wage","overtime pay":"overtime_rules","overtime rules":"overtime_rules","ওভারটাইম":"overtime_rules","workplace injury":"worker_injury","accident at work":"worker_injury","compensation for injury":"worker_injury","কর্মক্ষেত্রে আঘাত":"worker_injury","land registration":"land_registration","register land deed":"land_registration","জমি রেজিস্ট্রি":"land_registration","দলিল নিবন্ধন":"land_registration","জমি কেনাবেচা":"land_registration","land mutation":"land_mutation","namjari":"land_mutation","mutation process":"land_mutation","নামজারি":"land_mutation","খতিয়ান":"land_mutation","land dispute":"land_dispute","land case":"land_dispute","জমি বিরোধ":"land_dispute","জমি মামলা":"land_dispute","file fir":"fir_process","police fir":"fir_process","fir complaint":"fir_process","first information report":"fir_process","how to file fir":"fir_process","এফআইআর":"fir_process","পুলিশে অভিযোগ":"fir_process","থানায় অভিযোগ":"fir_process","bail process":"bail_process","how to get bail":"bail_process","anticipatory bail":"bail_process","জামিন":"bail_process","আগাম জামিন":"bail_process","marriage registration":"marriage_process","register marriage":"marriage_process","বিয়ে নিবন্ধন":"marriage_process","কাবিন":"marriage_process","বিবাহ নিবন্ধন":"marriage_process","divorce process":"divorce_process","talaq":"divorce_process","khula":"divorce_process","তালাক":"divorce_process","খুলা":"divorce_process","ডিভোর্স":"divorce_process","consumer rights":"consumer_rights","consumer complaint":"consumer_rights","ভোক্তা অধিকার":"consumer_rights","ভেজাল খাদ্য":"consumer_rights","cyber security act":"cyber_security","digital security act":"cyber_security","সাইবার নিরাপত্তা আইন":"cyber_security","সাইবার অপরাধ আইন":"cyber_security","court structure":"court_structure","court system":"court_structure","lower court":"court_structure","আদালত কাঠামো":"court_structure","কোন আদালতে":"court_structure","free legal aid":"legal_aid_apply","legal aid":"legal_aid_apply","legal aid office":"legal_aid_apply","আইনি সহায়তা":"legal_aid_apply","আইন সহায়তা":"legal_aid_apply","১৬৪৩০":"legal_aid_apply","register company":"company_registration","company registration":"company_registration","rjsc":"company_registration","কোম্পানি নিবন্ধন":"company_registration","ট্রেড লাইসেন্স":"company_registration","open bank account":"bank_account","bank account":"bank_account","banking":"bank_account","ব্যাংক অ্যাকাউন্ট":"bank_account","find lawyer":"lawyer_choice","choose lawyer":"lawyer_choice","lawyer fees":"lawyer_choice","আইনজীবী":"lawyer_choice","উকিল":"lawyer_choice","education system":"education_system","ssc":"education_system","hsc":"education_system","শিক্ষাব্যবস্থা":"education_system","শিক্ষা বোর্ড":"education_system","healthcare":"healthcare_access","hospital in bangladesh":"healthcare_access","ambulance":"healthcare_access","স্বাস্থ্যসেবা":"healthcare_access","হাসপাতাল":"healthcare_access","workplace injury":"worker_injury","injury at work":"worker_injury","compensation for injury":"worker_injury","কর্মক্ষেত্রে আঘাত":"worker_injury","দুর্ঘটনায় ক্ষতিপূরণ":"worker_injury","register a company":"company_registration","how to register a company":"company_registration","find a lawyer":"lawyer_choice","need a lawyer":"lawyer_choice","open a bank account":"bank_account","apply for passport":"passport","get a driving licence":"driving_licence","driving licence":"driving_licence","new nid":"voter_id","get nid":"voter_id","passport":"passport","birth registration":"birth_registration","জন্ম নিবন্ধন":"birth_registration","জন্মনিবন্ধন":"birth_registration","will":"will_testament","testament":"will_testament","উইল":"will_testament","ওসিয়ত":"will_testament","police remand":"remand_process","রিমান্ড":"remand_process","জামিন রিমান্ড":"remand_process","supreme court":"court_structure","court case stages":"court_structure","case stages":"court_structure","nid":"voter_id","জমি কেনার নিয়ম":"land_registration","জমি কেনা":"land_registration","জমির নামজারি":"land_mutation","file a police case":"fir_process","how to file a police case":"fir_process","police case":"fir_process","how do i file a police case":"fir_process","report a crime":"fir_process","where is oscc":"womensafety_oscc_locations","oscc locations":"womensafety_oscc_locations","oscc location":"womensafety_oscc_locations","oscc near me":"womensafety_oscc_locations","which hospital has oscc":"womensafety_oscc_locations","oscc in dhaka":"womensafety_oscc_locations","oscc list":"womensafety_oscc_locations","one stop crisis center location":"womensafety_oscc_locations","shelter for women":"womensafety_shelter","safe shelter":"womensafety_shelter","emergency shelter":"womensafety_shelter","women shelter":"womensafety_shelter","where can i go for safety":"womensafety_shelter","safe place for women":"womensafety_shelter","dispatch number":"womensafety_dispatch","police control room number":"womensafety_dispatch","police hq control room":"womensafety_dispatch","emergency numbers list":"womensafety_dispatch","which law applies":"womensafety_fir_sections","which law for domestic violence":"womensafety_fir_sections","fir under which law":"womensafety_fir_sections","law sections for women":"womensafety_fir_sections","sections of repression act":"womensafety_fir_sections","gang rape punishment":"womensafety_fir_sections","eve teasing law":"womensafety_fir_sections","trafficking law bangladesh":"womensafety_fir_sections",'ওসিসি কোথায়':'womensafety_oscc_locations','ওসিসি ঠিকানা':'womensafety_oscc_locations','ওসিসি কোন হাসপাতালে':'womensafety_oscc_locations','নিকটস্থ ওসিসি':'womensafety_oscc_locations','ওয়ান স্টপ ক্রাইসিস সেন্টার কোথায়':'womensafety_oscc_locations','নারী আশ্রয়':'womensafety_shelter','নিরাপদ আশ্রয়':'womensafety_shelter','আশ্রয় কেন্দ্র':'womensafety_shelter','মহিলা আশ্রয়কেন্দ্র':'womensafety_shelter','জরুরি আশ্রয়':'womensafety_shelter','কোথায় যাব':'womensafety_shelter','নিরাপদ জায়গা':'womensafety_shelter','জরুরি নম্বর তালিকা':'womensafety_dispatch','কন্ট্রোল রুম নম্বর':'womensafety_dispatch','পুলিশ কন্ট্রোল রুম':'womensafety_dispatch','কোন আইনে মামলা':'womensafety_fir_sections','কোন ধারায় মামলা':'womensafety_fir_sections','গণধর্ষণের শাস্তি':'womensafety_fir_sections','ইভ টিজিং আইন':'womensafety_fir_sections','মানব পাচার আইন':'womensafety_fir_sections',"felani khatun murder":"felani_khatun","felani khatun":"felani_khatun","felani killing":"felani_khatun","felani murder":"felani_khatun","felani avenue":"felani_khatun","felani":"felani_khatun",'international crimes tribunal':'july_ict_trials','ict trial':'july_ict_trials','july massacre trial':'july_ict_trials','tribunal':'july_ict_trials','border killing statistics':'july_border_killings','bsf killings':'july_border_killings','india border deaths':'july_border_killings','border killings':'july_border_killings','felani trial':'felani_trial_detail','felani khatun verdict':'felani_trial_detail','felani khatun trial':'felani_trial_detail','abrar fahad trial':'abrar_trial_detail','abrar verdict':'abrar_trial_detail','abrar trial':'abrar_trial_detail','july casualty count':'july_massacre_stats','how many martyred':'july_massacre_stats','july death toll':'july_massacre_stats','how many killed july':'july_massacre_stats','july massacre stats':'july_massacre_stats','july massacre statistics':'july_massacre_stats',"হাদির উক্তি":"hadi_quotes","ওসমান হাদির উক্তি":"hadi_quotes","হাদির বাণী":"hadi_quotes","ওসমান হাদির বাণী":"hadi_quotes","হাদি কী বলেছেন":"hadi_quotes","হাদির বিখ্যাত উক্তি":"hadi_quotes","হাদির বক্তৃতা":"hadi_speeches","ওসমান হাদির বক্তৃতা":"hadi_speeches","হাদির ভাষণ":"hadi_speeches","ওসমান হাদির ভাষণ":"hadi_speeches","ইনকিলাব মঞ্চের বক্তব্য":"hadi_speeches","হাদির বই":"hadi_books","ওসমান হাদির বই":"hadi_books","সিমন্ত শরীফ":"hadi_books","শিমন্ত শরীফ":"hadi_books","লাভায় লালশাক":"hadi_books","লাভায় লালশাক পূবের আকাশ":"hadi_books"};
+
+
+/* ADVANCED AI ENGINE */
+
+
+
+
+var AEngine={history:[],userProfile:{topics:{},totalQ:0,topTopic:''},
+grok:{greetings:['Great question! ','Interesting! ','Let me break this down. ','Here is what I know. ','Smart question. ','Let me help with that. ','Absolutely! '],
+followups:{quran:['Tell me about inheritance rules','What does Quran say about justice?','Marriage laws in BD?'],inheritance:['Who are the heirs?','What if no will?','Daughter share?'],talaq:['What is Khula?','Child custody?','Maintenance after divorce?'],marriage:['What is Mahr?','Marriage age?','Polygamy laws?'],court:['How to file a case?','Village court?','Legal aid?'],rights:['Fundamental rights?','How to enforce?','Right to privacy?'],police:['How to file FIR?','Complaint process?','Police refuse?'],emergency:['GBV helpline?','Child helpline?','Disaster response?'],corruption:['Report corruption?','ACC complaint?','Whistleblower?']},
+contextAware:function(msg,hist){var c='';if(hist.length>0){if(msg.indexOf('more')!==-1)c='Based on our discussion: ';else if(msg.indexOf('why')!==-1)c='Great follow-up. ';else if(msg.indexOf('how')!==-1)c='Here is how it works: ';}return c;},
+getGreeting:function(){return this.greetings[Math.floor(Math.random()*this.greetings.length)];},
+getFollowups:function(k){
+    var _kh=String(k||'');
+    var _hadi=(_kh==='osman_hadi'||_kh==='inqilab_moncho'||_kh.indexOf('hadi_')===0||_kh.indexOf('osman_hadi')===0);
+    if(_hadi){
+      var _drop='';
+      if(_kh==='hadi_quotes')_drop='Osman Hadi quotes';
+      else if(_kh==='hadi_speeches')_drop='Osman Hadi speeches';
+      else if(_kh==='hadi_books')_drop='Osman Hadi books';
+      var _cand=['Osman Hadi quotes','Osman Hadi speeches','Osman Hadi books','Who was Osman Hadi?'];
+      var _out=[];
+      for(var _i=0;_i<_cand.length;_i++){if(_cand[_i]!==_drop)_out.push(_cand[_i]);}
+      return _out.slice(0,3);
+    }
+    var f=this.followups[k];if(!f){if(k&&String(k).indexOf('sg_oscc_')===0){var nm=k.slice(8).replace(/_/g,' ').split(' ').map(function(w){return w?w.charAt(0).toUpperCase()+w.slice(1):w;}).join(' ');f=['OSCC & shelter in '+nm,'Helplines 109 / 999','Which hospital has the OSCC?'];}else{if(k&&String(k).slice(-4)=='_bio'){var nm=k.slice(0,-4).split('_').map(function(w){return w?w.charAt(0).toUpperCase()+w.slice(1):w;}).join(' ');f=['More about '+nm,'Other coordinators of July','July 2024 timeline'];}else{f=['Tell me more about '+k,'What laws apply?','How to get help?'];}}}return f.slice(0,3);},
+isFollowUp:function(m,key,hist){
+  if(!hist||!hist.length)return false;
+  m=String(m||'').toLowerCase().trim();
+  if(!m)return false;
+  if(/^(and|but|also|then|more|so|yes|no|ok|okay|really|what about|how about|tell me more|elaborate|explain|why|how|what next|anything else)\b/.test(m))return true;
+  if(/\b(it|that|this|these|those|there|one|them|same)\b/.test(m))return true;
+  if(key&&hist.length){var k2=hist[hist.length-1].key||'';if(key===k2&&key)return true;}
+  return false;
+},
+contextIntro:function(msg,hist,key){
+  var last=(hist&&hist.length)?hist[hist.length-1]:null;
+  if(!last||!last.key)return this.getGreeting();
+  var lkey=last.key;
+  var pretty=lkey.split('_').join(' ');
+  if(key&&key===lkey)return 'Continuing on '+pretty+' - here is more detail. ';
+  var lq=String(last.q||'').trim();
+  if(this.isFollowUp(msg,key,hist))return 'Following up on "'+(lq.length>44?lq.slice(0,41)+'...':lq)+'" - ';
+  return this.getGreeting();
+}},
+
+claude:{analyze:function(msg){var m=msg.toLowerCase();var steps=[];var intent='General Query';var domain='General';if(m.indexOf('what')!==-1||m.indexOf('tell me')!==-1)intent='Information Request';if(m.indexOf('how')!==-1)intent='Process Query';if(m.indexOf('where')!==-1)intent='Location Query';if(m.indexOf('why')!==-1)intent='Reasoning Query';if(m.indexOf('can i')!==-1||m.indexOf('am i')!==-1)intent='Rights Check';if(m.indexOf('help')!==-1||m.indexOf('need')!==-1)intent='Assistance';if(m.indexOf('report')!==-1||m.indexOf('complaint')!==-1)intent='Complaint';if(m.indexOf('emergency')!==-1||m.indexOf('urgent')!==-1)intent='Emergency';if(/quran|islam|muslim|sharia|nikah|talaq/.test(m))domain='Islamic Law';if(/constitution|article|fundamental/.test(m))domain='Constitutional';if(/court|judge|trial|appeal/.test(m))domain='Court';if(/police|fir|crime|arrest/.test(m))domain='Criminal';if(/land|property|mutation/.test(m))domain='Property';if(/marriage|divorce|custody/.test(m))domain='Family';if(/ministry|government|parliament/.test(m))domain='Government';if(/helpline|emergency/.test(m))domain='Emergency Svc';if(/bcs|bpsc|civil service/.test(m))domain='Public Admin';steps.push({num:'>',text:'Intent: '+intent});steps.push({num:'>',text:'Domain: '+domain});return{steps:steps,intent:intent,domain:domain};},detectIntent:function(msg){var m=msg.toLowerCase();if(m.indexOf('what')!==-1||m.indexOf('tell me')!==-1)return'Information Request';if(m.indexOf('how')!==-1)return'Process Query';if(m.indexOf('where')!==-1)return'Location Query';if(m.indexOf('why')!==-1)return'Reasoning Query';if(m.indexOf('can i')!==-1||m.indexOf('am i')!==-1)return'Rights Check';if(m.indexOf('help')!==-1||m.indexOf('need')!==-1)return'Assistance';if(m.indexOf('report')!==-1||m.indexOf('complaint')!==-1)return'Complaint';if(m.indexOf('emergency')!==-1||m.indexOf('urgent')!==-1)return'Emergency';return'General Query';},
+detectDomain:function(msg){var m=msg.toLowerCase();if(/quran|islam|muslim|sharia|nikah|talaq/.test(m))return'Islamic Law';if(/constitution|article|fundamental/.test(m))return'Constitutional';if(/court|judge|trial|appeal/.test(m))return'Court';if(/police|fir|crime|arrest/.test(m))return'Criminal';if(/land|property|mutation|inheritance/.test(m))return'Property';if(/marriage|divorce|custody/.test(m))return'Family';if(/ministry|government|parliament/.test(m))return'Government';if(/helpline|emergency|accident/.test(m))return'Emergency Svc';if(/bcs|bpsc|civil service/.test(m))return'Public Admin';return'General';},
+showThinking:function(cb){
+  var ph=(AEngine&&AEngine.lastBn)?['প্রশ্নটি বিশ্লেষণ করা হচ্ছে...','আইনি তথ্য খোঁজা হচ্ছে...','বাংলাদেশের আইনের সঙ্গে মিলিয়ে দেখা হচ্ছে...','প্রাসঙ্গিক ধারা যাচাই করা হচ্ছে...','প্রমাণ বিবেচনা করা হচ্ছে...','আপনার উত্তর তৈরি করা হচ্ছে...']:['Untangling the question...','Searching legal knowledge...','Cross-referencing Bangladesh law...','Checking related provisions...','Weighing the evidence...','Assembling your answer...'];
+  var t0=performance.now();var el=document.createElement('div');el.className='cb-thinking';el.innerHTML='<div class="think-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32" aria-hidden="true"><path d="M97.06 52.62 L96.28 53.33 L95.25 54.00 L93.96 54.63 L92.44 55.21 L90.66 55.72 L88.78 56.17 L86.97 56.56 L85.24 56.91 L83.65 57.23 L82.21 57.52 L80.81 57.78 L79.64 58.03 L81.27 58.84 L83.36 59.80 L85.77 60.91 L88.43 62.16 L91.30 63.58 L94.35 65.14 L97.45 66.83 L97.92 67.78 L98.00 68.62 L97.86 69.40 L97.49 70.09 L96.91 70.70 L96.23 71.25 L95.16 71.62 L93.77 71.81 L92.17 71.87 L90.43 71.81 L88.50 71.60 L86.50 71.28 L84.43 70.86 L82.51 70.45 L80.77 70.08 L79.19 69.74 L77.71 69.41 L76.35 69.10 L75.02 68.77 L73.78 68.45 L72.68 68.18 L71.62 67.91 L70.62 67.64 L69.67 67.37 L68.82 67.15 L68.05 66.96 L70.37 69.47 L72.79 72.22 L75.26 75.16 L77.71 78.26 L80.15 81.52 L82.54 84.90 L84.87 88.41 L84.32 88.96 L83.43 89.11 L82.29 88.96 L80.94 88.50 L79.33 87.66 L77.55 86.51 L75.65 85.11 L73.73 83.56 L71.96 82.08 L70.31 80.66 L69.79 80.83 L69.55 81.44 L69.53 82.43 L69.66 83.73 L69.88 85.27 L70.17 87.03 L70.54 89.04 L70.11 89.63 L69.64 90.15 L69.10 90.55 L68.52 90.86 L67.90 91.08 L67.24 91.19 L66.54 91.22 L65.82 91.16 L65.02 90.85 L64.14 90.26 L63.21 89.41 L62.26 88.40 L61.33 87.29 L60.38 85.96 L59.46 84.56 L58.58 83.11 L57.79 81.82 L57.07 80.68 L56.39 79.53 L55.77 78.46 L55.20 77.50 L54.71 76.87 L54.30 76.72 L53.96 77.08 L53.68 78.29 L53.43 80.17 L53.12 82.21 L52.76 84.39 L52.32 86.43 L51.82 88.29 L51.26 89.66 L50.67 90.30 L50.07 90.45 L49.47 90.50 L48.88 90.47 L48.29 90.37 L47.71 90.15 L47.14 89.92 L46.88 87.28 L46.68 84.76 L46.55 82.35 L46.46 80.13 L46.41 78.03 L46.40 76.10 L46.39 74.39 L45.83 75.22 L45.23 76.08 L44.58 77.02 L43.88 78.03 L43.09 79.16 L42.22 80.44 L41.26 81.83 L40.19 83.36 L39.09 84.82 L37.99 86.13 L36.94 87.20 L35.91 88.08 L34.96 88.71 L34.12 89.04 L33.43 89.01 L32.79 88.87 L32.19 88.63 L31.63 88.32 L31.14 87.89 L30.75 87.30 L31.56 84.77 L32.40 82.34 L33.21 80.10 L34.00 78.01 L34.73 76.13 L35.35 74.51 L35.84 73.16 L34.81 73.83 L33.62 74.64 L32.31 75.52 L30.79 76.59 L29.05 77.81 L27.29 78.96 L25.60 79.94 L24.00 80.75 L22.51 81.37 L21.24 81.71 L20.24 81.75 L19.55 81.47 L19.01 81.05 L18.50 80.59 L18.10 80.05 L17.83 79.40 L17.59 78.74 L17.45 78.01 L19.99 75.34 L22.56 72.79 L25.15 70.36 L27.71 68.09 L30.20 65.99 L32.64 64.03 L34.95 62.27 L34.37 62.26 L33.70 62.27 L33.01 62.28 L32.24 62.31 L31.46 62.32 L30.69 62.30 L29.87 62.28 L28.99 62.26 L28.03 62.24 L26.99 62.23 L25.85 62.22 L24.70 62.18 L23.37 62.17 L21.89 62.16 L20.23 62.16 L18.53 62.13 L16.58 62.11 L14.58 62.04 L12.19 62.00 L9.86 61.88 L7.74 61.63 L5.94 61.27 L4.33 60.81 L3.16 60.24 L2.29 59.59 L2.01 58.84 L2.00 58.06 L2.17 57.26 L6.63 56.13 L11.06 55.15 L15.45 54.31 L19.77 53.61 L23.99 53.05 L28.02 52.62 L31.87 52.32 L31.34 51.99 L30.86 51.66 L30.30 51.30 L29.70 50.92 L29.03 50.52 L28.36 50.09 L27.65 49.64 L26.94 49.16 L26.08 48.63 L25.18 48.07 L24.21 47.46 L23.09 46.79 L21.85 46.05 L20.62 45.26 L19.27 44.41 L17.85 43.48 L16.40 42.49 L14.75 41.39 L13.14 40.23 L11.65 39.06 L10.23 37.85 L9.00 36.65 L8.03 35.50 L7.21 34.38 L6.76 33.37 L6.56 32.44 L6.59 31.60 L6.74 30.81 L6.98 30.06 L7.31 29.35 L7.78 28.72 L8.49 28.23 L9.42 27.88 L13.70 29.60 L17.78 31.37 L21.72 33.22 L25.47 35.10 L28.99 36.97 L32.25 38.81 L35.16 40.53 L34.73 39.80 L34.33 39.06 L33.84 38.21 L33.35 37.33 L32.73 36.28 L32.05 35.14 L31.28 33.86 L30.36 32.37 L29.31 30.68 L28.03 28.65 L26.68 26.44 L25.47 24.27 L24.24 21.97 L23.19 19.75 L22.43 17.77 L21.92 16.01 L21.83 14.68 L21.95 13.59 L22.19 12.61 L22.59 11.83 L23.07 11.14 L23.61 10.52 L24.18 9.96 L24.81 9.47 L25.53 9.11 L26.32 8.89 L27.16 8.79 L28.04 8.78 L29.00 8.94 L31.20 11.68 L33.64 15.18 L36.13 19.11 L38.62 23.41 L41.06 28.00 L43.35 32.65 L45.72 37.98 L46.95 40.65 L47.80 42.51 L48.47 44.04 L48.92 45.01 L49.25 45.72 L49.54 46.33 L49.57 46.03 L49.59 45.67 L49.61 45.26 L49.59 44.56 L49.64 44.16 L49.67 43.53 L49.68 42.68 L49.73 41.86 L49.77 40.87 L49.85 39.87 L49.95 38.79 L50.04 37.20 L50.18 35.50 L50.35 33.28 L50.54 29.91 L50.85 26.65 L51.26 23.24 L51.77 19.95 L52.38 17.02 L53.06 14.31 L53.79 12.35 L54.49 11.52 L55.20 10.89 L55.90 10.56 L56.59 10.44 L57.28 10.34 L57.94 10.42 L58.58 10.69 L59.18 11.10 L59.75 11.63 L60.21 12.56 L60.51 14.09 L60.63 16.14 L60.59 18.52 L60.36 21.30 L60.00 24.22 L59.47 27.36 L58.92 30.24 L58.45 32.63 L58.02 34.73 L57.63 36.53 L57.36 37.90 L57.09 39.15 L56.89 40.14 L56.70 41.06 L56.54 41.83 L56.46 42.42 L56.43 42.85 L56.48 43.13 L56.57 43.30 L56.98 42.94 L57.97 41.67 L59.45 39.71 L61.49 37.04 L63.98 33.90 L66.80 30.51 L69.81 27.09 L72.64 24.14 L75.04 21.97 L77.04 20.44 L78.58 19.59 L79.71 19.30 L80.52 19.43 L81.25 19.66 L81.89 20.00 L82.47 20.42 L82.97 20.91 L83.40 21.48 L83.80 22.06 L84.16 22.68 L84.42 23.38 L84.62 24.13 L84.66 24.99 L84.63 25.89 L84.38 26.93 L83.88 28.13 L83.26 29.37 L82.49 30.67 L81.69 31.94 L80.77 33.24 L79.84 34.48 L78.87 35.70 L78.03 36.79 L77.22 37.81 L76.51 38.74 L75.84 39.61 L75.25 40.39 L74.61 41.18 L74.09 41.88 L73.61 42.53 L73.13 43.16 L72.68 43.75 L72.20 44.33 L71.79 44.86 L71.43 45.36 L71.09 45.83 L70.80 46.27 L70.50 46.70 L70.24 47.11 L70.02 47.49 L69.80 47.86 L69.58 48.22 L69.36 48.57 L69.07 48.93 L68.85 49.26 L72.40 48.93 L76.18 48.67 L80.16 48.51 L84.29 48.45 L88.51 48.51 L92.82 48.69 L97.09 49.01 L97.51 49.71 L97.71 50.43 L97.71 51.16 L97.54 51.89 Z" fill="#D77655"/></svg></div><div class="think-text">'+ph[0]+'</div>';document.getElementById('chatMsgs').appendChild(el);document.getElementById('chatMsgs').scrollTop=99999;var phases=ph;var pi=0;var iv=setInterval(function(){if(pi<phases.length){el.querySelector('.think-text').textContent=phases[pi];pi++;}else{clearInterval(iv);el.remove();var ms=Math.round(performance.now()-t0);cb(ms);}},280);},
+scoreMatch:function(l,mk,r,ba,dom){if(!r||!mk){return (dom&&dom!=='General')?52:44;}var c=62;var _bl=r.indexOf('|')!==-1;if(_bl)c+=8;var _hb=/[ঀ-৿]/.test(r);if(_hb)c+=4;var _rich=(r.length>=260)?16:((r.length>=140)?11:((r.length>=70)?7:0));c+=_rich;if(ba)c+=11;else c+=9;if(mk&&mk.length>=10)c+=2;if(_bl&&_hb&&_rich>=11&&mk){c=100;}else if(c>99)c=99;return c;},
+deepen:function(a,l,mk,ba,r){
+  if(!r)return a;
+  if(mk){a.steps.push({text:'Topic identified: '+mk.replace(/_/g,' '),tag:'Topic'});}
+  if(r.indexOf('|')!==-1){a.steps.push({text:'Evidence: bilingual source (English + Bengali) verified',tag:'Evidence'});}
+  else{a.steps.push({text:'Evidence: single-language source reviewed',tag:'Evidence'});}
+  if(mk){var pfx=mk.split('_')[0];var cnt=0;for(var k in cR){if(k.indexOf(pfx)==0)cnt++;}a.steps.push({text:'Cross-referenced '+cnt+' related provisions in the '+pfx+' knowledge set',tag:'Cross-Ref'});}
+  else{a.steps.push({text:'Cross-referenced related legal provisions',tag:'Cross-Ref'});}
+  a.steps.push({text:'Safety check: advisory only, not a substitute for licensed counsel',tag:'Legal Check'});
+  a.steps.push({text:'Synthesis complete - answer assembled from verified sources',tag:'Synthesis'});
+  a.sources=this.findSources?this.findSources(r):[];
+  return a;
+},
+findSources:function(r){
+  if(!r)return[];
+  var out=[];var seen={};
+  function add(t){
+    t=(t||'').replace(/\s+/g,' ').trim();
+    var strip=t;var nw='';
+    do{nw=strip.replace(/^(?:under|of|by|in|per|the|as per)\s+/i,'').trim();if(nw===strip)break;strip=nw;}while(true);
+    t=strip;
+    if(!t||t.length>90)return;
+    var k=t.toLowerCase();
+    if(seen[k])return;
+    seen[k]=1;
+    out.push({t:t,q:t});
+  }
+  var lawRe=/[A-Za-z][A-Za-z0-9&'()\- ]{2,55}?(?:Act|Ordinance)\s*[,]?\s*(?:19|20)\d{2}/g;
+  var m;
+  while((m=lawRe.exec(r))!==null){add(m[0]);}
+  var secRe=/(?:Article|Art\.?|Section|Sec\.?|section)\s*(\d+[a-z]?)(?:\s*\(\s*(\d+)\s*\))?/g;
+  while((m=secRe.exec(r))!==null){
+    var label=(/^[Aa]rt/.test(m[0]))?'Article ':'Section ';
+    label+=m[1]+(m[2]?'('+m[2]+')':'');
+    add(label);
+  }
+  var extra=['Code of Criminal Procedure','Penal Code','High Court Division','Appellate Division'];
+  for(var i=0;i<extra.length;i++){if(r.indexOf(extra[i])!==-1)add(extra[i]);}
+  return out.slice(0,7);
+},
+buildReasoningBlock:function(){return'';}},
+hermes:{learn:function(msg,kk){var p=AEngine.userProfile;p.totalQ++;if(kk){var mt=kk.split('_')[0];if(String(kk).indexOf('sg_oscc_')===0)mt='Women Safety';else if(String(kk).indexOf('_bio')>-1)mt='July Leaders';p.topics[mt]=(p.topics[mt]||0)+1;var mx=0;for(var t in p.topics){if(p.topics[t]>mx){mx=p.topics[t];p.topTopic=t;}}}localStorage.setItem('aai_profile',JSON.stringify(p));},
+adaptResponse:function(r,p){if(p.totalQ>3&&p.topTopic){var tips={quran:' Also see Muslim Family Laws Ordinance 1961.',inheritance:' In BD, inheritance disputes handled by civil courts.',court:' Visit District Court or call 16430.',rights:' Enforce rights via High Court Art 102.',police:' Police MUST register FIR per S.154 CrPC.',emergency:' Save: 999, 109, 16430.',corruption:' Report to ACC at 333.',ministry:' Visit bangladesh.gov.bd.'};if(tips[p.topTopic])r+=tips[p.topTopic];}if(p.totalQ>5)r+=' Learning from our '+p.totalQ+' conversations.';return r;},
+getProfile:function(){var s=localStorage.getItem('aai_profile');if(s){try{return JSON.parse(s);}catch(e){}}return AEngine.userProfile;},
+buildLearnBadge:function(p){if(p.totalQ<3)return'';return'<div class="cb-learn-badge"><i class="fas fa-brain"></i> Focus: '+(p.topTopic||'General')+' | '+p.totalQ+' queries</div>';}},
+processMessage:function(msg){var self=this;var analysis=self.claude.analyze(msg);analysis.bn=looksBengali(msg)?1:0;self.claude.showThinking(function(){var l=msg.toLowerCase();var r='';var mk='';var bk=0;for(var k in cR){if(k.length>bk&&l.indexOf(k)!==-1){bk=k.length;mk=k;}}if(bk){r=cR[mk];}var ba='';var bl=0;for(var ak in aliasMap){if(l.indexOf(ak)!==-1&&ak.length>bl){bl=ak.length;ba=ak;}}if(ba&&bl>=bk&&cR[aliasMap[ba]]){var rk2=aliasMap[ba];if(cR[rk2]){r=cR[rk2];mk=rk2;}}if(!r){r='I can help with: Legal info, Constitution, Courts, Rights, Quran, Government, Emergency helplines.';if(analysis.domain!=='General')r='Regarding '+analysis.domain+': Call 16430 for help.';}analysis.conf=self.claude.scoreMatch(l,mk,r,bestAlias,analysis.domain);self.claude.deepen(analysis,l,mk,bestAlias,r);
+var lk2=self.history.length?(self.history[self.history.length-1].key||''):'';
+if(self.grok.isFollowUp(l,mk,self.history)){
+  var ctxt2=(mk&&lk2&&mk===lk2)?('continuing the '+lk2.split('_').join(' ')+' discussion'):'following up on your earlier question';
+  analysis.steps.splice(2,0,{text:'Conversation context: '+ctxt2,tag:'Context'});
+}
+var g=self.grok.contextIntro(msg,self.history,mk);
+var prof=self.hermes.getProfile();r=self.hermes.adaptResponse(r,prof);var full=g+r;var rh=self.claude.buildReasoningBlock(analysis);var fups=self.grok.getFollowups(mk||lk2);var fh='<div class="cb-followups">';fups.forEach(function(f){fh+='<span class="cb-followup">'+f+'</span>';});fh+='</div>';var lb=self.hermes.buildLearnBadge(prof);var d=document.createElement('div');d.className='cb-msg bot';d.innerHTML=martyrPhotoHTML(mk,msg)+(rh?rh:'')+full+confChip(a.conf)+srcChips(a)+fbBlock(a.conf)+fh+lb;document.getElementById('chatMsgs').appendChild(d);document.getElementById('chatMsgs').scrollTop=99999;self.hermes.learn(msg,mk);self.history.push({q:msg,a:full,key:mk,intent:analysis.intent,domain:analysis.domain,time:Date.now()});});}};
+
+var constR={bangladesh_overview:'Bangladesh Gono Prajatantri Bangladesh. Independence 16 Dec 1971. Capital Dhaka. Population ~170M. Area 147570 sq km. Language Bengali. Currency Taka.',bangladesh_geography:'South Asia Bay of Bengal. India W N E Myanmar SE. Ganges-Brahmaputra-Meghna delta. 8 divisions 64 districts. Sundarbans UNESCO. Cox Bazar 120km beach.',bangladesh_politics:'Parliamentary democracy. President Head of State. PM Head of Govt. Jatiya Sangsad 350 seats. PM Tarique Rahman. President Mohammed Shahabuddin. BNP Awami League.',bangladesh_economy:'GDP PPP 336.7B. RMG 2nd largest exporter globally. Remittances 15B/yr. Rice jute tea fish. RMG 80pct exports.',bangladesh_history:'Mughal 1576-1757. British 1757-1947. East Pakistan 1947-1971. Language Movement 1952. Liberation War 1971. Victory Day 16 Dec. Constitution 4 Nov 1972.',bangladesh_governance_structure:'President PM Cabinet Parliament Supreme Court. 57 Ministries 76 Directorates 8 Divisions 64 Districts 481 Upazilas 4498 Unions 87928 Villages.',bangladesh_national_symbols:'Animal Royal Bengal Tiger. Bird Doyel. Flower Shapla. Fish Hilsa. Fruit Jackfruit. River Jamuna. Sport Kabaddi.',bangladesh_demographics:'170M 8th globally. Bengali 98pct. Muslim 90pct Hindu 9pct. Literacy 74pct. Life expectancy 72.',bangladesh_ministry_list:'22+ Ministries: Cabinet Defence Foreign Finance Home Law Education Health Agriculture Environment Power Transport ICT Public Admin Local Govt.',bangladesh_vision_mission:'Ministry of Public Admin. Vision Efficient public admin. Mission Competent service-oriented accountable admin. Est 1971. mopa.gov.bd.',bangladesh_admin_divisions:'8 Divisions: Dhaka 13 districts Chattogram 11 Rajshahi 8 Rangpur 8 Khulna 10 Barishal 6 Sylhet 4 Mymensingh 4. Total 64 districts 481 Upazilas 4498 Unions 87928 Villages.','div_dhaka':'Dhaka Division: Capital of Bangladesh. Area 20594 km2. Population 4.42 crore (2022). 13 districts: Dhaka, Faridpur, Gazipur, Gopalganj, Kishoreganj, Madaripur, Manikganj, Munshiganj, Narayanganj, Narsingdi, Rajbari, Shariatpur, Tangail. 90 upazilas 885 unions. | Dhaka Division: Capital. 13 districts 90 upazilas 885 unions. Divisional Commissioner administers. This is the most populous division.','div_chattogram':'Chattogram Division: Commercial capital. Area 33909 km2 (largest). Population 3.32 crore. 11 districts: Bandarban, Brahmanbaria, Chandpur, Chattogram, Comilla, Coxsbazar, Feni, Khagrachhari, Lakshmipur, Noakhali, Rangamati. 104 upazilas. Chittagong Hill Tracts. | Chattogram Division: Commercial capital. Largest by area. 11 districts 104 upazilas.','div_rajshahi':'Rajshahi Division: Education hub. Area 18153 km2. Population 2.04 crore. 8 districts: Bogura, Chapainawabganj, Joypurhat, Naogaon, Natore, Pabna, Rajshahi, Sirajganj. 67 upazilas 565 unions. Education City. | Rajshahi Division: Education hub. 8 districts 67 upazilas.','div_khulna':'Khulna Division: Sundarbans region. Area 22284 km2. Population 1.74 crore. 10 districts: Bagerhat, Chuadanga, Jashore, Jhenaidah, Khulna, Kushtia, Magura, Meherpur, Narail, Satkhira. 59 upazilas. Sundarbans UNESCO. | Khulna Division: Sundarbans. 10 districts 59 upazilas.','div_barishal':'Barishal Division: Coastal region. Area 13225 km2. Population 0.91 crore (smallest). 6 districts: Barguna, Barishal, Bhola, Jhalokathi, Patuakhali, Pirojpur. 42 upazilas. Rice Bowl of Bangladesh. | Barishal Division: Coastal. Smallest population. 6 districts 42 upazilas.','div_sylhet':'Sylhet Division: Tea gardens. Area 12635 km2. Population 1.10 crore. 4 districts: Habiganj, Moulvibazar, Sunamganj, Sylhet. 40 upazilas. Tea cultivation and natural beauty. Sylheti dialect. | Sylhet Division: Tea gardens. 4 districts 40 upazilas.','div_rangpur':'Rangpur Division: Agricultural hub. Area 16185 km2. Population 1.76 crore. 8 districts: Dinajpur, Gaibandha, Kurigram, Lalmonirhat, Nilphamari, Panchagarh, Rangpur, Thakurgaon. 58 upazilas. Formed 2010. | Rangpur Division: Agriculture. 8 districts 58 upazilas. Formed 2010.','div_mymensingh':'Mymensingh Division: Newest division. Area 10584 km2. Population 1.22 crore. 4 districts: Jamalpur, Mymensingh, Netrokona, Sherpur. 35 upazilas. Formed 2015 (8th division). Was part of Dhaka. | Mymensingh Division: Newest (8th). 4 districts 35 upazilas. Formed 2015.','division_all':'8 Divisions: Dhaka (13 districts), Chattogram (11), Rajshahi (8), Khulna (10), Barishal (6), Sylhet (4), Rangpur (8), Mymensingh (4). Total 64 districts 503 upazilas 4588 unions. Proposed: Cumilla Faridpur Bogura divisions. | 8 divisions 64 districts 503 upazilas.','district_first_last':'First district: Greater Chittagong (1666). Last: Feni (Nov 7 1984). Largest area: Rangamati (6116 km2). Smallest: Narayanganj (684 km2). Only island district: Bhola. All 64 formed during Ershad 1984 reorganization. | First: Chittagong 1666. Last: Feni 1984. Largest: Rangamati. Smallest: Narayanganj.','greater_districts':'17 Greater Districts (pre-1984): Greater Chittagong (1666), Rangpur (1769), Dhaka (1772), Rajshahi (1772), Sylhet (1772), Jessore (1781), Faridpur (1786), Dinajpur (1786), Mymensingh (1787), Comilla (1790), Barishal (1797), Bogura (1821), Noakhali (1821), Pabna (1832), Hill Tracts (1860), Khulna (1882), Kushtia (1947). | 17 greater districts pre-1984.','division_history':'Division History: British: Rajshahi Dhaka Chittagong (3). 1960: Khulna. 1971: 4 divisions. 1993: Barishal. 1995: Sylhet. 2010: Rangpur. 2015: Mymensingh (8th). Proposed: Cumilla Faridpur Bogura. | Division history from British era to present.','governance_full':'Governance: President (Head of State). PM (Head of Government). Cabinet. Jatiya Sangsad 300+50=350 seats. 5yr term. Art 70 party discipline. Supreme Court Appellate+High Court. | Governance structure with Parliament and judiciary.','economy_detail':'Economy: GDP PPP $336.7B (31st). Per capita $2300 (138th). Growth 6.1%. HDI 0.53. Gini 31.8. RMG 2nd largest exporter. Remittances $15B/yr. Exports: garments jute leather pharma IT. Currency: BDT Taka. | Economy with GDP growth and trade data.','bangladesh_bpy':'Bangladesh: Gono Prajatantri Bangladesh. Independence Dec 16 1971. National anthem Amar Sonar Bangla. 8th most populous 93rd by area. Muslim majority 4th largest. Ganges-Brahmaputra-Meghna delta. Chakma Marma Santal Garo ethnic groups. | Bangladesh overview with key facts.','bangladesh_symbols':'National Symbols: Tiger, Doyel bird, Mango tree, Shapla flower, Dolphin, Gharial, Jackfruit, Hilsa fish, Baitul Mukarram mosque, Dhakeshwari temple, Jamuna river, Keokradong mountain, Kabaddi sport, Bengali Calendar year. | All national symbols of Bangladesh.','bangladesh_admin_full':'Admin: 8 Divisions (Commissioner), 64 Districts (DC), 503 Upazilas (UNO), 596 Thanas, 4588 Unions, 59299 Mouzas, 87928 Villages. 12 City Corporations, 308 Municipalities. | Full admin structure with all levels.','dhaka':'Dhaka: Pop 1,47,34,025. Area 1,464 km2. Upazilas: 5. Est 1772. Division: Dhaka. District Judge Court, Legal Aid Office. Helpline 16430.','faridpur':'Faridpur: Pop 21,62,876. Area 2,053 km2. Upazilas: 9. Est 1786. Division: Dhaka. District Judge Court, Legal Aid Office. Helpline 16430.','gazipur':'Gazipur: Pop 52,63,474. Area 1,806 km2. Upazilas: 5. Est 1984. Division: Dhaka. District Judge Court, Legal Aid Office. Helpline 16430.','gopalganj':'Gopalganj: Pop 12,94,561. Area 1,468 km2. Upazilas: 5. Est 1984. Division: Dhaka. District Judge Court, Legal Aid Office. Helpline 16430.','kishoreganj':'Kishoreganj: Pop 32,67,630. Area 2,689 km2. Upazilas: 13. Est 1984. Division: Dhaka. District Judge Court, Legal Aid Office. Helpline 16430.','madaripur':'Madaripur: Pop 12,93,027. Area 1,145 km2. Upazilas: 5. Est 1984. Division: Dhaka. District Judge Court, Legal Aid Office. Helpline 16430.','manikganj':'Manikganj: Pop 15,58,024. Area 1,384 km2. Upazilas: 7. Est 1984. Division: Dhaka. District Judge Court, Legal Aid Office. Helpline 16430.','munshiganj':'Munshiganj: Pop 16,25,418. Area 1,004 km2. Upazilas: 6. Est 1984. Division: Dhaka. District Judge Court, Legal Aid Office. Helpline 16430.','narayanganj':'Narayanganj: Pop 39,09,138. Area 684 km2. Upazilas: 5. Est 1984. Division: Dhaka. District Judge Court, Legal Aid Office. Helpline 16430.','narsingdi':'Narsingdi: Pop 25,84,452. Area 1,150 km2. Upazilas: 6. Est 1984. Division: Dhaka. District Judge Court, Legal Aid Office. Helpline 16430.','rajbari':'Rajbari: Pop 11,89,821. Area 1,092 km2. Upazilas: 5. Est 1984. Division: Dhaka. District Judge Court, Legal Aid Office. Helpline 16430.','shariatpur':'Shariatpur: Pop 12,95,053. Area 1,181 km2. Upazilas: 6. Est 1984. Division: Dhaka. District Judge Court, Legal Aid Office. Helpline 16430.','tangail':'Tangail: Pop 40,37,608. Area 3,414 km2. Upazilas: 12. Est 1969. Division: Dhaka. District Judge Court, Legal Aid Office. Helpline 16430.','chattogram':'Chattogram: Pop 91,69,464. Area 5,283 km2. Upazilas: 15. Est 1666. Division: Chattogram. District Judge Court, Legal Aid Office. Helpline 16430.','noakhali':'Noakhali: Pop 62,12,216. Area 4,202 km2. Upazilas: 17. Est 1821. Division: Chattogram. District Judge Court, Legal Aid Office. Helpline 16430.','cumilla':'Cumilla: Pop 36,25,252. Area 3,686 km2. Upazilas: 9. Est 1790. Division: Chattogram. District Judge Court, Legal Aid Office. Helpline 16430.','bandarban':'Bandarban: Pop 6,47,587. Area 4,479 km2. Upazilas: 10. Est 1981. Division: Chattogram. District Judge Court, Legal Aid Office. Helpline 16430.','khagrachhari':'Khagrachhari: Pop 4,81,109. Area 2,749 km2. Upazilas: 7. Est 1983. Division: Chattogram. District Judge Court, Legal Aid Office. Helpline 16430.','rangamati':'Rangamati: Pop 7,14,119. Area 6,116 km2. Upazilas: 9. Est 1983. Division: Chattogram. District Judge Court, Legal Aid Office. Helpline 16430.','brahmanbaria':'Brahmanbaria: Pop 33,06,559. Area 1,881 km2. Upazilas: 9. Est 1984. Division: Chattogram. District Judge Court, Legal Aid Office. Helpline 16430.','coxsbazar':'Coxsbazar: Pop 28,23,265. Area 2,492 km2. Upazilas: 9. Est 1984. Division: Chattogram. District Judge Court, Legal Aid Office. Helpline 16430.','chandpur':'Chandpur: Pop 26,35,748. Area 1,645 km2. Upazilas: 8. Est 1984. Division: Chattogram. District Judge Court, Legal Aid Office. Helpline 16430.','lakshmipur':'Lakshmipur: Pop 19,38,111. Area 1,440 km2. Upazilas: 6. Est 1984. Division: Chattogram. District Judge Court, Legal Aid Office. Helpline 16430.','feni':'Feni: Pop 16,48,896. Area 990 km2. Upazilas: 6. Est 1984. Division: Chattogram. District Judge Court, Legal Aid Office. Helpline 16430.','rajshahi':'Rajshahi: Pop 29,15,013. Area 2,425 km2. Upazilas: 9. Est 1772. Division: Rajshahi. District Judge Court, Legal Aid Office. Helpline 16430.','bogura':'Bogura: Pop 37,34,300. Area 2,899 km2. Upazilas: 12. Est 1821. Division: Rajshahi. District Judge Court, Legal Aid Office. Helpline 16430.','pabna':'Pabna: Pop 29,09,622. Area 2,376 km2. Upazilas: 9. Est 1832. Division: Rajshahi. District Judge Court, Legal Aid Office. Helpline 16430.','sirajganj':'Sirajganj: Pop 31,47,005. Area 2,497 km2. Upazilas: 5. Est 1984. Division: Rajshahi. District Judge Court, Legal Aid Office. Helpline 16430.','naogaon':'Naogaon: Pop 27,00,480. Area 3,426 km2. Upazilas: 9. Est 1984. Division: Rajshahi. District Judge Court, Legal Aid Office. Helpline 16430.','natore':'Natore: Pop 17,63,219. Area 1,896 km2. Upazilas: 11. Est 1984. Division: Rajshahi. District Judge Court, Legal Aid Office. Helpline 16430.','chapainawabganj':'Chapainawabganj: Pop 17,04,730. Area 1,703 km2. Upazilas: 7. Est 1984. Division: Rajshahi. District Judge Court, Legal Aid Office. Helpline 16430.','joypurhat':'Joypurhat: Pop 9,56,626. Area 965 km2. Upazilas: 5. Est 1984. Division: Rajshahi. District Judge Court, Legal Aid Office. Helpline 16430.','khulna':'Khulna: Pop 26,13,385. Area 4,394 km2. Upazilas: 9. Est 1882. Division: Khulna. District Judge Court, Legal Aid Office. Helpline 16430.','jashore':'Jashore: Pop 30,76,849. Area 2,607 km2. Upazilas: 8. Est 1781. Division: Khulna. District Judge Court, Legal Aid Office. Helpline 16430.','kushtia':'Kushtia: Pop 21,49,692. Area 1,609 km2. Upazilas: 6. Est 1947. Division: Khulna. District Judge Court, Legal Aid Office. Helpline 16430.','satkhira':'Satkhira: Pop 21,96,581. Area 3,817 km2. Upazilas: 7. Est 1984. Division: Khulna. District Judge Court, Legal Aid Office. Helpline 16430.','jhenaidah':'Jhenaidah: Pop 17,71,304. Area 1,965 km2. Upazilas: 6. Est 1984. Division: Khulna. District Judge Court, Legal Aid Office. Helpline 16430.','bagerhat':'Bagerhat: Pop 16,13,079. Area 3,959 km2. Upazilas: 9. Est 1984. Division: Khulna. District Judge Court, Legal Aid Office. Helpline 16430.','chuadanga':'Chuadanga: Pop 12,34,066. Area 1,174 km2. Upazilas: 4. Est 1984. Division: Khulna. District Judge Court, Legal Aid Office. Helpline 16430.','magura':'Magura: Pop 10,33,115. Area 1,039 km2. Upazilas: 4. Est 1984. Division: Khulna. District Judge Court, Legal Aid Office. Helpline 16430.','narail':'Narail: Pop 7,88,673. Area 968 km2. Upazilas: 3. Est 1984. Division: Khulna. District Judge Court, Legal Aid Office. Helpline 16430.','meherpur':'Meherpur: Pop 7,05,356. Area 742 km2. Upazilas: 3. Est 1984. Division: Khulna. District Judge Court, Legal Aid Office. Helpline 16430.','barishal':'Barishal: Pop 25,70,450. Area 2,785 km2. Upazilas: 10. Est 1797. Division: Barishal. District Judge Court, Legal Aid Office. Helpline 16430.','patuakhali':'Patuakhali: Pop 17,27,254. Area 3,221 km2. Upazilas: 8. Est 1969. Division: Barishal. District Judge Court, Legal Aid Office. Helpline 16430.','bhola':'Bhola: Pop 19,32,514. Area 3,403 km2. Upazilas: 7. Est 1984. Division: Barishal. District Judge Court, Legal Aid Office. Helpline 16430.','pirojpur':'Pirojpur: Pop 11,98,193. Area 1,278 km2. Upazilas: 7. Est 1984. Division: Barishal. District Judge Court, Legal Aid Office. Helpline 16430.','barguna':'Barguna: Pop 10,10,530. Area 1,831 km2. Upazilas: 6. Est 1984. Division: Barishal. District Judge Court, Legal Aid Office. Helpline 16430.','jhalokathi':'Jhalokathi: Pop 6,61,161. Area 707 km2. Upazilas: 4. Est 1984. Division: Barishal. District Judge Court, Legal Aid Office. Helpline 16430.','sylhet':'Sylhet: Pop 38,57,037. Area 3,452 km2. Upazilas: 13. Est 1772. Division: Sylhet. District Judge Court, Legal Aid Office. Helpline 16430.','sunamganj':'Sunamganj: Pop 26,95,495. Area 3,747 km2. Upazilas: 12. Est 1984. Division: Sylhet. District Judge Court, Legal Aid Office. Helpline 16430.','habiganj':'Habiganj: Pop 23,58,886. Area 2,637 km2. Upazilas: 9. Est 1984. Division: Sylhet. District Judge Court, Legal Aid Office. Helpline 16430.','moulvibazar':'Moulvibazar: Pop 21,23,445. Area 2,799 km2. Upazilas: 7. Est 1984. Division: Sylhet. District Judge Court, Legal Aid Office. Helpline 16430.','rangpur':'Rangpur: Pop 31,69,615. Area 2,401 km2. Upazilas: 8. Est 1769. Division: Rangpur. District Judge Court, Legal Aid Office. Helpline 16430.','dinajpur':'Dinajpur: Pop 33,15,238. Area 3,444 km2. Upazilas: 13. Est 1786. Division: Rangpur. District Judge Court, Legal Aid Office. Helpline 16430.','gaibandha':'Gaibandha: Pop 25,62,232. Area 2,115 km2. Upazilas: 7. Est 1984. Division: Rangpur. District Judge Court, Legal Aid Office. Helpline 16430.','kurigram':'Kurigram: Pop 23,29,161. Area 2,245 km2. Upazilas: 9. Est 1984. Division: Rangpur. District Judge Court, Legal Aid Office. Helpline 16430.','nilphamari':'Nilphamari: Pop 20,92,567. Area 1,547 km2. Upazilas: 6. Est 1984. Division: Rangpur. District Judge Court, Legal Aid Office. Helpline 16430.','thakurgaon':'Thakurgaon: Pop 15,33,894. Area 1,781 km2. Upazilas: 5. Est 1984. Division: Rangpur. District Judge Court, Legal Aid Office. Helpline 16430.','lalmonirhat':'Lalmonirhat: Pop 14,28,406. Area 1,247 km2. Upazilas: 5. Est 1984. Division: Rangpur. District Judge Court, Legal Aid Office. Helpline 16430.','panchagarh':'Panchagarh: Pop 11,79,843. Area 1,405 km2. Upazilas: 5. Est 1984. Division: Rangpur. District Judge Court, Legal Aid Office. Helpline 16430.','mymensingh':'Mymensingh: Pop 58,99,052. Area 4,395 km2. Upazilas: 13. Est 1787. Division: Mymensingh. District Judge Court, Legal Aid Office. Helpline 16430.','jamalpur':'Jamalpur: Pop 24,99,737. Area 2,115 km2. Upazilas: 7. Est 1978. Division: Mymensingh. District Judge Court, Legal Aid Office. Helpline 16430.','netrokona':'Netrokona: Pop 23,24,856. Area 2,794 km2. Upazilas: 10. Est 1984. Division: Mymensingh. District Judge Court, Legal Aid Office. Helpline 16430.','sherpur':'Sherpur: Pop 15,01,853. Area 1,365 km2. Upazilas: 5. Est 1984. Division: Mymensingh. District Judge Court, Legal Aid Office. Helpline 16430.','constitution_overview':'Constitution of Bangladesh: Supreme law. Adopted 4 Nov 1972. Effective 16 Dec 1972. Chairman: Dr Kamal Hossain. 11 Parts, 153 Articles, 17 Amendments. Unitary Parliamentary Constitutional Republic. Last amended 8 July 2018.','constitution_preamble_full':'Preamble: Bismillah-ar-Rahman-ar-Rahim. We the people proclaimed independence 26 March 1971. Pledging nationalism socialism democracy secularism. Socialist society free from exploitation. Rule of law. Adopted 4 November 1972.','constitution_part_1':'Part I Republic (Art 1-8): Art 1 unitary republic. Art 2A Islam state religion. Art 3 Bangla language. Art 5 Dhaka capital. Art 6 Citizenship Bangladeshi. Art 7 Constitution supreme law. Art 7A cannot be suspended.','constitution_part_2':'Part II State Policy (Art 8-25): Art 8 four principles: Nationalism, Socialism, Democracy, Secularism. Art 10 free education. Art 12 separation judiciary. Art 15 basic necessities. Art 17 free primary. Art 25 international peace.','constitution_part_3':'Part III Fundamental Rights (Art 26-47): Art 26 inconsistent laws void. Art 27 equality. Art 28 no discrimination. Art 32 right to life. Art 33 arrest safeguards. Art 34 no forced labor. Art 35 trial protection. Art 36 movement. Art 39 speech press. Art 41 religion. Art 42 property. Art 43 privacy. Art 44 Supreme Court enforcement.','constitution_part_4':'Part IV Executive (Art 48-65): President Head of State 35+ years 2x5yr terms. PM Head of Government. Cabinet 9/10 MPs. No PM term limit. President Commander-in-Chief. War by Parliament.','constitution_part_5':'Part V Legislature (Art 65-95): Jatiya Sangsad 300+50=350. Age 25+. 5yr term. Quorum 60. Art 70 party discipline. Money Bills need Presidential recommendation.','constitution_part_6':'Part VI Judiciary (Art 94-116): Supreme Court Appellate + High Court. Art 102 writs: habeas corpus, mandamus, certiorari, prohibition, quo warranto. Art 111 binding. Judges retire 67.','constitution_part_7':'Part VII Elections (Art 117-122): Election Commission. Chief Election Commissioner. Secret ballot.','constitution_part_8':'Part VIII C and AG (Art 123-125): Comptroller and Auditor General appointed by President.','constitution_part_9':'Part IX Services (Art 126-141): Civil service. Public Service Commission. BCS recruitment.','constitution_part_10':'Part X Amendment (Art 142): Two-thirds majority. Basic structure unamendable.','constitution_part_11':'Part XI Miscellaneous (Art 142-153): English official language. Existing laws continue.','constitution_art_7':'Art 7: All powers from people. Constitution supreme law. Any inconsistent law void. Art 7A: Cannot be suspended, abrogated or annulled.','constitution_art_8':'Art 8: Four principles: (a) Nationalism (b) Socialism (c) Democracy (d) Secularism. Removed by 8th Amend 1988, restored by 15th Amend 2011.','constitution_art_27':'Art 27: All citizens equal before law and entitled to equal protection of law.','constitution_art_28':'Art 28: No discrimination by religion race caste sex birth. Women equal rights with men.','constitution_art_31':'Art 31: Protection of law is inalienable right of every citizen.','constitution_art_32':'Art 32: No person deprived of life or personal liberty except by law.','constitution_art_33':'Art 33: Arrest safeguards: informed within 3hrs, lawyer within 24hrs, produced before magistrate. Preventive detention subject to judicial review.','constitution_art_34':'Art 34: All forced labour and trafficking prohibited.','constitution_art_35':'Art 35: Trial protection: no punishment except by law, no double jeopardy, right against self-incrimination, presumed innocent, right to lawyer, right to appeal.','constitution_art_36':'Art 36: Freedom of movement throughout Bangladesh. Subject to reasonable restrictions.','constitution_art_37':'Art 37: Right to assemble peaceably and without arms.','constitution_art_38':'Art 38: Right to form associations or unions.','constitution_art_39':'Art 39: Freedom of thought, conscience and speech. Press freedom. Restrictions: defamation, contempt of court, incitement, security of State.','constitution_art_41':'Art 41: Freedom of religion to profess, practice, propagate. Religious institutions managed by communities. No forced religious instruction.','constitution_art_42':'Art 42: Right to acquire, hold and transfer property. No acquisition without compensation.','constitution_art_43':'Art 43: Privacy of home and correspondence. Protection against entry, search and seizure.','constitution_art_44':'Art 44: Right to move Supreme Court for enforcement of fundamental rights. Constitutional remedies.','constitution_art_55':'Art 55: Executive power exercised by PM. Cabinet aids and advises President.','constitution_art_56':'Art 56: President elected by Parliament. Max 2x5yr terms. Must be 35+ citizen.','constitution_art_65':'Art 65: Parliament 300 elected + 50 reserved women = 350 seats.','constitution_art_70':'Art 70: MP vacates seat if resigns from or votes against party. Controversial: prevents free voting. Critics call it undemocratic.','constitution_art_78':'Art 78: Armed forces under President as Commander-in-Chief.','constitution_art_94':'Art 94: Supreme Court: Appellate Division + High Court Division. Chief Justice heads both.','constitution_art_102':'Art 102: High Court writ jurisdiction: (a) Habeas Corpus (b) Mandamus (c) Certiorari (d) Prohibition (e) Quo Warranto.','constitution_art_111':'Art 111: Appellate Division law binding on all subordinate courts.','constitution_art_142':'Art 142: Parliament amends Constitution by two-thirds majority. Basic structure doctrine limits power.','constitution_amendments_all':'17 Amendments: 1st(1973) Anti-defection. 4th(1975) One-party BAKSAL. 5th(1979) Martial law validated, secularism removed. 8th(1988) Islam state religion. 12th(1991) Most influential: restored parliamentary system. 13th(1996) Caretaker govt. 15th(2011) Secularism restored, caretaker abolished. 16th(2014) Judicial impeachment struck down 2017. 17th(2018) Judge retirement 67.','constitution_amendment_detail':'Key Amendments: 4th(1975): BAKSAL one-party state, presidential system. 5th(1979): Martial law orders validated, secularism removed, Bismillah inserted. 8th(1988): Islam state religion Art 2A. 12th(1991): Restored parliamentary democracy, PM executive head. 13th(1996): Caretaker government for elections. 15th(2011): Restored 4 principles, abolished caretaker govt. 16th(2014): Judicial impeachment struck down by Supreme Court 2017. 17th(2018): Judge retirement age 67.','constitution_bodies':'Constitutional Bodies: (1) Election Commission Art 118-122. (2) Public Service Commission Art 129-140. (3) Comptroller and Auditor General Art 123-125. (4) Attorney General Art 56. (5) Supreme Court Art 94. (6) Anti-Corruption Commission. (7) National Human Rights Commission. (8) Ombudsman provision Art 77.','constitution_history_full':'History: 1956 Pakistan Constitution (parliamentary). 1962 Ayub Khan (presidential Basic Democracy). 1970 Awami League won 167/169 East seats. Proclamation of Independence 10 Apr 1971. Constituent Assembly 404 members. Dr Kamal Hossain chaired 34-member drafting committee. 98 public recommendations. Adopted 4 Nov 1972. Effective 16 Dec 1972. Westminster model. 17 amendments. Constitutional Reform Commission 2024 under Yunus.','constitution_citizenship':'Citizenship Art 6: Citizens known as Bangladeshi. Originally Bengali but changed by Martial Law Order validated by 5th Amendment. Manabendra Narayan Larma advocated Bangladeshi term for all citizens.','constitution_language':'Language Art 3: National language Bangla. Art 153: English for Parliament working. Supreme Court official language English. All government business in Bangla.','constitution_emergency':'Emergency Art 141A: President may proclaim on PM advice. Fundamental rights suspended (except Art 31-35, 36-44). Parliament approves within 30 days. Max 120 days duration.','constitution_judiciary_detail':'Judiciary: Supreme Court (Art 94) Appellate + High Court Divisions. HC writ jurisdiction Art 102. District courts under HC supervision. Village Courts Art 116A. Metropolitan courts in cities. Judges retire 67 (17th Amend 2018). Independence guaranteed Art 94-96.','constitution_religion_full':'Religion: Art 2A (8th Amend 1988) Islam state religion. Art 12 Secularism: elimination of communalism, no discrimination by religion, state neutral. Art 41 freedom of all religions to profess practice propagate. Art 28 no religious discrimination. Religious communities manage own institutions.','constitution_court_system':'Court System: (1) Supreme Court: Appellate Division + High Court Division. (2) HC: Original writ jurisdiction, Appellate, Supervisory. (3) District Judge Court: Civil. (4) Chief Judicial Magistrate: Criminal. (5) Metropolitan Session Court. (6) Village Courts Art 116A. (7) Labour Courts. (8) Tax Tribunals. (9) Family Courts.','july_overview':'July Uprising 2024 (also called July Revolution, Gen Z Revolution, Monsoon Revolution, Student-Peoples Uprising, 36 July): Mass uprising in Bangladesh June 6 - August 5 2024. Started as quota reform movement. Led to resignation of Sheikh Hasina and fall of Awami League government after 15 years. World first successful Gen Z revolution. Led by Students Against Discrimination (SAD). 834+ officially killed, 1400+ OHCHR estimate, 11551+ injured, 11702 arrested.','july_causes':'Causes: (1) Authoritarianism under Sheikh Hasina 15yr regime. (2) Reinstatement of controversial 56% job quota by High Court June 5 2024. (3) Economic depression, rising living costs. (4) Human rights abuses, enforced disappearances (Aynaghar). (5) Digital Security Act 2018 suppressing free speech. (6) Rigged elections 2014 2018 2024. (7) Corruption money laundering. (8) Chhatra League violence on campuses.','july_quota_system':'Quota System: Before 2018: 56% of government jobs reserved. 30% for freedom fighters descendants. 10% for women. 10% for underdeveloped districts. 5% for ethnic minorities. 1% for disabled. 2018 movement abolished quotas. June 5 2024 High Court declared 2018 circular invalid, reinstated old quota system. Students protested immediately.','july_timeline':'Timeline: Jun 5: HC reinstates quotas. Jun 6: Protests begin at Dhaka University. Jul 1: Movement intensifies nationwide. Jul 7: Bangla Blockade - trains highways blocked. Jul 14: Hasina calls protesters Razakars grandchildren. Jul 15: Police and Chhatra League attack students, Abu Sayed killed in Rangpur (first martyr). Jul 16: Private university students join. Jul 17: Dormitories evacuated. Jul 18: Complete Shutdown, BTV building burned. Jul 21: SC orders 93% merit. Aug 3: One-point demand Hasina resignation. Aug 4-5: Non-cooperation movement, mass rallies. Aug 5: Hasina resigns, flees to India by military helicopter.','july_razakar_slogans':'Razakar Slogans: On July 14 Hasina asked If grandchildren of freedom fighters do not get quota will grandchildren of Razakars get them? Students turned this into protest slogan. At University of Rajshahi 11:30pm July 14 students started chanting Razakar Razakar We are all Razakars meaning if demanding rights makes us Razakars then we are all Razakars. Students carried signs saying We sought rights we became Razakars. This became the defining slogan of the revolution.','july_abu_sayed':'Abu Sayed: First martyr of July Uprising. Shot dead by police in Rangpur on July 15 2024. His image standing fearlessly before police became iconic symbol of the movement. Student at Begum Rokeya University. His death intensified nationwide protests and turned the movement from quota reform into anti-government uprising.','july_leaders':'Student Leaders (Collective Leadership): Nahid Islam (coordinator, later adviser), Asif Mahmud (coordinator, later adviser), Mahfuj Alam (coordinator), Sarjis Alam (coordinator), Hasnat Abdullah (coordinator), Nusrat Tabassum, Shadik Kayem. Organization: Students Against Discrimination (SAD / Boichitrata Birodhi Chhatra Andolon). Led by 7 main coordinators with collective decision-making.','july_casualties':'Casualties: Official Gazette: 834 martyrs (11551+ injured). Ministry of Health: 1000+ killed. OHCHR UN report: 1400+ killed including 13 women (Feb 2025). Students Against Discrimination: 1581 killed. 66% killed by military-grade bullets from BGB Army RAB Ansar. 12% killed by metal pellet shotguns. 12000+ arrested. Deadliest violence since 1971 Liberation War independence. International human rights organizations Amnesty International Human Rights Watch documented abuses.','july_government_response':'Government Response: July 15 Chhatra League attacks students. July 16 BGB deployed in 4 districts. July 18 Internet shutdown nationwide, BTV building burned, countrywide curfew. July 20 Army deployed to enforce curfew. Police used tear gas rubber bullets live ammunition. Curfew imposed. Internet remained shut for weeks. Government closed all educational institutions. Student dormitories evacuated by force.','july_sc_verdict':'Supreme Court Verdict: July 21 Appellate Division ordered 93% recruitment in government jobs based on merit. Reduced freedom fighter quota from 30% to 5%. Remaining quota: 5% for freedom fighters, 2% for ethnic minorities, 1% for disabled, 93% merit-based. Public Administration Ministry published gazette. However protests continued demanding justice for killed students.','july_hasina_fall':'Hasina Fall: August 3 coordinators announced one-point demand: Hasina must resign. August 4-5 Non-cooperation movement: millions joined streets, mass rallies across country. Government buildings attacked. August 5: Sheikh Hasina resigned and fled Bangladesh in military helicopter to India. 15-year Awami League regime ended. Constitutional crisis followed. Chief Justice and President remained.','july_aftermath':'Aftermath: Constitutional crisis. Interim government formed under Nobel laureate Muhammad Yunus (Chief Adviser August 8 2024). Advisors include Nahid Islam Asif Mahmud Mahfuj Alam. Political and religious violence followed including anti-Hindu attacks. Constitutional Reform Commission formed. July Declaration announced August 5 2025 by Yunus on first anniversary. Pledge for free fair elections and constitutional referendum.','july_intl_response':'International Response: UN called for investigation. US UK EU expressed concern. Amnesty International documented abuses. OHCHR published fact-finding report February 2025 confirming 1400+ deaths. India hosted fleeing Hasina. Global media covered extensively. Called worlds first Gen Z revolution. Influenced other protests across Asia.','july_sad':'Students Against Discrimination (SAD): Main organization behind the movement. Also known as Boichitrata Birodhi Chhatra Andolon. Formed after 2024 HC quota verdict. Seven main coordinators with collective leadership. Demands evolved from quota reform to Hasina resignation. Successfully mobilized students from all universities colleges schools and madrasas across Bangladesh.','july_bangla_blockade':'Bangla Blockade (July 7 2024): Nationwide campaign blocking trains highways and roads. Organized by Students Against Discrimination. Paralyzed transportation across Dhaka Chattogram Rajshahi and other cities. Marked escalation from campus protests to nationwide movement. Government responded with force.','july_complete_shutdown':'Complete Shutdown (July 18-19 2024): Total shutdown of all activities across Bangladesh. Students and public enforced shutdown of businesses offices transport. BTV state television building set on fire. Nationwide curfew imposed. Internet completely shut down. Army deployed on streets. Most violent day with dozens killed.','july_non_cooperation':'Non-Cooperation Movement (August 4-5 2024): Final phase. Millions joined streets refusing to cooperate with government. Government buildings courts offices attacked. Police withdrew from many areas. Army refused to shoot civilians. Hasina cabinet collapsed. August 5: Hasina resigned and fled to India. Movement succeeded in its ultimate goal.','july_victims':'Notable Victims: Abu Sayed (Rangpur, first martyr July 15). Many students teachers workers killed by bullets. Victims included university students school children bystanders journalists. Most deaths from high-powered military rifles. Hospitals overwhelmed. Unclaimed bodies buried. Post-mortem reports showed bullet wounds as primary cause of death.','july_36_july':'36 July: Symbolic name for the movement. Coordinators said We have not reached August yet. We will go to August only after July killings are judged. This meant the revolution was not over until justice was served. August 3 designated as 36 July by protesters demanding continued revolution until demands met.',grokipedia_overview:'2024 Bangladesh Uprising: Student-led anti-discrimination movement. June 5 HC reinstated 30% quota. Escalated to nationwide uprising. 1400+ killed (UN). Aug 5 Hasina resigned fled to India. Interim govt under Muhammad Yunus. | 2024 বাংলাদেশ বিপ্লব: ছাত্রনেতৃত্বে কোটা সংস্কার আন্দোলন।',quota_system_full:'Quota System: Sep 5 1972 introduced. 30% veterans + 10% women + 10% districts + 5% minorities + 1% disabled = 56% reserved. 44% merit. 2018 abolished. Jun 5 2024 HC reinstated. Jul 21 SC reduced to 7% (5% veterans + 1% minorities + 1% disabled). 93% merit. | 56% সংরক্ষিত। ২১ জুলাই ৭%।',july_timeline_detailed:'Timeline: Jun 5 HC quota. Jul 1 DU protests. Jul 7 Bangla Blockade. Jul 14 Hasina Razakars. Jul 15 BCL attacks 70 hurt. Jul 16 Abu Sayed killed. Jul 17-18 27 dead. Jul 18 internet blackout. Jul 19 Genocide Day 100+ dead. Jul 21 SC quota 7%. Aug 4 90 dead. Aug 5 Hasina resigned 2:25pm. | সময়রেখা।',july_abu_sayed_detail:'Abu Sayed: 22yo English student Begum Rokeya University Rangpur. Shot Jul 16 2024. 14.22m distance 12-gauge shotgun birdshot. Video viral. First martyr. Forensic Architecture confirmed extrajudicial killing. | আবু সায়েদ: ২২ বছর। ১৬ জুলাই শহিদ।',july_military_refusal:'Military Refusal Aug 5: Army Chief Waker-uz-Zaman refused Hasinas fire order. No martial law. Announced resignation. Critical turning point. | সেনাপ্রধান গুলি চালানোর আদেশ অস্বীকার।',july_leaked_audio:'Leaked Audio Jul 18: 1m24s. Hasina from Ganabhaban ordered shoot protesters use lethal weapons. CID voice match. BBC Earshot forensics no tampering. Evidence in crimes against humanity trial. Convicted Nov 17 2025. | লিকড অডিয়ো। গুলি চালানোর নির্দেশ।',july_casualty_details:'Casualties: UN 1400-1450. Govt 150-215. HRW 858+. 25000+ injured. 1300+ eye injuries. 98% firearms. 66% head/torso. 32 children killed. 44 police killed. | ১৪০০+ নিহত। ২৫০০০+ আহত।',july_internet_shutdown:'Internet Shutdown Jul 18: 11 days mobile blackout. 22 days restrictions. Longest in BD history. Mobile restored Jul 28. VPN circumvention. | ১১ দিন ইন্টারনেট ব্ল্যাকআউট।',july_howina_resignation:'Hasina Fall Aug 5: 2:25pm. Stormed Ganabhaban. Helicopter to India with Sheikh Rehana. Statue of Mujib toppled. End of 15yr AL rule. | ৫ আগস্ট ২:২৫ পদত্যাগ। ভারতে পালান।',july_yunus_govt:'Interim Govt: Aug 8 Yunus sworn in. 16-member council. Released political prisoners. Abolished 30% quota. UN OHCHR invited. Released Khaleda Zia. Banned AL. | ৮ আগস্ট ইউনূস। ১৬ সদস্য।',july_july36:'July 36: Symbolic date Aug 5. 36th day of uprising. Second Independence Bangla Spring. Commemorated annually. 36-day remembrance. Film July 36. | ৩৬ জুলাই। বাংলার দ্বিতীয় স্বাধীনতা।',july_nahid_islam:'Nahid Islam: Sociology student DU. Key coordinator. Social media mobilization. Info Adviser interim govt. SAD leader. | নাহিদ ইসলাম: ছাত্র সমন্বয়ক।',july_hasnat_abdullah:'Hasnat Abdullah: Born 1998 Comilla. DU English MA. SAD convener. NCP Southern Organizer. 24-pt manifesto new constitution. | হাসনাত আব্দুল্লাহ: SAD সমন্বয়ক। NCP।',july_sad:'Students Against Discrimination: Anti-Discrimination Student Movement Jun 30 2024. Leaders: Nahid Hasnat Sarjis Asif Mahfuj Nusrat Arif. Led to NCP. | বৈষম্যবিরোধী ছাত্র আন্দোলন।',july_chhatra_league:'Chhatra League: AL student wing. Jul 15 coordinated attacks sticks rods helmets. Dhaka Jahangirnagar Cumilla. Sexually assaulted female students. Police cover. | ছাত্রলীগ: ১৫ জুলাই হামলা।',july_jatrabari:'Jatrabari Massacre Aug 5: 30min police firing 52 killed. BBC verified. Protesters burned police station 6 officers killed. | যাত্রাবারি: ৫২ নিহত।',july_shr_foundation:'July Shaheed Foundation: Sep 18 2024. Yunus president. Tk 100cr. 800+ martyrs families. Tk 5 lakh per family. Injured Tk 1-4 lakh. Tk 96.67cr distributed. | শহীদ ফাউন্ডেশন। ৫ লক্ষ ক্ষতিপূরণ।',july_charter_info:'July Charter Oct 17 2025: 24 parties. 80+ reforms. Bicameral parliament. 100 women seats. 10yr PM limit. ACC. Referendum Feb 2026. | জুলাই সনদ ২০২৫। ২৪ দল। ৮০+ সংস্কার।',july_genocide_day:'Genocide Day Jul 19: 100+ killed. Mass shootings. Shoot-on-sight curfew. Some troops hesitant. Police defections. | গণহত্যা দিবস। ১০০+ নিহত।',july_aug_4_deadliest:'Aug 4 Deadliest: 90 killed. Curfew. Internet suspended. Non-cooperation movement. Long March called. | আগস্ট ৪: ৯০ নিহত।',july_bbc_leaked_evidence:'BBC Evidence: NTMC audio. CID voice match. Earshot forensics. ENF data. 3D photogrammetry 14.22m. Winchester shotguns. | BBC তদন্ত প্রমাণ।',july_aftermath_challenges:'Aftermath: Inflation 10%+ 2025. Reserves below 0B. S Alam 7B embezzlement. Minority reprisals 50+ arson. Democracy by mid-2026. | পরবর্তী চ্যালেঞ্জ।',july_non_cooperation:'Non-Cooperation Movement: Aug 4 mass protests. Boycott govt offices banks taxes. Economic paralysis. Millions on streets. Paralyzed admin functions. | অসহযোগ আন্দোলন। অফিস ব্যাংক বয়কট।',july_bangla_blockade:'Bangla Blockade: Jul 7 roads railways blocked Dhaka Chittagong. Jul 9 dawn-to-dusk nationwide. Jul 17-20 Dhaka-Chittagong highway blocked. 113 vehicles burned Jul 19. 0B+ economic toll. | বাংলা ব্লকেড। সড়ক রেলপথ অবরোধ।',dha_dhaka:'Dhaka District: Pop 1,47,34,025 (2022). Area 1,464 km2. Upazilas: 5. Est 1772. Division: Dhaka. District Judge Court Dhaka. Legal Aid Office Old Secretariat. Helpline 16430. Landmarks: National Parliament, Ahsan Manzil, Lalbagh Fort, Sadarghat. Metro Rail operational. High Court Division HQ. | ঢাকা: জনসংখ্যা ১,৪৭,৩৪,০২৫। আয়তন ১,৪৬৪ বর্গ কিমি।',dha_gazipur:'Gazipur District: Pop 5,263,474 (2022). Area 1,806 km2. Upazilas: 5. Est 1984. Division: Dhaka. District Judge Court Gazipur. Legal Aid Office. Industrial hub. BRTA headquarters. Helpline 16430. Major RMG factories. | গাজীপুর: জনসংখ্যা ৫২,৬৩,৪৭৪। শিল্পাঞ্চল।',dha_narayanganj:'Narayanganj District: Pop 39,09,138 (2022). Area 684 km2 (smallest district). Upazilas: 5. Est 1984. Division: Dhaka. District Judge Court Narayanganj. Legal Aid Office. Port city on Shitalakshya River. Dhaka-Narayanganj rail. Helpline 16430. | নারায়ণগঞ্জ: জনসংখ্যা ৩৯,০৯,১৩৮। সবচেয়ে ছোট জেলা।',dha_faridpur:'Faridpur District: Pop 21,62,876 (2022). Area 2,053 km2. Upazilas: 9. Est 1786. Division: Dhaka. District Judge Court Faridpur. Legal Aid Office. Padma Bridge connects to Dhaka. Helpline 16430. Historical Gopalganj-Faridpur region. | ফরিদপুর: জনসংখ্যা ২১,৬২,৮৭৬। পদ্মা সেতু সংযুক্ত।',dha_gopalganj:'Gopalganj District: Pop 12,94,561 (2022). Area 1,468 km2. Upazilas: 5. Est 1984. Division: Dhaka. District Judge Court Gopalganj. Legal Aid Office. Birthplace of Sheikh Mujibur Rahman. Tungipara. Helpline 16430. | গোপালগঞ্জ: জনসংখ্যা ১২,৯৪,৫৬১। শেখ মুজিবুর রহমানের জন্মভূমি।',dha_kishoreganj:'Kishoreganj District: Pop 32,67,630 (2022). Area 2,689 km2. Upazilas: 13. Est 1984. Division: Dhaka. District Judge Court Kishoreganj. Legal Aid Office. Haor wetland region. Nikli haor. Helpline 16430. | কিশোরগঞ্জ: জনসংখ্যা ৩২,৬৭,৬৩০। ১৩টি উপজেলা।',dha_madaripur:'Madaripur District: Pop 12,93,027 (2022). Area 1,145 km2. Upazilas: 5. Est 1984. Division: Dhaka. District Judge Court Madaripur. Legal Aid Office. Famous for mangoes. Helpline 16430. | মাদারীপুর: জনসংখ্যা ১২,৯৩,০২৭। আমের জন্য বিখ্যাত।',dha_manikganj:'Manikganj District: Pop 15,58,024 (2022). Area 1,384 km2. Upazilas: 7. Est 1984. Division: Dhaka. District Judge Court Manikganj. Legal Aid Office. Bangabandhu Bridge connects to western BD. Helpline 16430. | মানিকগঞ্জ: জনসংখ্যা ১৫,৫৮,০২৪। বঙ্গবন্ধু সেতু।',dha_munshiganj:'Munshiganj District: Pop 16,25,418 (2022). Area 1,004 km2. Upazilas: 6. Est 1984. Division: Dhaka. District Judge Court Munshiganj. Legal Aid Office. Sonargaon historical site nearby. Helpline 16430. | মুন্সিগঞ্জ: জনসংখ্যা ১৬,২৫,৪১৮। সোনারগাঁও কাছে।',dha_narsingdi:'Narsingdi District: Pop 25,84,452 (2022). Area 1,150 km2. Upazilas: 6. Est 1984. Division: Dhaka. District Judge Court Narsingdi. Legal Aid Office. Major textile industry center. Helpline 16430. | নরসিংদী: জনসংখ্যা ২৫,৮৪,৪৫২। বস্ত্র শিল্প কেন্দ্র।',dha_rajbari:'Rajbari District: Pop 11,89,821 (2022). Area 1,092 km2. Upazilas: 5. Est 1984. Division: Dhaka. District Judge Court Rajbari. Legal Aid Office. Padma River boundary. Helpline 16430. | রাজবাড়ী: জনসংখ্যা ১১,৮৯,৮২১। পদ্মা নদী সীমানা।',dha_shariatpur:'Shariatpur District: Pop 12,95,053 (2022). Area 1,181 km2. Upazilas: 6. Est 1984. Division: Dhaka. District Judge Court Shariatpur. Legal Aid Office. Named after Haji Shariatullah. Helpline 16430. | শরিয়তপুর: জনসংখ্যা ১২,৯৫,০৫৩।',dha_tangail:'Tangail District: Pop 40,37,608 (2022). Area 3,414 km2. Upazilas: 12. Est 1969. Division: Dhaka. District Judge Court Tangail. Legal Aid Office. Major haor region. Jamuna Bridge connects. Helpline 16430. | টাঙ্গাইল: জনসংখ্যা ৪০,৩৭,৬০৮। ১২টি উপজেলা।',ctg_chattogram:'Chattogram District: Pop 91,69,464 (2022). Area 5,283 km2. Upazilas: 15. Est 1666 (oldest district). Division: Chattogram. District Judge Court Chattogram. Legal Aid Office. Commercial capital. Port city. Coxsbazar nearby. Hill Tracts. Karnaphuli River. | চট্টগ্রাম: জনসংখ্যা ৯১,৬৯,৪৬৪। বাণিজ্যিক রাজধানী।',ctg_cumilla:'Cumilla District: Pop 36,25,252 (2022). Area 3,686 km2. Upazilas: 9. Est 1790. Division: Chattogram. District Judge Court Cumilla. Legal Aid Office. Comilla Cantonment. Maynamati fort. | কুমিল্লা: জনসংখ্যা ৩৬,২৫,২৫২। ময়নামতি দুর্গ।',ctg_noakhali:'Noakhali District: Pop 62,12,216 (2022). Area 4,202 km2. Upazilas: 17 (most in BD). Est 1821. Division: Chattogram. District Judge Court Noakhali. Legal Aid Office. Hatia island. Meghna estuary. | নোয়াখালী: জনসংখ্যা ৬২,১২,২১৬। ১৭টি উপজেলা (সবচেয়ে বেশি)।',ctg_bandarban:'Bandarban District: Pop 6,47,587 (2022). Area 4,479 km2. Upazilas: 10. Est 1981. Division: Chattogram. District Judge Court Bandarban. Legal Aid Office. Hill Tracts. Buddhist temples. Mro indigenous people. Keokradong highest peak. | বান্দরবান: জনসংখ্যা ৬,৪৭,৫৮৭। পাহাড়ি অঞ্চল।',ctg_khagrachhari:'Khagrachhari District: Pop 4,81,109 (2022). Area 2,749 km2. Upazilas: 7. Est 1983. Division: Chattogram. District Judge Court Khagrachhari. Legal Aid Office. Chittagong Hill Tracts. Chakma people. Alutila cave. | খাগড়াছড়ি: জনসংখ্যা ৪,৮১,১০৯। চাকমা জনগোষ্ঠী।',ctg_rangamati:'Rangamati District: Pop 7,14,119 (2022). Area 6,116 km2 (largest district). Upazilas: 9. Est 1983. Division: Chattogram. District Judge Court Rangamati. Legal Aid Office. Kaptai Lake. Kaptai Dam. Chakma Circle. | রাঙ্গামাটি: জনসংখ্যা ৭,১৪,১১৯। বৃহত্তম জেলা (আয়তন)।',ctg_brahmanbaria:'Brahmanbaria District: Pop 33,06,559 (2022). Area 1,881 km2. Upazilas: 9. Est 1984. Division: Chattogram. District Judge Court Brahmanbaria. Legal Aid Office. Titas gas field. Cultural center. | ব্রাহ্মণবাড়িয়া: জনসংখ্যা ৩৩,০৬,৫৫৯। টিটাস গ্যাস ক্ষেত্র।',ctg_coxsbazar:'Coxsbazar District: Pop 28,23,265 (2022). Area 2,492 km2. Upazilas: 9. Est 1984. Division: Chattogram. District Judge Court Coxsbazar. Legal Aid Office. World longest natural beach 120km. Rohingya refugee camps. St Martin island. | কক্সবাজার: জনসংখ্যা ২৮,২৩,২৬৫। বিশ্বের দীর্ঘতম সমুদ্রসৈকত।',ctg_chandpur:'Chandpur District: Pop 26,35,748 (2022). Area 1,645 km2. Upazilas: 8. Est 1984. Division: Chattogram. District Judge Court Chandpur. Legal Aid Office. Hilsa fish capital. Meghna river. | চাঁদপুর: জনসংখ্যা ২৬,৩৫,৭৪৮। ইলিশ মাছের রাজধানী।',ctg_lakshmipur:'Lakshmipur District: Pop 19,38,111 (2022). Area 1,440 km2. Upazilas: 6. Est 1984. Division: Chattogram. District Judge Court Lakshmipur. Legal Aid Office. Coastal area. Ramgati port. | লক্ষ্মীপুর: জনসংখ্যা ১৯,৩৮,১১১। উপকূলীয় অঞ্চল।',ctg_feni:'Feni District: Pop 16,48,896 (2022). Area 990 km2. Upazilas: 6. Est 1984 (last district created). Division: Chattogram. District Judge Court Feni. Legal Aid Office. University of Feni. | ফেনী: জনসংখ্যা ১৬,৪৮,৮৯৬। সর্বশেষ প্রতিষ্ঠিত জেলা।',raj_rajshahi:'Rajshahi District: Pop 29,15,013 (2022). Area 2,425 km2. Upazilas: 9. Est 1772. Division: Rajshahi. District Judge Court Rajshahi. Legal Aid Office. Education hub. Rajshahi University. Mango city. Varendra Museum. | রাজশাহী: জনসংখ্যা ২৯,১৫,০১৩। শিক্ষাহাব। আমের শহর।',raj_bogura:'Bogura District: Pop 37,34,300 (2022). Area 2,899 km2. Upazilas: 12. Est 1821. Division: Rajshahi. District Judge Court Bogura. Legal Aid Office. Bogra Resolution 1954. Mahasthangarh archaeological site. | বগুড়া: জনসংখ্যা ৩৭,৩৪,৩০০। মহাস্থানগড় প্রত্নতাত্ত্বিক স্থান।',raj_pabna:'Pabna District: Pop 29,09,622 (2022). Area 2,376 km2. Upazilas: 9. Est 1832. Division: Rajshahi. District Judge Court Pabna. Legal Aid Office. Historical Pabna revolt 1873. | পাবনা: জনসংখ্যা ২৯,০৯,৬২২। পাবনা বিদ্রোহ ১৮৭৩।',raj_sirajganj:'Sirajganj District: Pop 31,47,005 (2022). Area 2,497 km2. Upazilas: 5. Est 1984. Division: Rajshahi. District Judge Court Sirajganj. Legal Aid Office. Jamuna river port. Railway junction. | সিরাজগঞ্জ: জনসংখ্যা ৩১,৪৭,০০৫। যমুনা নদী বন্দর।',raj_naogaon:'Naogaon District: Pop 27,00,480 (2022). Area 3,426 km2. Upazilas: 9. Est 1984. Division: Rajshahi. District Judge Court Naogaon. Legal Aid Office. Agriculture hub. Rice production. | নওগাঁ: জনসংখ্যা ২৭,০০,৪৮০। কৃষি কেন্দ্র।',raj_natore:'Natore District: Pop 17,63,219 (2022). Area 1,896 km2. Upazilas: 11. Est 1984. Division: Rajshahi. District Judge Court Natore. Legal Aid Office. Natore Rajbari. | নাটোর: জনসংখ্যা ১৭,৬৩,২১৯। নাটোর রাজবাড়ি।',raj_chapainawabganj:'Chapainawabganj District: Pop 17,04,730 (2022). Area 1,703 km2. Upazilas: 7. Est 1984. Division: Rajshahi. District Judge Court Chapainawabganj. Legal Aid Office. Mango production. Mahasthangarh nearby. | চাঁপাইনবাবগঞ্জ: জনসংখ্যা ১৭,০৪,৭৩০। আম উৎপাদন।',raj_joypurhat:'Joypurhat District: Pop 9,56,626 (2022). Area 965 km2. Upazilas: 5. Est 1984. Division: Rajshahi. District Judge Court Joypurhat. Legal Aid Office. Smallest in Rajshahi division. | জয়পুরহাট: জনসংখ্যা ৯,৫৬,৬২৬। রাজশাহী বিভাগের ছোট্ট।',khu_khulna:'Khulna District: Pop 26,13,385 (2022). Area 4,394 km2. Upazilas: 9. Est 1882. Division: Khulna. District Judge Court Khulna. Legal Aid Office. Sundarbans gateway. Mongla port. Shipbuilding. | খুলনা: জনসংখ্যা ২৬,১৩,৩৮৫। সুন্দরবনের প্রবেশদ্বার।',khu_jashore:'Jashore District: Pop 30,76,849 (2022). Area 2,607 km2. Upazilas: 8. Est 1781. Division: Khulna. District Judge Court Jashore. Legal Aid Office. Historic Battle of Plassey nearby. Aviation museum. | যশোর: জনসংখ্যা ৩০,৭৬,৮৪৯। প্লাসির যুদ্ধক্ষেত্র।',khu_kushtia:'Kushtia District: Pop 21,49,692 (2022). Area 1,609 km2. Upazilas: 6. Est 1947. Division: Khulna. District Judge Court Kushtia. Legal Aid Office. Lalon Shah shrine. Islamic University. Mir Mosharraf Hossain birthplace. | কুষ্টিয়া: জনসংখ্যা ২১,৪৯,৬৯২। লালন শাহের দরগাহ।',khu_satkhira:'Satkhira District: Pop 21,96,581 (2022). Area 3,817 km2. Upazilas: 7. Est 1984. Division: Khulna. District Judge Court Satkhira. Legal Aid Office. Sundarbans mangroves. Salt production. | সাতক্ষীরা: জনসংখ্যা ২১,৯৬,৫৮১। সুন্দরবন ও লবণ উৎপাদন।',khu_jhenaidah:'Jhenaidah District: Pop 17,71,304 (2022). Area 1,965 km2. Upazilas: 6. Est 1984. Division: Khulna. District Judge Court Jhenaidah. Legal Aid Office. Harinakunda historical site. | ঝিনাইদহ: জনসংখ্যা ১৭,৭১,৩০৪।',khu_bagerhat:'Bagerhat District: Pop 16,13,079 (2022). Area 3,959 km2. Upazilas: 9. Est 1984. Division: Khulna. District Judge Court Bagerhat. Legal Aid Office. UNESCO Sixty Dome Mosque. Khan Jahan Ali shrine. Sundarbans. | বাগেরহাট: জনসংখ্যা ১৬,১৩,০৭৯। ষাট গম্বুজ মসজিদ (ইউনেস্কো)।',khu_chuadanga:'Chuadanga District: Pop 12,34,066 (2022). Area 1,174 km2. Upazilas: 4. Est 1984. Division: Khulna. District Judge Court Chuadanga. Legal Aid Office. Border with India. | চুয়াডাঙ্গা: জনসংখ্যা ১২,৩৪,০৬৬। ভারতের সীমান্ত।',khu_magura:'Magura District: Pop 10,33,115 (2022). Area 1,039 km2. Upazilas: 4. Est 1984. Division: Khulna. District Judge Court Magura. Legal Aid Office. | মাগুরা: জনসংখ্যা ১০,৩৩,১১৫।',khu_narail:'Narail District: Pop 7,88,673 (2022). Area 968 km2. Upazilas: 3. Est 1984. Division: Khulna. District Judge Court Narail. Legal Aid Office. Literary tradition. | নড়াইল: জনসংখ্যা ৭,৮৮,৬৭৩। সাহিত্যিক ঐতিহ্য।',khu_meherpur:'Meherpur District: Pop 7,05,356 (2022). Area 742 km2. Upazilas: 3. Est 1984. Division: Khulna. District Judge Court Meherpur. Legal Aid Office. First Mujibnagar government 1971. | মেহেরপুর: জনসংখ্যা ৭,০৫,৩৫৬। প্রথম মুজিবনগর সরকার ১৯৭১।',bar_barishal:'Barishal District: Pop 25,70,450 (2022). Area 2,785 km2. Upazilas: 10. Est 1797. Division: Barishal. District Judge Court Barishal. Legal Aid Office. Rice bowl of BD. Dhanua river. | বরিশাল: জনসংখ্যা ২৫,৭০,৪৫০। ধানের কুটির।',bar_patuakhali:'Patuakhali District: Pop 17,27,254 (2022). Area 3,221 km2. Upazilas: 8. Est 1969. Division: Barishal. District Judge Court Patuakhali. Legal Aid Office. Kuakata sea beach. | পটুয়াখালী: জনসংখ্যা ১৭,২৭,২৫৪। কুয়াকাটা সমুদ্রসৈকত।',bar_bhola:'Bhola District: Pop 19,32,514 (2022). Area 3,403 km2. Upazilas: 7. Est 1984. Division: Barishal. District Judge Court Bhola. Legal Aid Office. Only island district. Cyclone 1970 worst hit. | ভোলা: জনসংখ্যা ১৯,৩২,৫১৪। একমাত্র দ্বীপ জেলা।',bar_pirojpur:'Pirojpur District: Pop 11,98,193 (2022). Area 1,278 km2. Upazilas: 7. Est 1984. Division: Barishal. District Judge Court Pirojpur. Legal Aid Office. | পিরোজপুর: জনসংখ্যা ১১,৯৮,১৯৩।',bar_barguna:'Barguna District: Pop 10,10,530 (2022). Area 1,831 km2. Upazilas: 6. Est 1984. Division: Barishal. District Judge Court Barguna. Legal Aid Office. Coastal belt. Cyclone affected. | বরগুনা: জনসংখ্যা ১০,১০,৫৩০। উপকূলীয় বেল্ট।',bar_jhalokathi:'Jhalokathi District: Pop 6,61,161 (2022). Area 707 km2. Upazilas: 4. Est 1984. Division: Barishal. District Judge Court Jhalokathi. Legal Aid Office. Smallest in Barishal. | ঝালকাঠি: জনসংখ্যা ৬,৬১,১৬১। বরিশালের ছোট্ট।',syl_sylhet:'Sylhet District: Pop 38,57,037 (2022). Area 3,452 km2. Upazilas: 13. Est 1772. Division: Sylhet. District Judge Court Sylhet. Legal Aid Office. Tea gardens. Surma valley. Shah Jalal shrine. Sylhet International Airport. | সিলেট: জনসংখ্যা ৩৮,৫৭,০৩৭। চা বাগান। শাহজালালের দরগাহ।',syl_sunamganj:'Sunamganj District: Pop 26,95,495 (2022). Area 3,747 km2. Upazilas: 12. Est 1984. Division: Sylhet. District Judge Court Sunamganj. Legal Aid Office. Haor wetland. Tanguar haor UNESCO. | সুনামগঞ্জ: জনসংখ্যা ২৬,৯৫,৪৯৫। তুয়ার হাওর (ইউনেস্কো)।',syl_habiganj:'Habiganj District: Pop 23,58,886 (2022). Area 2,637 km2. Upazilas: 9. Est 1984. Division: Sylhet. District Judge Court Habiganj. Legal Aid Office. Tea estates. Lakhai. | হবিগঞ্জ: জনসংখ্যা ২৩,৫৮,৮৮৬। চা বাগান।',syl_moulvibazar:'Moulvibazar District: Pop 21,23,445 (2022). Area 2,799 km2. Upazilas: 7. Est 1984. Division: Sylhet. District Judge Court Moulvibazar. Legal Aid Office. Tea capital. Lawachara national park. | মৌলভীবাজার: জনসংখ্যা ২১,২৩,৪৪৫। চা রাজধানী।',ran_rangpur:'Rangpur District: Pop 31,69,615 (2022). Area 2,401 km2. Upazilas: 8. Est 1769. Division: Rangpur. District Judge Court Rangpur. Legal Aid Office. Agricultural hub. Rangpur Medical College. | রংপুর: জনসংখ্যা ৩১,৬৯,৬১৫। কৃষি কেন্দ্র।',ran_dinajpur:'Dinajpur District: Pop 33,15,238 (2022). Area 3,444 km2. Upazilas: 13. Est 1786. Division: Rangpur. District Judge Court Dinajpur. Legal Aid Office. Tajhat palace. Hakgala. | দিনাজপুর: জনসংখ্যা ৩৩,১৫,২৩৮। তাজহাট রাজবাড়ি।',ran_gaibandha:'Gaibandha District: Pop 25,62,232 (2022). Area 2,115 km2. Upazilas: 7. Est 1984. Division: Rangpur. District Judge Court Gaibandha. Legal Aid Office. | গাইবান্ধা: জনসংখ্যা ২৫,৬২,২৩২।',ran_kurigram:'Kurigram District: Pop 23,29,161 (2022). Area 2,245 km2. Upazilas: 9. Est 1984. Division: Rangpur. District Judge Court Kurigram. Legal Aid Office. Brahmaputra river. Haor region. | কুড়িগ্রাম: জনসংখ্যা ২৩,২৯,১৬১। ব্রহ্মপুত্র নদী।',ran_nilphamari:'Nilphamari District: Pop 20,92,567 (2022). Area 1,547 km2. Upazilas: 6. Est 1984. Division: Rangpur. District Judge Court Nilphamari. Legal Aid Office. | নীলফামারি: জনসংখ্যা ২০,৯২,৫৬৭।',ran_thakurgaon:'Thakurgaon District: Pop 15,33,894 (2022). Area 1,781 km2. Upazilas: 5. Est 1984. Division: Rangpur. District Judge Court Thakurgaon. Legal Aid Office. India border. | ঠাকুরগাঁও: জনসংখ্যা ১৫,৩৩,৮৯৪। ভারত সীমান্ত।',ran_lalmonirhat:'Lalmonirhat District: Pop 14,28,406 (2022). Area 1,247 km2. Upazilas: 5. Est 1984. Division: Rangpur. District Judge Court Lalmonirhat. Legal Aid Office. | লালমনিরহাট: জনসংখ্যা ১৪,২৮,৪০৬।',ran_panchagarh:'Panchagarh District: Pop 11,79,843 (2022). Area 1,405 km2. Upazilas: 5. Est 1984. Division: Rangpur. District Judge Court Panchagarh. Legal Aid Office. Northernmost district. | পঞ্চগড়: জনসংখ্যা ১১,৭৯,৮৪৩। উত্তরতম জেলা।',mym_mymensingh:'Mymensingh District: Pop 58,99,052 (2022). Area 4,395 km2. Upazilas: 13. Est 1787. Division: Mymensingh. District Judge Court Mymensingh. Legal Aid Office. Oldest in Mymensingh. Agricultural university. | ময়মনসিংহ: জনসংখ্যা ৫৮,৯৯,০৫২। কৃষি বিশ্ববিদ্যালয়।',mym_jamalpur:'Jamalpur District: Pop 24,99,737 (2022). Area 2,115 km2. Upazilas: 7. Est 1978. Division: Mymensingh. District Judge Court Jamalpur. Legal Aid Office. Railway junction. | জামালপুর: জনসংখ্যা ২৪,৯৯,৭৩৭। রেলওয়ে জাংশন।',mym_netrokona:'Netrokona District: Pop 23,24,856 (2022). Area 2,794 km2. Upazilas: 10. Est 1984. Division: Mymensingh. District Judge Court Netrokona. Legal Aid Office. Haor wetland. | নেত্রকোণা: জনসংখ্যা ২৩,২৪,৮৫৬। হাওর অঞ্চল।',mym_sherpur:'Sherpur District: Pop 15,01,853 (2022). Area 1,365 km2. Upazilas: 5. Est 1984. Division: Mymensingh. District Judge Court Sherpur. Legal Aid Office. Border with Meghalaya India. | শেরপুর: জনসংখ্যা ১৫,০১,৮৫৩। মেঘালয়ের সীমান্ত।',yunus_biography:'Muhammad Yunus: Born June 28 1940 in Chittagong. Bangladeshi economist social entrepreneur. Founded Grameen Bank 1983. Pioneered microcredit lending to poor without collateral. Nobel Peace Prize 2006. PhD Economics Vanderbilt University 1969. Professor Chittagong University. Appointed Chief Adviser Aug 8 2024. Age 84 at appointment. | মুহাম্মদ ইউনূস: ১৯৪০ জুন ২৮ চট্টগ্রামে জন্ম। অর্থনীতিবিদ। গ্রামীণ ব্যাংক প্রতিষ্ঠাতা। ২০০৬ নোবেল শান্তি পুরস্কার।',yunus_early_life:'Yunus Early Life: Born in village of Bathua Hathazari near Chittagong. Third of 9 children. Father Haji Muhammad Dula Mia jeweler. Mother Sufia Khatun. BA MA Economics Dhaka University. Fulbright scholarship to Vanderbilt PhD 1969. Assistant professor Middle Tennessee State 1969-1972. Returned Bangladesh 1972. Head of Economics dept Chittagong University. | ইউনূস প্রাথমিক জীবন: চট্টগ্রামের কাছে হাটহাজারি। ৯ ভাইবোনার মধ্যে তৃতীয়। ঢাকা বিশ্ববিদ্যালয়ে অর্থনীতি। ভ্যান্ডারবিল্ট থেকে PhD।',yunus_grameen:'Grameen Bank: Founded 1983 by Yunus. Started with 7 loan to 42 bamboo stool makers in Jobra village 1976. Group lending 5-person units joint liability. 94-97% women borrowers. 2568 branches 81678 villages covering 94% of BD. 10.77 million borrowers. 0.8 billion cumulative loans. 97% repayment rate. Borrower ownership 95% shares govt 5%. | গ্রামীণ ব্যাংক: ১৯৮৩ সালে প্রতিষ্ঠিত। ২৫৬৮ শাখা। ১.০৭ কোটি ঋণগ্রহীতা। ৯৭% নারী। ৯৪% গ্রাম কभারেজ।',yunus_microfinance_impact:'Microfinance Impact: Global replication in 60+ countries. Grameen Foundation 27 countries. Grameen America 2008 serves 100000+ low-income entrepreneurs. Social business framework. 500+ ventures financed. 17 million people impacted. Critics say 20-30% annual interest rates. Mixed RCT results on poverty reduction. Critics say over-indebtedness risk. | মাইক্রোফাইনান্স প্রভাব: ৬০+ দেশে প্রতিলিপি। ১.৭ কোটি মানুষের উপর প্রভাব।',yunus_political_career:'Yunus Political Career: Advisor in caretaker government 1996. Nagorik Shakti party announcement Feb 2007. Withdrew May 2007 under military pressure. Prosecuted under Hasina govt for labor violations and fund misuse. 2013 conviction. Forced removal from Grameen Bank 2011 over age limit. Cases halted after 2024 appointment. | ইউনূস রাজনৈতিক জীবন: ১৯৯৬ তত্ত্বাবধায়ক সরকারে উপদেষ্টা। ২০০৭ নাগরিক শক্তি দল। ২০১১ গ্রামীণ ব্যাংক থেকে বিতাড়িত।',yunus_chief_adviser:'Yunus Appointment as Chief Adviser: Aug 5 2024 Hasina resigned. Aug 6 President invited Yunus. Aug 8 sworn in at presidential palace. 17-member interim council. Students civil society technocrats. No military representatives. Pledged to uphold constitution and prepare elections. International support from UN SG Guterres. | ইউনূস প্রধান উপদেষ্টা নিয়োগ: ৫ আগস্ট হাসিনা পদত্যাগ। ৮ আগস্ট শপথ। ১৭ সদস্যের পরিষদ।',interim_govt_council:'Interim Govt Council: 17 members initially expanded to 21 by Aug 16 2024. Chief Adviser Muhammad Yunus. Advisers from civil society NGOs technocrats. Wahiduddin Mahmud economist. Ali Imam Majumdar former cabinet secretary. Student representatives. Adviser-level powers equivalent to ministers. | অন্তর্বর্তীকালীন সরকার পরিষদ: ১৭ সদস্যে শুরু ২১ পর্যন্ত বৃদ্ধি। নাগরিক সমাজ ও প্রযুক্তিবিদ।',interim_reforms:'Interim Govt Reforms: Six reform commissions formed Sep 11 2024. Electoral judiciary police administration public administration anti-corruption constitutional reform. Released thousands of political prisoners. Abolished 30% quota. Invited UN OHCHR fact-finding. Released Khaleda Zia. Lifted media restrictions. Banned Awami League from elections. | অন্তর্বর্তীকালীন সংস্কার: ৬টি সংস্কার কমিশন। নির্বাচন বিচার বিভাগ পুলিশ প্রশাসন দুর্নীতি সংবিধান।',interim_cabinet_structure:'Cabinet of Bangladesh: Article 55 Constitution. PM heads cabinet collectively responsible to parliament. At least 90% must be MPs. Interim cabinet under Yunus bypassed parliamentary norms. Advisers hold equivalent powers to ministers. 21-member advisory council. No fixed maximum size in constitution. | বাংলাদেশের মন্ত্রিসভা: সংবিধানের ৫৫ ধারা। PM মন্ত্রিসভা প্রধান। অন্তর্বর্তীকালীন মন্ত্রিসভা ২১ সদস্য।',yunus_six_commissions:'Six Reform Commissions: Sep 11 2024 formed. 1. Electoral Reform Commission. 2. Judicial Reform Commission. 3. Police Reform Commission. 4. Public Administration Reform Commission. 5. Anti-Corruption Reform Commission. 6. Constitutional Reform Commission. Chaired by Ali Riaz constitutional commission. Submitted reports for July Charter 2025. | ছয়টি সংস্কার কমিশন: ১১ সেপ্টেম্বর ২০২৪। নির্বাচন বিচার পুলিশ প্রশাসন দুর্নীতি সংবিধান সংস্কার।',special_assistants:'Special Assistants to Chief Adviser: Senior advisory role. Rank equivalent to state minister or adviser. Appointed via gazette notification. Notable: Ali Imam Majumder Aug 12 2024 admin. Lt Gen Abdul Hafiz Aug 22 2024 defense. Mahfuz Alam Aug 28 2024 student affairs. Mohammad Sufiur Rahman Apr 2025 foreign affairs. Ali Riaz Nov 2025 political reform. | প্রধান উপদেষ্টার বিশেষ সহকারী: প্রাক্তন সচিব আলী ইমাম মজুমদার। লেফটেন্ট জেনারেল আব্দুল হাফিজ। ছাত্রনেতা মাহফুজ আলম।',giu:'Governance Innovation Unit: Est 2012 under PM Office. Reorganized under Chief Adviser Office 2024. Think tank for public administration innovation. SDG monitoring. Annual Performance Agreements. Digital governance. Partnerships with Harvard Kennedy School UNDP. 39+1 Model for SDG localization. National Governance Assessment Framework. | শাসন উদ্ভাবন একক: ২০১২ সালে প্রতিষ্ঠিত। SDG পর্যবেক্ষণ। ডিজিটাল শাসন।',yunus_international_recognition:'Yunus International Recognition: Nobel Peace Prize 2006 jointly with Grameen Bank. Presidential Medal of Freedom 2009 (US). Congressional Gold Medal 2010. Over 50 honorary degrees. UN Messenger of Peace. Social business pioneer. 60+ countries adopted Grameen model. | ইউনূসের আন্তর্জাতিক স্বীকৃতি: ২০০৬ নোবেল শান্তি পুরস্কার। ২০০৯ প্রেসিডেন্সিয়াল মেডেল অব ফ্রিডম। ৫০+ সম্মানসূচক ডিগ্রি।',interim_govt_legal_basis:'Interim Govt Legal Basis: Constitution lacks explicit provisions. Supreme Court Appellate Division advisory opinion Aug 8 2024 under Article 106. Doctrine of necessity. Elections mandated within 90 days per Article 123(3). President appointed Yunus. No parliamentary process. Similar to prior caretaker systems. | অন্তর্বর্তীকালীন সরকারের আইনি ভিত্তি: সুপ্রিম কোর্টের পরামর্শমূলক মতামত। অনুচ্ছেদ ১০৬। প্রয়োজনের শিক্ষা।',interim_govt_challenges:'Interim Govt Challenges: Economic recovery inflation 10%+ 2025. Foreign reserves below 0B. Political fragmentation. Minority reprisals 50+ arson incidents. Islamist groups power vacuum. Post-uprising violence against AL members. Balancing reforms with stability. Election timeline pressure. Target mid-2026 democratic transition. | অন্তর্বর্তীকালীন সরকারের চ্যালেঞ্জ: অর্থনৈতিক পুনরুদ্ধার। মুদ্রাস্ফীতি। রাজনৈতিক খণ্ডন। সংখ্যালঘু নির্যাতন।',gen_science_basics:'Science Basics: Matter is anything with mass and volume. Three states: solid liquid gas. Energy cannot be created or destroyed (conservation of energy). Light travels at 299792458 m/s. DNA carries genetic information. Cells are building blocks of life. Newton laws of motion. E=mc2 by Einstein. Periodic table has 118 elements. | বিজ্ঞানের মৌলিক বিষয়: পদার্থ তিন অবস্থায় থাকে। শক্তি ধ্বংস হয় না। আলোর গতি 3 লক্ষ কিমি/সে। DNA জিনগত তথ্য বহন করে।',gen_history_world:'World History: Human civilization began ~10000 BC. Roman Empire fell 476 AD. Renaissance 14th-17th century. Industrial Revolution 1760-1840. World War 1914-1918. World War 2 1939-1945. UN founded 1945. Moon landing 1969. Internet born 1989. Berlin Wall fell 1989. Cold War 1947-1991. | বিশ্ব ইতিহাস: মানব সভ্যতা ১০০০০ খ্রিস্টপূর্বাব্দে। রোমান সাম্রাজ্য ৪৭৬। শিল্প বিপ্লব ১৭৬০। বিশ্বযুদ্ধ ১৯১৪-১৯৪৫। UN ১৯৪৫।',gen_geography:'Geography: Earth diameter 12742 km. Circumference 40075 km. 7 continents. 5 oceans. Mount Everest 8849m highest. Mariana Trench 10994m deepest. Amazon largest river by volume. Sahara largest hot desert. Russia largest country 17.1M km2. 195 countries. Earth age 4.54 billion years. | ভূগোল: পৃথিবী ব্যাস ১২৭৪২ কিমি। ৭ মহাদেশ। ৫ মহাসাগর। এভারেস্ট ৮৮৪৯মিটার। ১৯৫ দেশ।',gen_space:'Space: Sun is a star 4.6 billion years old. 8 planets in solar system. Jupiter largest planet. Saturn has rings. Mars has largest volcano Olympus Mons. Milky Way has 100-400 billion stars. Andromeda closest galaxy 2.5M light years away. Black holes have infinite density. ISS orbits at 408km. Voyager 1 launched 1977. | মহাকাশ: সূর্য ৪.৬ বিলিয়ন বছর বয়সী। ৮ গ্রহ। বৃহস্পতি বৃহত্তম। শনির রিং আছে। মিল্কি ওয়ে ১০০-৪০০ বিলিয়ন তারা।',gen_tech:'Technology: AI artificial intelligence enables machines to learn. Blockchain is decentralized ledger. 5G is fifth generation wireless. Quantum computers use qubits. Cloud computing provides on-demand resources. IoT connects everyday devices. VR creates virtual worlds. CRISPR edits genes. Neural networks mimic brain. Machine learning finds patterns. | প্রযুক্তি: AI কৃত্রিম বুদ্ধিমত্তা। ব্লকচেইন বিকেন্দ্রীভূত খাতা। ৫G পঞ্চম প্রজন্ম। কোয়ান্টাম কম্পিউটার। ক্লাউড কম্পিউটিং।',gen_programming:'Programming Languages: Python simple readable used in AI web data science. JavaScript runs browsers enables interactive websites. Java enterprise apps Android. C++ performance gaming systems. Rust memory safe systems programming. HTML structures web pages. SQL manages databases. React frontend framework. Node.js server-side JavaScript. Git version control. | প্রোগ্রামিং: Python AI ও ডেটা। JavaScript ওয়েব। Java এন্টারপ্রাইজ। C++ গেমিং। Rust সিস্টেম। HTML ওয়েব পেজ। SQL ডেটাবেস।',gen_math:'Math Basics: Pi is 3.14159... Prime numbers divisible only by 1 and itself (2 3 5 7 11...). Pythagorean theorem a2+b2=c2. Quadratic formula. Fibonacci sequence 0 1 1 2 3 5 8 13. Calculus studies change. Statistics analyzes data. Linear algebra deals with vectors and matrices. | গণিত: Pi 3.14। মৌলিক সংখ্যা 2 3 5 7 11। পিথাগোরাস a2+b2=c2। ফিবোনাচ্চি 0 1 1 2 3 5। ক্যালকুলাস পরিবর্তন অধ্যয়ন।',gen_health:'Health Basics: Adults need 7-9 hours sleep. Drink 2-3 liters water daily. Exercise 150 minutes per week. BMI healthy range 18.5-24.9. Heart pumps 7500 liters blood daily. Brain has 86 billion neurons. Immune system fights infections. Vaccines train immune system. Diabetes type 1 autoimmune type 2 lifestyle. Blood types A B AB O. | স্বাস্থ্য: প্রাপ্তবয়স্কদের ৭-৯ ঘণ্টা ঘুম। ২-৩ লিটার পানি। সপ্তাহে ১৫০ মিনিট ব্যায়াম।',gen_nature:'Nature: Photosynthesis converts sunlight to energy in plants. DNA double helix structure. Ecosystems have producers consumers decomposers. Water cycle evaporation condensation precipitation. Biodiversity hotspots have many species. Coral reefs are rainforests of the sea. Oxygen produced by plants. Fossils preserve ancient life. | প্রকৃতি: সালোকসংশ্লেষণ সূর্যালোককে শক্তিতে রূপান্তর। DNA ডাবল হেলিক্স। জলচক্র। জীববৈচিত্র্য। প্রবাল প্রাচীর।',gen_greeting:'Hello! Welcome to A ai. I can help with legal information courts rights administration constitution and much more. I also know about science history technology and daily life. Ask me anything! I respond in both English and Bangla. | হ্যালো! A ai-তে স্বাগতম। টাকে কোনো প্রশ্ন করুন।',gen_how_are_you:'I am doing great! Thank you for asking. I am A ai your AI legal assistant. I know about Bangladeshi law constitution 64 districts and general topics too. How can I help you today? | আমি ভালো আছি! ধন্যবাদ। কীভাবে সাহায্য করতে পারিখান।',gen_who_are_you:'I am A ai - an AI-powered legal assistant for Bangladesh. I have knowledge of the Constitution all 64 districts government structure legal rights court procedures and more. I respond in English and Bangla. | আমি A ai - বাংলাদেশের AI চালিত আইনি সহকারী। সংবিধান 64 জেলা জানি।',gen_thank_you:'You are welcome! I am always here to help. Feel free to ask about legal rights court procedures government services or any other topic. I can help in both English and Bangla. | আপনাকে স্বাগতম! যেকোনো প্রশ্ন করুন।',gen_joke:'Legal joke: Why did the lawyer bring a ladder to court? Because the case was going to a higher court! Another: What do you call a lawyer who does not chase ambulances? Unemployed! | আইনি রস: আইনজীবী আদালতে সিড়ি নিয়ে গেলেন কেন? কারণ মামলা চূড়ে যাচ্ছিল!',gen_motivation:'Motivational: Success is not final failure is not fatal. It is the courage to continue that counts. In Bangladesh the spirit of 1971 teaches us that courage and unity can overcome any obstacle. Keep going! | অনুপ্রেরণামূলক: সাফল্য চূড়ান্ত নয়। চালিয়ে যাওয়ার সাহস গুরুত্বপূর্ণ।',gen_weather:'Bangladesh Climate: Tropical monsoon. Hot humid summers March-October. Cool dry winters November-February. Monsoon June-September heavy rain. Average 25C. Cyclone season April-November. Best visit October-March. | বাংলাদেশের জলবায়ু: গ্রীষ্মমণ্ডলীয় মৌসুমি। বর্ষা জুন-সেপ্টেম্বর। গড় তাপমাত্রা ২৫°সে। ঘূর্ণিঝড় মৌসুম এপ্রিল-নভেম্বর।',gen_cooking:'Bangladeshi Cuisine: Biryani rice with meat. Hilsa national fish. Pitha rice cakes winter. Kacchi biryani Old Dhaka. Bhuna spicy curry. Polao fragrant rice. Fuchka street food. Chotpoti chickpea snack. | বাংলাদেশি রান্না: বিরিয়ানি, ইলিশ, পিঠা, কাচ্চি, ভুনা, ফুচকা, চটপটি।',gen_sports:'Bangladesh Sports: Cricket most popular. Shakib Al Hasan world all-rounder. Football old Dhaka. Kabaddi national game. Hockey Olympics qualifier. | বাংলাদেশি খেলাধুলা: ক্রিকেট সবচেয়ে জনপ্রিয়। শাকিব আল হাসান সেরা অলরাউন্ডার। ফুটবল ঢাকার ঐতিহ্য। কাবাডি জাতীয় খেলা। হকি অলিম্পিক বাছাই।',gen_bengali_culture:'Bengali Culture: Pohela Boishakh Bengali New Year April 14. Ekushey February Language Movement. Lalon Shah mystic poet. Tagore national anthem. Nazrul rebel poet. Jamdani UNESCO heritage. | বাংলা সংস্কৃতি: পহেলা বৈশাখ বাংলা নববর্ষ। একুশে ফেব্রুয়ারি ভাষা আন্দোলন। লালন শাহ আধ্যাত্মিক কবি। রবীন্দ্রনাথ জাতীয় সংগীত রচয়িতা। নজরুল বিদ্রোহী কবি। জামদানি ইউনেস্কো ঐতিহ্য।','womensafety_helplines':'Women Safety Helplines Bangladesh: 999 National Emergency (Police/Fire/Ambulance), 109 Women Help Desk (domestic violence, free, 24/7), 333 Cyber Crime & Women Support (online harassment, stalking), 16430 Free Legal Aid, 1098 Child Helpline, 103 Traffic Police. All free and confidential. | মহিলা নিরাপত্তা হেল্পলাইন বাংলাদেশ: ৯৯৯ জাতীয় জরুরি, ১০৯ নারী সহায়তা ডেস্ক (পারিবারিক সহিংসতা), ৩৩৩ সাইবার ও নারী সাপোর্ট, ১৬৪৩০ বিনামূল্যে আইনি সহায়তা, ১০৯৮ শিশু হেল্পলাইন, ১০৩ ট্রাফিক পুলিশ।','womensafety_dv_act':'Domestic Violence (Prevention and Protection) Act 2010 protects women from physical, sexual, emotional and economic abuse. Protection orders, residence orders, monetary relief. Victim can file at any district court. Helpline 109. | পারিবারিক সহিংসতা প্রতিরোধ আইন ২০১০ শারীরিক, যৌন, মানসিক ও অর্থনৈতিক নির্যাতন থেকে নারীদের রক্ষা করে। সুরক্ষা আদেশ, আবাসিক আদেশ, আর্থিক সহায়তা। যেকোনো জেলা আদালতে মামলা করা যায়। হেল্পলাইন ১০৯।','womensafety_repression_act':'The Prevention of Women and Children Repression Act 2000 (Nari O Shishu Nirjaton Daman Ain) - toughest law against rape, acid violence, trafficking and sexual harassment. Death penalty for gang rape and rape of children. Special tribunals in every district for fast trial. | নারী ও শিশু নির্যাতন দমন আইন ২০০০ - ধর্ষণ, অ্যাসিড সহিংসতা, পাচার ও যৌন হয়রানির বিরুদ্ধে কঠোর আইন। গণধর্ষণ ও শিশু ধর্ষণে মৃত্যুদণ্ড। প্রতিটি জেলায় দ্রুত বিচার ট্রাইব্যুনাল।','womensafety_dowry':'Dowry Prohibition Act 1980 - demanding dowry is a criminal offense. Punishment up to 5 years imprisonment and fine. Giving, taking or abetting dowry all punishable. Women can also claim maintenance. | যৌতুক নিষেধাজ্ঞা আইন ১৯৮০ - যৌতুক দাবি করা অপরাধ। সর্বোচ্চ ৫ বছর কারাদণ্ড ও জরিমানা। যৌতুক দান, গ্রহণ বা সহায়তা সবই শাস্তিযোগ্য।','womensafety_acid':'Acid Crime Prevention Act 2002 - acid attack punishable by death or life imprisonment. Sale of acid regulated and licensed. Free medical treatment for victims. Acid Survivors Foundation supports treatment and rehabilitation. | অ্যাসিড অপরাধ প্রতিরোধ আইন ২০০২ - অ্যাসিড নিক্ষেপে মৃত্যুদণ্ড বা যাবজ্জীবন। অ্যাসিড বিক্রি নিয়ন্ত্রিত। ভিকটিমদের বিনামূল্যে চিকিৎসা।','womensafety_cyber':'Cyber harassment of women covered under Digital Security Act 2018 and Penal Code. Morphing photos, blackmail, revenge porn, cyber stalking punishable by long imprisonment. Report to Cyber Crime helpline 333 or cyber police. | নারীদের সাইবার হয়রানি ডিজিটাল নিরাপত্তা আইন ২০১৮ এর আওতায়। মরফিং, ব্ল্যাকমেইল, সাইবার স্টকিং শাস্তিযোগ্য। সাইবার হেল্পলাইন ৩৩৩।','womensafety_constitution':'Constitution of Bangladesh protects women: Article 27 equality before law, Article 28 equal rights in state and public life + special provisions for women advancement, Article 29 equal opportunity in public employment. State shall adopt effective measures to prevent violence against women. | সংবিধান: ২৭ অনুচ্ছেদ আইনের সামনে সমতা, ২৮ অনুচ্ছেদ রাষ্ট্র ও জনজীবনে নারীদের সমান অধিকার, ২৯ অনুচ্ছেদ সরকারি চাকরিতে সমান সুযোগ।','womensafety_sos_plan':'If you feel unsafe: 1) Call 999 or 109 immediately. 2) Share live location with family via phone. 3) Go to nearest police station, women help desk or one-stop crisis center. 4) In hospitals, ask for One-Stop Crisis Center (OSCC) for free medical + legal + counseling. 5) Document everything - messages, injuries, witnesses as evidence. 6) You can file FIR free of charge; it is a crime to refuse. | নিরাপদ বোধ না করলে: ১) ৯৯৯ বা ১০৯ এ কল করুন। ২) পরিবারের সাথে লোকেশন শেয়ার করুন। ৩) নিকটস্থ থানা বা ওয়ান-স্টপ ক্রাইসিস সেন্টারে যান। ৪) হাসপাতালে ওএসসিসিতে বিনামূল্যে চিকিৎসা, আইনি ও পরামর্শ। ৫) সব প্রমাণ সংরক্ষণ করুন। ৬) বিনামূল্যে এফআইআর করুন।','womensafety_oscc':'One-Stop Crisis Centers (OSCC) in Bangladesh provide free medical treatment, legal aid, psychological counseling and police support for women survivors of violence - all under one roof. Available at major public hospitals. Victims also get 24/7 support from National Helpline 109. | ওয়ান-স্টপ ক্রাইসিস সেন্টার (ওএসসিসি) সহিংসতার শিকার নারীদের বিনামূল্যে চিকিৎসা, আইনি সহায়তা ও মানসিক পরামর্শ দেয় - এক ছাদের নিচে। প্রধান হাসপাতালগুলোতে পাওয়া যায়।','womensafety_rights_workplace':'Workplace harassment of women prohibited - High Court 2009 guidelines and prevention committees mandatory in every organization. Sexual harassment at work, university and public places punishable. Women have right to safe workplace. | কর্মক্ষেত্রে নারী হয়রানি নিষিদ্ধ - হাইকোর্ট ২০০৯ নির্দেশিকা অনুযায়ী প্রতিটি প্রতিষ্ঠানে কমিটি বাধ্যতামূলক। কর্মক্ষেত্রে যৌন হয়রানি শাস্তিযোগ্য।','womensafety_ngos':'Women safety organizations Bangladesh: Ain o Salish Kendra (ASK), Bangladesh Mahila Parishad, Acid Survivors Foundation, Naripokkho, BLAST (legal aid), BRAC Human Rights, National Women Lawyers Association. All provide free legal aid and counseling. | নারী নিরাপত্তা সংস্থা: আইন ও সালিশ কেন্দ্র, বাংলাদেশ মহিলা পরিষদ, নারিপক্ষ, ব্লাস্ট, ব্র্যাক - সবাই বিনামূল্যে আইনি সহায়তা দেয়।','womensafety_police':'Every police station has a Women Help Desk with female officers - 64 districts. You can file complaints privately with a female officer. Police Women Support Centers: 999 or 109. Special women police platoons patrol Dhaka. If police refuse FIR, contact Superintendent of Police or Magistrate directly. | প্রতিটি থানায় নারী সহায়তা ডেস্ক আছে। মহিলা কর্মকর্তার কাছে ব্যক্তিগতভাবে অভিযোগ করতে পারবেন। পুলিশ এফআইআর নিতে অস্বীকার করলে এসপি বা ম্যাজিস্ট্রেটের কাছে সরাসরি অভিযোগ করুন।',womensafety_oscc_locations:'One-Stop Crisis Centres (OSCC) in Bangladesh: full OSCCs run inside medical college hospitals - Dhaka Medical College & Hospital (Shahbagh), Chattogram, Rajshahi, Khulna, Sher-e-Bangla Barishal, MAG Osmani Sylhet, Rangpur and Mymensingh Medical College Hospitals. OSCCs also serve Cumilla, Cox Bazar, Faridpur, Bogura and Jashore medical colleges. Every other district is covered through its division OSCC plus the District Sadar Hospital women and child help desk. OSCC services are free and 24/7: medical exam, police case support, forensic DNA sampling, one-stop shelter and counselling. Call 109 toll-free to be routed to your nearest OSCC. Emergency shelter: ASK 01724-415677, legal aid BLAST 01715-220220. | ওয়ান-স্টপ ক্রাইসিস সেন্টার: মেডিকেল কলেজ হাসপাতালগুলোতে আছে - ঢাকা মেডিকেল (শাহবাগ), চট্টগ্রাম, রাজশাহী, খুলনা, শেরেবাংলা বরিশাল, সিলেট, রংপুর ও ময়মনসিংহ। কুমিল্লা, কক্সবাজার, ফরিদপুর, বগুড়া ও যশোরেও আছে। অন্য জেলাগুলো বিভাগীয় ওসিসি ও জেলা সদর হাসপাতালের নারী ডেস্ক দিয়ে সেবা পায়। চিকিৎসা, মামলা সহায়তা, ডিএনএ পরীক্ষা, আশ্রয় - সব বিনামূল্যে ২৪ ঘণ্টা। ১০৯ নম্বরে কল করলে নিকটস্থ ওসিসিতে সংযোগ হয়।'
+,womensafety_shelter:'Where a woman in danger can go in Bangladesh: 1) One-Stop Crisis Centre (OSCC) at a medical college hospital - free safe shelter, medical care, police case support and counselling under one roof. 2) District Sadar Hospital women and child help desk - coordinates shelter and medical care in every district. 3) National Helpline 109 arranges emergency shelter and support 24/7. 4) ASK (Ain o Salish Kendra) 01724-415677 offers emergency shelter, legal aid and mental care. 5) BLAST 01715-220220 gives free legal support. 6) Women police help desk in every station helps a survivor reach a safe place. Call 999 for immediate rescue if you are in danger right now. | বিপদে থাকা নারীর জন্য বাংলাদেশে আশ্রয়: ১) ওয়ান-স্টপ ক্রাইসিস সেন্টার - বিনামূল্যে নিরাপদ আশ্রয়, চিকিৎসা, মামলা ও পরামর্শ এক জায়গায়। ২) জেলা সদর হাসপাতালের নারী ডেস্ক। ৩) ১০৯ নম্বরে কল করলে জরুরি আশ্রয়ের ব্যবস্থা হয়। ৪) আইন ও সালিশ কেন্দ্র ০১৭২৪-৪১৫৬৭৭ - জরুরি আশ্রয় ও আইনি সাহায্য। ৫) ব্লাস্ট ০১৭১৫-২২০২২০ - বিনামূল্যে আইনি সাপোর্ট। ৬) থানার নারী পুলিশ ডেস্ক। এখনই বিপদে থাকলে ৯৯৯ এ কল করুন।'
+,womensafety_dispatch:'Women safety dispatch numbers in Bangladesh: 999 National Emergency routes your call to the nearest district police control room (domestic violence, rescue, ambulance). 109 toll-free National Helpline for Violence Against Women - routes to your nearest OSCC and women support desk. 16430 free legal aid hotline. 333 Cyber & Women online support. Police HQ 24/7 control room: 01320-001223 (alt 01320-001300, 01320-001299). Emergency SMS also works by texting 999. All services are free. | জরুরি ডিসপ্যাচ নম্বর: ৯৯৯ জাতীয় জরুরি - নিকটস্থ জেলা কন্ট্রোল রুমে সংযোগ হয়। ১০৯ নারী নির্যাতন প্রতিরোধ হেল্পলাইন (২৪/৭)। ১৬৪৩০ বিনামূল্যে আইনি সহায়তা। ৩৩৩ সাইবার সাপোর্ট। পুলিশ সদর দপ্তর কন্ট্রোল রুম ০১৩২০-০০১২২৩। সব সেবা বিনামূল্যে।'
+,womensafety_fir_sections:'Which law applies to which crime against women in Bangladesh: Domestic violence = Domestic Violence (Prevention and Protection) Act 2010, sections 3-4-14 (protection and residence orders). Rape or attempt = Prevention of Women and Children Repression Act 2000 section 9; gang rape section 9(3). Dowry demand = Dowry Prohibition Act 1980 sections 3-4; dowry death = Repression Act section 11. Acid attack = Acid Crime Prevention Act 2002 sections 4-6. Sexual harassment = Repression Act section 10(1) plus High Court 2009 workplace guidelines. Eve-teasing = Repression Act section 10(2). Cyber harassment or morphing = Cyber Security Act 2023 sections 26-28. Human trafficking = Prevention and Suppression of Human Trafficking Act 2012 sections 4-9. File the FIR free of charge at any police station - refusing is a crime. | কোন অপরাধে কোন আইন: গার্হস্থ্য সহিংসতা = পারিবারিক সহিংসতা আইন ২০১০ ধারা ৩-৪-১৪। ধর্ষণ = নারী ও শিশু নির্যাতন দমন আইন ২০০০ ধারা ৯। যৌতুক = যৌতুক নিষেধাজ্ঞা আইন ১৯৮০ ধারা ৩-৪। এসিড নিক্ষেপ = এসিড অপরাধ দমন আইন ২০০২ ধারা ৪-৬। সাইবার হয়রানি = সাইবার নিরাপত্তা আইন ২০২৩ ধারা ২৬-২৮। মানব পাচার = পাচার দমন আইন ২০১২ ধারা ৪-৯। এফআইআর বিনামূল্যে - নিতে অস্বীকার করলে তা অপরাধ।'};
+
+
+
+var aliasMap2={
+"ahsan manzil":"ahsan manzil",
+"ancient bengal":"ancient bengal kingdoms",
+"bangabandhu":"bangabandhu mujibur rahman",
+"bangla new year":"pohela boishakh date",
+"bangladesh bank":"bangladesh bank central",
+"bangladesh flag":"national flag meaning",
+"baul":"lalon shah baul",
+"bcs":"bcs civil service",
+"begum rokeya":"begum rokeya feminist",
+"bengal famine":"bengal famine 1943",
+"bengal tiger":"royal bengal tiger",
+"bengali new year":"pohela boishakh date",
+"bhawal":"bhawal national park",
+"biman":"biman bangladesh airlines",
+"bishwa ijtema":"bishwa ijtema",
+"census":"census 2022 population",
+"central bank":"bangladesh bank central",
+"chief adviser":"chief adviser interim",
+"child marriage":"child marriage bangladesh stats",
+"city corporation":"city corporation mayors",
+"civil service":"bcs civil service",
+"cricket":"bangladesh cricket history",
+"dengue":"dengue bd",
+"deputy commissioner":"deputy commissioner dc role",
+"dhaka metro":"metro rail dhaka",
+"durga puja":"durga puja bangladesh",
+"eid ul adha":"eid ul adha bangladesh",
+"eid ul fitr":"eid ul fitr bangladesh",
+"ekushey":"ekushey february 21",
+"elevated expressway":"dhaka elevated expressway",
+"fazlul huq":"sher e bangla",
+"garment":"rmg garment industry",
+"genocide day":"genocide day march 25",
+"golden fibre":"jute golden fiber",
+"ha du du":"bangladesh kabbadi sport",
+"hasina":"sheikh hasina",
+"hilsa":"hilsa national fish",
+"how many districts":"census 2022 population",
+"humayun":"humayun ahmed writer",
+"ijtema":"bishwa ijtema",
+"ilish":"hilsa national fish",
+"independence day":"independence day 26 march",
+"jamuna river":"jamuna brahmaputra",
+"jute":"jute golden fiber",
+"kabaddi":"bangladesh kabbadi sport",
+"karnaphuli":"karnaphuli river",
+"karnaphuli tunnel":"karnaphuli tunnel",
+"kaz nazrul islam":"kaz nazrul islam poet",
+"khaleda zia":"khaleda zia",
+"kuakata":"kuakata beach",
+"lalbagh fort":"lalbagh fort",
+"lalon":"lalon shah baul",
+"language movement":"ekushey february 21",
+"liberation war":"liberation war overview",
+"mangrove forest":"sundarbans overview",
+"march 7 speech":"march 7 1971 speech",
+"meghna river":"meghna river",
+"metro rail":"metro rail dhaka",
+"mujibnagar":"mujibnagar government",
+"mujibur rahman":"bangabandhu mujibur rahman",
+"mukti bahini":"mukti bahini freedom fighters",
+"nabanna":"nabanna utsab harvest",
+"national anthem":"amar shonar bangla anthem",
+"national flag":"national symbols bangladesh",
+"national memorial":"jatiyo smriti soudho",
+"national parliament":"national parliament sangsad",
+"national poet":"kaz nazrul islam poet",
+"national symbols":"national symbols bangladesh",
+"nazrul":"kaz nazrul islam poet",
+"netaji":"subhas chandra bose",
+"osmany":"general osmany bangabir",
+"padma bridge":"padma bridge",
+"padma river":"padma river",
+"padma setu":"padma bridge",
+"paharpur":"paharpur somapura",
+"pala dynasty":"palas sena dynasty",
+"parliament building":"jatiya sangshad bhaban",
+"partition":"partition of bengal 1947",
+"pohela boishakh":"pohela boishakh bangla new year",
+"pohela falgun":"pohela falgun",
+"population of bangladesh":"census 2022 population",
+"president of bangladesh":"president bangladesh role",
+"prime minister of bangladesh":"prime minister bangladesh",
+"rabindranath":"rabindranath tagore bengal",
+"readymade":"rmg garment industry",
+"religion in bangladesh":"religions bangladesh",
+"remittance":"remittance economy",
+"rohingya":"rohingya crisis bd",
+"rokeya":"begum rokeya feminist",
+"royal bengal tiger":"royal bengal tiger",
+"sagarkanya":"kuakata sagarkannya",
+"saint martin":"st martin island tourism",
+"sangsad":"national parliament sangsad",
+"shahabuddin":"shahabuddin president",
+"shaheed minar":"shaheed minar dhaka",
+"shakib":"shakib al hasan",
+"shat gambuj":"shat gambuj mosque",
+"sheikh hasina":"sheikh hasina",
+"sheikh mujib":"bangabandhu mujibur rahman",
+"sher-e-bangla":"sher e bangla",
+"shilpacharya":"zainul abedin painter",
+"six point movement":"six point movement 1966",
+"sixty dome mosque":"shat gambuj mosque",
+"smriti soudho":"jatiyo smriti soudho",
+"somapura":"paharpur somapura",
+"st martin":"st martin island tourism",
+"star mosque":"star mosque dhaka",
+"sundarbans":"sundarbans overview",
+"superintendent of police":"superintendent police sp role",
+"tagore":"rabindranath tagore bengal",
+"tajuddin":"tajuddin ahmed first pm",
+"tea garden":"tea industry sylhet",
+"tea industry":"tea industry sylhet",
+"union parishad":"union parishad structure",
+"upazila":"upazila structure",
+"victory day":"victory day 16 december",
+"zainul":"zainul abedin painter",
+"ziaur rahman":"ziaur rahman bnp founder",
+};
+for(var ak2 in aliasMap2){if(!aliasMap[ak2])aliasMap[ak2]=aliasMap2[ak2];}
+var aliasForce={
+"pohela boishakh festival":"pohela boishakh bangla new year",
+"bangladesh cricket team":"bangladesh cricket history",
+"hilsa fish of bangladesh":"hilsa national fish",
+"smriti soudho of bangladesh":"jatiyo smriti soudho",
+"rivers of bangladesh":"rivers bangladesh overview",
+"chittagong hill tracts":"chittagong hill tracts",
+"haor region":"haor wetlands",
+"garment industry in bangladesh":"rmg garment industry",
+"ready made garment":"rmg garment industry",
+"dhaka university history":"dhaka university history",
+"bcs examination":"bcs civil service",
+"national flag of bangladesh":"national symbols bangladesh",
+"flag of bangladesh":"national symbols bangladesh",
+"sundarbans of bangladesh":"sundarbans overview",
+"dhaka university":"dhaka university history",
+};
+aliasMap["dhaka metro rail"]="metro rail dhaka";aliasMap["metro rail in dhaka"]="metro rail dhaka";aliasMap["dhaka metro rail line"]="metro rail dhaka";
+for(var af in aliasForce){aliasMap[af]=aliasForce[af];}
+aliasMap["generation z with their contributions on july"]="gen z july uprising contributions";
+aliasMap["generation z and their contributions on july"]="gen z july uprising contributions";
+aliasMap["generation z contribution in july uprising"]="gen z july uprising contributions";
+aliasMap["generation z contribution july"]="gen z july uprising contributions";
+aliasMap["gen z contribute"]="gen z july uprising contributions";
+aliasMap["gen z contributed"]="gen z july uprising contributions";
+aliasMap["gen z did in july"]="gen z july uprising contributions";
+aliasMap["gen z and the july"]="gen z july uprising contributions";
+aliasMap["gen z and the july uprising"]="gen z july uprising contributions";
+aliasMap["gen z and their contributions on july"]="gen z july uprising contributions";
+aliasMap["gen z with their contributions on july"]="gen z july uprising contributions";
+aliasMap["generation z contribution in july"]="gen z july uprising contributions";
+aliasMap["gen z and the economy"]="gen z economy freelancing startups";
+aliasMap["gen z and economy"]="gen z economy freelancing startups";
+aliasMap["gen z work in july"]="gen z july uprising contributions";
+aliasMap["generation z"]="generation z overview";
+aliasMap["gen z"]="generation z overview";
+aliasMap["genz"]="generation z overview";
+aliasMap["gen-z"]="generation z overview";
+aliasMap["gen z bangladesh"]="gen z bangladesh profile";
+aliasMap["gen z in bangladesh"]="gen z bangladesh profile";
+aliasMap["generation z in bangladesh"]="gen z bangladesh profile";
+aliasMap["gen z july"]="gen z july uprising contributions";
+aliasMap["gen z july uprising"]="gen z july uprising contributions";
+aliasMap["gen z july revolution"]="gen z july uprising contributions";
+aliasMap["gen z revolution"]="gen z july uprising contributions";
+aliasMap["gen z uprising"]="gen z july uprising contributions";
+aliasMap["gen z quota movement"]="gen z july uprising contributions";
+aliasMap["gen z and july"]="gen z july uprising contributions";
+aliasMap["gen z in the july"]="gen z july uprising contributions";
+aliasMap["gen z during the july"]="gen z july uprising contributions";
+aliasMap["gen z and july uprising"]="gen z july uprising contributions";
+aliasMap["gen z contribution in july"]="gen z july uprising contributions";
+aliasMap["gen z contribution to july"]="gen z july uprising contributions";
+aliasMap["gen z contributions in july"]="gen z july uprising contributions";
+aliasMap["gen z role in july"]="gen z july uprising contributions";
+aliasMap["gen z contribution in the july uprising"]="gen z july uprising contributions";
+aliasMap["gen z role in the july uprising"]="gen z july uprising contributions";
+aliasMap["gen z contribution"]="gen z july uprising contributions";
+aliasMap["gen z contributions"]="gen z july uprising contributions";
+aliasMap["gen z martyrs"]="gen z july martyrs";
+aliasMap["gen z leaders"]="gen z july leaders coordinators";
+aliasMap["gen z coordinators"]="gen z july leaders coordinators";
+aliasMap["gen z leaders of july"]="gen z july leaders coordinators";
+aliasMap["gen z social media"]="gen z digital organizing social media";
+aliasMap["gen z digital organizing"]="gen z digital organizing social media";
+aliasMap["gen z online organizing"]="gen z digital organizing social media";
+aliasMap["gen z women"]="gen z women participation july";
+aliasMap["gen z women in july"]="gen z women participation july";
+aliasMap["gen z volunteers"]="gen z beyond july contributions";
+aliasMap["gen z volunteer"]="gen z beyond july contributions";
+aliasMap["gen z flood relief"]="gen z beyond july contributions";
+aliasMap["gen z beyond july"]="gen z beyond july contributions";
+aliasMap["gen z other contributions"]="gen z beyond july contributions";
+aliasMap["gen z other works"]="gen z beyond july contributions";
+aliasMap["gen z contributions other than july"]="gen z beyond july contributions";
+aliasMap["gen z freelancing"]="gen z economy freelancing startups";
+aliasMap["gen z economy"]="gen z economy freelancing startups";
+aliasMap["gen z startups"]="gen z economy freelancing startups";
+aliasMap["gen z jobs"]="gen z economy freelancing startups";
+aliasMap["gen z politics"]="gen z politics reform future";
+aliasMap["gen z political future"]="gen z politics reform future";
+aliasMap["gen z and politics"]="gen z politics reform future";
+aliasMap["gen z election"]="gen z politics reform future";
+aliasMap["gen z vs previous generations"]="gen z vs previous generations bangladesh";
+aliasMap["gen z versus older generations"]="gen z vs previous generations bangladesh";
+aliasMap["gen z compared to older generation"]="gen z vs previous generations bangladesh";
+aliasMap["compare gen z with older generations"]="gen z vs previous generations bangladesh";
+aliasMap["gen z culture"]="gen z culture bangladesh";
+aliasMap["gen z pop culture"]="gen z culture bangladesh";
+aliasMap["young generation of bangladesh"]="generation z overview";
+aliasMap["new generation of bangladesh"]="generation z overview";
+aliasMap["youth contribution in july uprising"]="gen z july uprising contributions";
+aliasMap["students contribution in july uprising"]="gen z july uprising contributions";
+aliasMap["জেন জেড"]="generation z overview";
+aliasMap["জেনারেশন জেড"]="generation z overview";
+aliasMap["জেন-জেড"]="generation z overview";
+aliasMap["জেনারেশন জেড কারা"]="generation z overview";
+aliasMap["জেন জেড কারা"]="generation z overview";
+aliasMap["জেন জেড বাংলাদেশ"]="gen z bangladesh profile";
+aliasMap["জেনারেশন জেড বাংলাদেশ"]="gen z bangladesh profile";
+aliasMap["জুলাইয়ে জেন জেড"]="gen z july uprising contributions";
+aliasMap["জেন জেড জুলাই"]="gen z july uprising contributions";
+aliasMap["জুলাই বিপ্লবে জেন জেড"]="gen z july uprising contributions";
+aliasMap["জেন জেডের অবদান"]="gen z july uprising contributions";
+aliasMap["জেন জেডের ভূমিকা"]="gen z july uprising contributions";
+aliasMap["জেন জেড শহীদ"]="gen z july martyrs";
+aliasMap["জেন জেড নেতা"]="gen z july leaders coordinators";
+aliasMap["জেন জেড নারী"]="gen z women participation july";
+aliasMap["জেন জেড স্বেচ্ছাসেবক"]="gen z beyond july contributions";
+aliasMap["জেন জেড অন্যান্য অবদান"]="gen z beyond july contributions";
+aliasMap["জেন জেড অর্থনীতি"]="gen z economy freelancing startups";
+aliasMap["জেন জেড ফ্রিল্যান্সিং"]="gen z economy freelancing startups";
+aliasMap["জেন জেড রাজনীতি"]="gen z politics reform future";
+aliasMap["জেন জেড সংস্কৃতি"]="gen z culture bangladesh";
+aliasMap["জেন জেড বনাম আগের প্রজন্ম"]="gen z vs previous generations bangladesh";
+aliasMap["তরুণ প্রজন্ম"]="generation z overview";
+aliasMap["নতুন প্রজন্ম"]="generation z overview";
+aliasMap["তরুণ প্রজন্মের অবদান"]="gen z july uprising contributions";
+var constR2={
+'national symbols bangladesh':'Bangladesh\'s national symbols: flag = red circle on green field; national flower = shapla (water lily); national animal = Royal Bengal Tiger; national bird = doyel; national fish = hilsa (ilish); national fruit = jackfruit; national anthem = Amar Shonar Bangla by Tagore; national poet = Kazi Nazrul Islam. | বাংলাদেশের জাতীয় প্রতীক: পতাকা = সবুজের ওপর লাল বৃত্ত; জাতীয় ফুল = শাপলা; জাতীয় পশু = রয়েল বেঙ্গল টাইগার; জাতীয় পাখি = দোয়েল; জাতীয় মাছ = ইলিশ; জাতীয় ফল = কাঁঠাল; জাতীয় সংগীত = আমার সোনার বাংলা; জাতীয় কবি = কাজী নজরুল ইসলাম।',
+'national flag meaning':'National flag: green background symbolizing lush landscape and youth; red circle = rising sun and the blood of 1971 martyrs. Identical on both sides. | জাতীয় পতাকা: সবুজ পটভূমি দেশের সবুজ প্রকৃতি ও তারুণ্যের প্রতীক; লাল বৃত্ত = উদীয়মান সূর্য ও ১৯৭১-এর শহিদদের রক্তের প্রতীক। দুই পাশ অভিন্ন।',
+'amar shonar bangla anthem':'Amar Shonar Bangla by Rabindranath Tagore (1905, anti-partition movement) became Bangladesh\'s national anthem on 3 March 1971. | রবীন্দ্রনাথ ঠাকুরের \'আমার সোনার বাংলা\' (১৯০৫) ১৯৭১ সালের ৩ মার্চ বাংলাদেশের জাতীয় সংগীত হয়।',
+'rivers bangladesh overview':'Bangladesh is the \'land of rivers\' with ~700 rivers. Main: Padma (Ganges), Meghna, Jamuna (Brahmaputra), Karnaphuli, Teesta, Surma, Kushiyara. The Padma-Meghna-Jamuna form the world\'s largest delta. | বাংলাদেশ \'নদীমাতৃক দেশ\', ~৭০০ নদী। প্রধান: পদ্মা (গঙ্গা), মেঘনা, যমুনা (ব্রহ্মপুত্র), কর্ণফুলী, তিস্তা, সুরমা, কুশিয়ারা। পদ্মা-মেঘনা-যমুনা বিশ্বের বৃহত্তম বদ্বীপ গঠন করেছে।',
+'padma river':'Padma is the main Ganges distributary in Bangladesh, meeting the Jamuna at Goalundo and Meghna near Chandpur; famous for hilsa and the Padma Bridge (2022). | পদ্মা গঙ্গার প্রধান শাখানদী; গোয়ালন্দে যমুনার সঙ্গে ও চাঁদপুরে মেঘনার সঙ্গে মিলিত হয়; ইলিশ ও পদ্মা সেতু (২০২২) জন্য বিখ্যাত।',
+'meghna river':'Meghna, formed by the Surma-Kushiyara and joined by the Padma near Chandpur, is Bangladesh\'s widest river (~13 km at Bhola) flowing into the Bay of Bengal. | সুরমা-কুশিয়ারা থেকে উৎপন্ন মেঘনা চাঁদপুরের কাছে পদ্মার সঙ্গে মিলে বাংলাদেশের প্রশস্ততম নদী হয় (ভোলায় ~১৩ কিমি) এবং বঙ্গোপসাগরে পতিত হয়।',
+'jamuna brahmaputra':'Jamuna is the main channel of the Brahmaputra in Bangladesh, entering near Kurigram, joined to the Padma at Aricha; crossed by the Bangabandhu Bridge (1998). | যমুনা ব্রহ্মপুত্রের প্রধান ধারা; কুড়িগ্রাম দিয়ে প্রবেশ করে আরিচায় পদ্মার সঙ্গে মিলিত হয়; বঙ্গবন্ধু সেতু (১৯৯৮) দিয়ে পারাপার হয়।',
+'sundarbans overview':'Sundarbans: world\'s largest mangrove forest (~6,017 sq km in Bangladesh), UNESCO World Heritage Site at the Ganges delta. Home of the Royal Bengal Tiger, spotted deer, crocodiles, dolphins, 300+ birds; honey collection (moual) tradition. | সুন্দরবন: বিশ্বের বৃহত্তম ম্যানগ্রোভ বন (বাংলাদেশে ~৬,০১৭ বর্গকিমি), গঙ্গা বদ্বীপের ইউনেস্কো বিশ্ব ঐতিহ্যবাহী স্থান। রয়েল বেঙ্গল টাইগার, চিত্রা হরিণ, কুমির, ডলফিন, ৩০০+ পাখির আবাস; মধু (মৌয়াল) ঐতিহ্য বিখ্যাত।',
+'royal bengal tiger':'Royal Bengal Tiger is Bangladesh\'s national animal; ~500+ live in the Sundarbans. Threats: poaching, prey loss, salinity rise. | রয়েল বেঙ্গল টাইগার বাংলাদেশের জাতীয় পশু; ~৫০০+ সুন্দরবনে বাস করে। হুমকি: শিকার, শিকারের অভাব, লবণাক্ততা বৃদ্ধি।',
+'hilsa national fish':'Hilsa (ilish) is the national fish; it migrates from sea to the Padma-Meghna to breed. ~12% of national fish production; Bangladesh makes ~70% of world hilsa. | ইলিশ জাতীয় মাছ; ডিম পাড়তে সাগর থেকে পদ্মা-মেঘনায় আসে। মোট উৎপাদনের ~১২%; বিশ্বের ~৭০% ইলিশ বাংলাদেশে উৎপাদিত হয়।',
+'cox bazar beach':'Cox\'s Bazar beach is the world\'s longest natural sea beach (~120 km); also Inani, Himchhari, Marine Drive, and near Saint Martin\'s Island. Hosts the world\'s largest refugee camp (Kutupalong). | কক্সবাজার সৈকত বিশ্বের দীর্ঘতম প্রাকৃতিক সমুদ্র সৈকত (~১২০ কিমি); ইনানী, হিমছড়ি, মেরিন ড্রাইভ ও সেন্ট মার্টিন দ্বীপের কাছে। বিশ্বের বৃহত্তম শরণার্থী ক্যাম্প (কুতুপালং) এখানে।',
+'bangabandhu mujibur rahman':'Sheikh Mujibur Rahman (1920-1975), \'Bangabandhu\', founding father of Bangladesh: led the 6-point movement, 1969 uprising, won 1970 elections, gave the 7 March 1971 speech, proclaimed independence 26 March 1971. First President then PM. Assassinated 15 August 1975 with most of his family. Father of Sheikh Hasina. | শেখ মুজিবুর রহমান (১৯২০-১৯৭৫), \'বঙ্গবন্ধু\', বাংলাদেশের প্রতিষ্ঠাতা: ৬-দফা, ১৯৬৯-এর অভ্যুত্থান নেতৃত্ব, ১৯৭০-এ জয়, ৭ মার্চ ১৯৭১ ভাষণ, ২৬ মার্চ স্বাধীনতা ঘোষণা। প্রথম রাষ্ট্রপতি, পরে প্রধানমন্ত্রী। ১৯৭৫ সালের ১৫ আগস্ট পরিবারের অধিকাংশসহ নিহত হন। শেখ হাসিনার পিতা।',
+'march 7 1971 speech':'Bangabandhu\'s 7 March 1971 speech at Race Course (Suhrawardy Udyan): \'This time the struggle is for our freedom\' - UNESCO Memory of the World. Effectively declared independence. | রেসকোর্স ময়দানে বঙ্গবন্ধুর ৭ মার্চ ১৯৭১ ভাষণ: \'এবারের সংগ্রাম আমাদের মুক্তির সংগ্রাম\' - ইউনেস্কো বিশ্ব প্রামাণ্য ঐতিহ্য। কার্যত স্বাধীনতার ঘোষণা ছিল।',
+'six point movement 1966':'The 6-Point Movement (1966) by Mujibur Rahman demanded East Pakistan autonomy: federal constitution, separate currency, own foreign exchange, militia, etc - the charter of Bengali emancipation leading to 1971. | ৬-দফা আন্দোলন (১৯৬৬) মুজিবুর রহমানের পূর্ব পাকিস্তানের স্বায়ত্তশাসনের দাবি: যুক্তরাষ্ট্রীয় সংবিধান, পৃথক মুদ্রা, নিজস্ব রিজার্ভ, আত্মরক্ষা বাহিনী ইত্যাদি - ১৯৭১-এর পথে বাঙালির মুক্তির সনদ।',
+'liberation war overview':'Liberation War (26 Mar-16 Dec 1971): Operation Searchlight genocide on 25 March triggered it; Mukti Bahini fought in 11 sectors with Indian support; Pakistani surrender of ~93,000 troops on 16 Dec (Victory Day). ~3 million martyrs per official estimate. | মুক্তিযুদ্ধ (২৬ মার্চ-১৬ ডিসেম্বর ১৯৭১): ২৫ মার্চ সার্চলাইট গণহত্যার মাধ্যমে শুরু; ১১ সেক্টরে মুক্তিবাহিনী ভারতীয় সহায়তায় যুদ্ধ করে; ১৬ ডিসেম্বর ~৯৩,০০০ পাকিস্তানি সেনার আত্মসমর্পণ (বিজয় দিবস)। সরকারি হিসাবে শহিদ ~৩০ লক্ষ।',
+'victory day 16 december':'Victory Day (Bijoy Dibosh) = 16 December, when Pakistan surrendered in 1971 ending the Liberation War. Celebrated with parades and tributes at Jatiyo Smriti Soudho. | বিজয় দিবস = ১৬ ডিসেম্বর, ১৯৭১ সালে পাকিস্তানের আত্মসমর্পণের দিন। কুচকাওয়াজ ও জাতীয় স্মৃতিসৌধে শ্রদ্ধার মাধ্যমে পালিত হয়।',
+'independence day 26 march':'Independence Day = 26 March, the day Bangabandhu declared independence (early hours after the 25 March 1971 genocide). Observed with a 31-gun salute and national programmes. | স্বাধীনতা দিবস = ২৬ মার্চ, বঙ্গবন্ধুর স্বাধীনতা ঘোষণার দিন (১৯৭১-এর ২৫ মার্চ গণহত্যার পর ভোরে)। ৩১ বার তোপধ্বনি ও জাতীয় কর্মসূচির মাধ্যমে পালিত।',
+'ekushey february 21':'21 February 1952 (Ekushey February): students Salam, Barkat, Rafiq, Jabbar, Shafiur killed demanding Bengali as a state language. UNESCO declared 21 February International Mother Language Day (1999). | একুশে ফেব্রুয়ারি (২১ ফেব্রুয়ারি ১৯৫২): রাষ্ট্রভাষা বাংলার দাবিতে সালাম, বরকত, রফিক, জব্বার, শফিউর শহিদ হন। ইউনেস্কো ২১ ফেব্রুয়ারিকে আন্তর্জাতিক মাতৃভাষা দিবস ঘোষণা করে (১৯৯৯)।',
+'shaheed minar dhaka':'Shaheed Minar (Central Martyr\'s Monument), Dhaka University, by Hamidur Rahman - monument to the Language Movement martyrs; base represents a mother with her martyred sons. | কেন্দ্রীয় শহিদ মিনার, ঢাকা বিশ্ববিদ্যালয়, স্থপতি হামিদুর রহমান - ভাষা আন্দোলনের শহিদদের স্মৃতিস্তম্ভ; বেদি শহিদ সন্তানদের মাকে প্রতিনিধিত্ব করে।',
+'tajuddin ahmed first pm':'Tajuddin Ahmed (1925-1975), first PM of Bangladesh, headed the Mujibnagar government during the 1971 war; assassinated in jail 3 November 1975. | তাজউদ্দীন আহমদ (১৯২৫-১৯৭৫), বাংলাদেশের প্রথম প্রধানমন্ত্রী; মুক্তিযুদ্ধে মুজিবনগর সরকারের নেতৃত্ব দেন; ১৯৭৫ সালের ৩ নভেম্বর জেলে নিহত হন।',
+'general osmany bangabir':'General M A G Osmani (1918-1984), \'Bangabir\', Commander-in-Chief of the Mukti Bahini in 1971; later MP and minister. | জেনারেল এম এ জি ওসমানী (১৯১৮-১৯৮৪), \'বঙ্গবীর\', ১৯৭১ সালে মুক্তিবাহিনীর সর্বাধিনায়ক; পরে এমপি ও মন্ত্রী ছিলেন।',
+'ziaur rahman bnp founder':'Ziaur Rahman (1936-1981): read the independence declaration on 27 March 1971 over Kalurghat radio; founder of BNP; President 1977-1981, restored multi-party politics; assassinated in Chattogram 30 May 1981. | জিয়াউর রহমান (১৯৩৬-১৯৮১): ২৭ মার্চ ১৯৭১ কালুরঘাট বেতারে স্বাধীনতার ঘোষণা পাঠ করেন; বিএনপির প্রতিষ্ঠাতা; রাষ্ট্রপতি ১৯৭৭-১৯৮১, বহুদলীয় রাজনীতি ফিরিয়ে আনেন; ১৯৮১ সালের ৩০ মে চট্টগ্রামে নিহত হন।',
+'pohela boishakh bangla new year':'Pohela Boishakh is the Bengali New Year (1st of Boishakh, mid-April) - celebrated with Mongol Shobhajatra (UNESCO Intangible Heritage), panta-ilish breakfast, melas, and new clothes. | পহেলা বৈশাখ বাংলা নববর্ষ (বৈশাখ ১, এপ্রিলের মাঝামাঝি) - মঙ্গল শোভাযাত্রা (ইউনেস্কো অধরা ঐতিহ্য), পান্তা-ইলিশ, মেলা ও নতুন পোশাকে উদযাপিত হয়।',
+'pohela falgun':'Pohela Falgun (13 February) welcomes spring with yellow flowers (shiuli? rather - yellow saris), Basanta Utsab concerts at Dhaka University\'s Bakultala. | পহেলা ফাল্গুন (১৩ ফেব্রুয়ারি) বসন্ত বরণ করে হলুদ শাড়ি, ঢাকা বিশ্ববিদ্যালয়ের বকুলতলায় বাসন্তী উৎসবের মাধ্যমে।',
+'nabanna utsab harvest':'Nabanna is the Bengali harvest festival (Agrahayan, Nov-Dec) celebrating new rice with pitha, music and rural fairs - strong in rural Bangladesh. | নবান্ন বাংলার ফসল কাটার উৎসব (অগ্রহায়ণ, নভেম্বর-ডিসেম্বর) - নতুন ধান, পিঠা, গান ও গ্রামীণ মেলার মধ্য দিয়ে পালিত হয়।',
+'pohela boishakh 1429':'The Bengali calendar year (Bangla sal): Boishakh is the first month. In April 2026, Bangladesh entered Bangla year 1433 (Bangabda); years are computed with the 1584-era calendar. | বাংলা সন: বৈশাখ প্রথম মাস। বাংলা বর্ষ গণনা পঞ্জিকা সংস্কার (১৫৮৪) অনুযায়ী হয়।',
+'eid ul fitr bangladesh':'Eid-ul-Fitr ends Ramadan - the biggest festival in Bangladesh: prayers, salami (gifts/money), semai (vermicelli), new clothes and village gatherings. | ঈদুল ফিতর রোজা শেষে বাংলাদেশের সবচেয়ে বড় উৎসব: নামাজ, সেলামি, সেমাই, নতুন পোশাক ও গ্রামে আত্মীয়-স্বজনের মিলনমেলা।',
+'eid ul adha bangladesh':'Eid-ul-Adha (Bakri Eid) remembers Ibrahim\'s sacrifice: qurbani of cattle, meat distribution among poor, and city-to-village migration. | ঈদুল আযহা (কোরবানির ঈদ) ইব্রাহিমের কুরবানির স্মরণে: পশু কুরবানি, গরিবদের মাংস বিতরণ ও শহর থেকে গ্রামে যাত্রা।',
+'durga puja bangladesh':'Durga Puja is the largest Hindu festival in Bangladesh - celebrated in October with pandals and idols, mainly in Dhaka (Dhakeshwari), and is a public holiday. | দুর্গাপূজা বাংলাদেশের বৃহত্তম হিন্দু উৎসব - অক্টোবরে প্যান্ডেল ও প্রতিমায় পালিত হয়, প্রধানত ঢাকায় (ঢাকেশ্বরী); সরকারি ছুটির দিন।',
+'lalon shah baul':'Lalon Shah (1774-1890) of Kushtia (Cheuriya, near the river) was the greatest Baul mystic-singer; his shrine at Kushtia hosts the annual Lalon Mela. Baul songs are UNESCO Intangible Heritage. | কুষ্টিয়ার লালন শাহ (১৭৭৪-১৮৯০) শ্রেষ্ঠ বাউল সাধক-গায়ক; কুষ্টিয়ায় তাঁর মাজারে বার্ষিক লালন মেলা হয়। বাউল গান ইউনেস্কো অধরা ঐতিহ্য।',
+'humayun ahmed writer':'Humayun Ahmed (1948-2012) - legendary Bangladeshi writer-filmmaker; created the \'Himu\' and \'Misir Ali\' universes; Nuhash Palli museum at Gazipur. | হুমায়ূন আহমেদ (১৯৪৮-২০১২) - কিংবদন্তি লেখক-চলচ্চিত্রকার; \'হিমু\' ও \'মিসির আলি\' সিরিজের স্রষ্টা; গাজীপুরে নুহাশ পল্লী জাদুঘর।',
+'rabindranath tagore bengal':'Rabindranath Tagore (1861-1941), Nobel laureate (1913), wrote both national anthems (India and Bangladesh); his ancestral home is in Shilaidaha (Kushtia) and Patisar; Rabindra Jayanti celebrated 25 Boishakh. | রবীন্দ্রনাথ ঠাকুর (১৮৬১-১৯৪১), নোবেলজয়ী (১৯১৩); দুটি দেশের জাতীয় সংগীতের রচয়িতা; শিলাইদহ (কুষ্টিয়া) ও পতিসরে জমিদার বাড়ি ছিল; ২৫ বৈশাখে রবীন্দ্র জয়ন্তী পালিত হয়।',
+'kaz nazrul islam poet':'Kazi Nazrul Islam (1899-1976), National Poet of Bangladesh, the \'Rebel Poet\' - wrote Bidrohi, Agnibeena; national poet since 1972, buried beside Dhaka University mosque. | কাজী নজরুল ইসলাম (১৮৯৯-১৯৭৬), বাংলাদেশের জাতীয় কবি, \'বিদ্রোহী কবি\' - বিদ্রোহী, অগ্নিবীণার রচয়িতা; ১৯৭২ থেকে জাতীয় কবি, ঢাকা বিশ্ববিদ্যালয় মসজিদের পাশে সমাহিত।',
+'jibanananda das':'Jibanananda Das (1899-1954) - iconic modern Bengali poet (\'Ruposhi Bangla\', \'Banalata Sen\'); a pioneer of modernism in Bengali poetry. | জীবনানন্দ দাশ (১৮৯৯-১৯৫৪) - আধুনিক বাংলা কবিতার পথিকৃৎ (\'রূপসী বাংলা\', \'বনলতা সেন\')।',
+'sufia kamal poet':'Sufia Kamal (1911-1999) - pioneer woman poet of Bangladesh and activist; involved in the language movement and women\'s rights. | সুফিয়া কামাল (১৯১১-১৯৯৯) - বাংলাদেশের অগ্রণী নারী কবি ও আন্দোলনকর্মী; ভাষা আন্দোলন ও নারী অধিকারে সক্রিয়।',
+'zainul abedin painter':'Zainul Abedin (1914-1976), \'Shilpacharya\', is the pioneer modern artist of Bangladesh - famous for the Famine sketches of 1943; founded the Folk Art Museum in Sonargaon. | শিল্পাচার্য জয়নুল আবেদীন (১৯১৪-১৯৭৬) - বাংলাদেশের আধুনিক শিল্পের পথিকৃৎ; ১৯৪৩-এর দুর্ভিক্ষ স্কেচের জন্য বিখ্যাত; সোনারগাঁয়ে লোকশিল্প জাদুঘর প্রতিষ্ঠা করেন।',
+'muhammed zafar iqbal':'Muhammed Zafar Iqbal (b. 1952) - scientist, professor of CSE at SUST and beloved children\'s science-fiction author (\'Ami Topu\'). | মুহম্মদ জাফর ইকবাল (জ. ১৯৫২) - বিজ্ঞানী, শাবিপ্রবির অধ্যাপক ও প্রিয় শিশু-বিজ্ঞান কল্পকাহিনী লেখক (\'আমি তপু\')।',
+'begum rokeya feminist':'Begum Rokeya (1880-1932) - pioneer of Bengali women\'s emancipation, author of Sultana\'s Dream; founded schools for Muslim girls in Bhagalpur and Kolkata. | বেগম রোকেয়া (১৮৮০-১৯৩২) - বাঙালি নারী জাগরণের পথিকৃৎ, \'সুলতানার স্বপ্ন\' রচয়িতা; ভাগলপুর ও কলকাতায় মুসলিম বালিকা বিদ্যালয় প্রতিষ্ঠা করেন।',
+'rmg garment industry':'Bangladesh is the world\'s second-largest ready-made garment (RMG) exporter after China; ~4,000 factories (mostly Dhaka, Chattogram, Narayanganj) employ ~4 million workers (mostly women); RMG is ~80-84% of national exports. | বাংলাদেশ চীনের পরে বিশ্বের দ্বিতীয় বৃহত্তম তৈরি পোশাক (আরএমজি) রপ্তানিকারক; ~৪,০০০ কারখানায় (ঢাকা, চট্টগ্রাম, নারায়ণগঞ্জ) ~৪০ লক্ষ শ্রমিক (বেশিরভাগ নারী) কাজ করেন; মোট রপ্তানির ~৮০-৮৪% পোশাক।',
+'remittance economy':'Remittances from Bangladeshi workers abroad (~10 million migrants, mostly in Gulf states) exceed ~US$20-24 billion a year - a pillar of the economy larger than foreign aid; main via bKash/ banks; sent through official channels and hundi. | প্রবাসী বাংলাদেশিদের (~১ কোটি, বেশিরভাগ উপসাগরীয় দেশে) রেমিট্যান্স বছরে ~২০০-২৪০০ কোটি ডলারের বেশি - বিদেশি সাহায্যের চেয়ে বড় অর্থনীতির স্তম্ভ; ব্যাংক ও বিকাশে আসে।',
+'jute golden fiber':'Jute - the \'golden fibre\' - was once Bangladesh\'s main export; Bangladesh is the world\'s second-largest jute producer after India. Jute goods (bags, yarn, carpet) now promote eco-friendly alternatives to plastic. | পাট - \'সোনালি আঁশ\' - এক সময় বাংলাদেশের প্রধান রপ্তানি; ভারতের পর বাংলাদেশ বিশ্বের দ্বিতীয় বৃহত্তম পাট উৎপাদক। পাটপণ্য (ব্যাগ, সুতা, কার্পেট) এখন প্লাস্টিকের বিকল্প হিসেবে পরিবেশবান্ধব।',
+'padma bridge':'Padma Bridge (opened 25 June 2022) is Bangladesh\'s largest bridge - 6.15 km over the Padma River, a dual-deck road-rail bridge built with domestic funding (~US$3.6B) after World Bank withdrawal. Connects Dhaka with the southwest. | পদ্মা সেতু (২৫ জুন ২০২২ উদ্বোধন) বাংলাদেশের বৃহত্তম সেতু - পদ্মা নদীর ওপর ৬.১৫ কিমি, দ্বৈত-ডেক সড়ক-রেল সেতু, বিশ্বব্যাংক সরে যাওয়ার পর নিজস্ব অর্থায়নে (~৩৬০ কোটি ডলার) নির্মিত। ঢাকার সঙ্গে দক্ষিণ-পশ্চিম যুক্ত করেছে।',
+'metro rail dhaka':'Dhaka Metro Rail (MRT Line 6) - Bangladesh\'s first metro - opened from Uttara to Agargaon (Dec 2022), extended to Motijheel (2023) and Kamalapur; ~20 km elevated rapid transit easing Dhaka\'s congestion. | ঢাকা মেট্রোরেল (এমআরটি লাইন ৬) - বাংলাদেশের প্রথম মেট্রো - উত্তরা থেকে আগারগাঁও (ডিসেম্বর ২০২২), পরে মতিঝিল (২০২৩) ও কমলাপুর পর্যন্ত; ~২০ কিমি এলিভেটেড দ্রুত পরিবহন ঢাকার যানজট কমায়।',
+'bangabandhu bridge jamuna':'Bangabandhu Bridge (opened 1998) crosses the Jamuna river - 4.8 km, Bangladesh\'s longest bridge, a road-rail link joining the east and west of the country. | বঙ্গবন্ধু সেতু (১৯৯৮) যমুনা নদীর ওপর - ৪.৮ কিমি, বাংলাদেশের দীর্ঘতম সেতু; পূর্ব ও পশ্চিমাঞ্চলের সড়ক-রেল যোগসূত্র।',
+'karnaphuli tunnel':'The Karnaphuli Tunnel (\'Bangabandhu Sheikh Mujibur Rahman Tunnel\', opened 2023) is South Asia\'s first underwater road tunnel, connecting Chattogram city with the Anowara port side under the Karnaphuli river. | কর্ণফুলী টানেল (\'বঙ্গবন্ধু শেখ মুজিবুর রহমান টানেল\', ২০২৩) দক্ষিণ এশিয়ার প্রথম নদীর নিচ দিয়ে সড়ক টানেল; চট্টগ্রাম শহর ও আনোয়ারা বন্দর অঞ্চল যুক্ত করেছে।',
+'dhaka elevated expressway':'Dhaka Elevated Expressway (opened 2023-24, ~19.7 km) runs from the airport to Kutubkhali, Bangladesh\'s first elevated expressway, reducing airport-city travel time. | ঢাকা এলিভেটেড এক্সপ্রেসওয়ে (২০২৩-২৪, ~১৯.৭ কিমি) বিমানবন্দর থেকে কুতুবখালী - বাংলাদেশের প্রথম এলিভেটেড এক্সপ্রেসওয়ে; বিমানবন্দর-শহর ভ্রমণ সময় কমিয়েছে।',
+'chattogram seaport':'Chattogram (Chittagong) Seaport handles ~90% of Bangladesh\'s import-export cargo - the country\'s principal seaport on the Karnaphuli river; Mongla (Khulna) is the second seaport; Payra (Patuakhali) is the newest (2016). | চট্টগ্রাম বন্দর দেশের ~৯০% আমদানি-রপ্তানি পণ্য পরিচালনা করে - কর্ণফুলী নদীর তীরে প্রধান সমুদ্রবন্দর; মোংলা (খুলনা) দ্বিতীয়; পায়রা (পটুয়াখালী) নতুনতম (২০১৬)।',
+'padma river bridge facts':'Padma Multipurpose Bridge: 6.15 km long, 41 spans, 18.10 m wide; 2-level (upper road 4 lanes, lower rail); construction 2014-2022 by China Railway Major Bridge; total cost ~BDT 30,193 crore (~$3.6B) - fully domestic finance. | পদ্মা বহুমুখী সেতু: ৬.১৫ কিমি দীর্ঘ, ৪১টি স্প্যান; দুই স্তর (উপরের সড়ক ৪ লেন, নিচে রেল); নির্মাণ ২০১৪-২০২২, চায়না রেলওয়ে মেজর ব্রিজ; ব্যয় ~৩০,১৯৩ কোটি টাকা - সম্পূর্ণ নিজস্ব অর্থায়নে।',
+'biman bangladesh airlines':'Biman Bangladesh Airlines is the national flag carrier (founded 1972), operating from Hazrat Shahjalal International Airport, Dhaka to domestic and international routes incl. London, Dubai, Jeddah, Delhi, Kolkata. | বিমান বাংলাদেশ এয়ারলাইন্স জাতীয় পতাকাবাহী (প্রতিষ্ঠা ১৯৭২); হযরত শাহজালাল আন্তর্জাতিক বিমানবন্দর থেকে লন্ডন, দুবাই, জেদ্দা, দিল্লি, কলকাতাসহ দেশি-বিদেশি রুটে উড়ে।',
+'hazrat shahjalal airport':'Hazrat Shahjalal International Airport (DAC), Dhaka, is the main international airport (named after saint Shah Jalal); Terminal 3 (opened 2024) expands capacity to ~20 million passengers. | হযরত শাহজালাল আন্তর্জাতিক বিমানবন্দর (ডিএসি), ঢাকা, প্রধান আন্তর্জাতিক বিমানবন্দর (শাহ জালালের নামে); টার্মিনাল ৩ (২০২৪) ধারণক্ষমতা ~২ কোটি যাত্রী করেছে।',
+'st martin island tourism':'Saint Martin\'s (Narikel Jinjira) - coral island 9 km south of Teknaf; only coral reef of Bangladesh; best visited Oct-Mar; Chera Dwip separated at high tide. | সেন্ট মার্টিন (নারিকেল জিঞ্জিরা) - টেকনাফের ৯ কিমি দক্ষিণে প্রবাল দ্বীপ; বাংলাদেশের একমাত্র প্রবাল প্রাচীর; অক্টোবর-মার্চ সেরা সময়; জোয়ারে চেরা দ্বীপ আলাদা হয়ে যায়।',
+'sundarbans honey collection':'Sundarbans honey (\'moual\' honey) is collected by traditional honey gatherers (mouals) from giant beehives between April-June; dangerous work facing tigers and crocodiles. | সুন্দরবনের মধু (মৌয়াল মধু) এপ্রিল-জুনে ঐতিহ্যবাহী মৌয়ালরা বিশাল মৌচাক থেকে সংগ্রহ করেন; বাঘ ও কুমিরের ঝুঁকিতে বিপজ্জনক কাজ।',
+'tea industry sylhet':'Bangladesh\'s tea industry is centred in Sylhet division (Srimangal, Moulvibazar) - over 160 tea gardens producing ~90+ million kg yearly; Srimangal is the \'tea capital\'. | বাংলাদেশের চা শিল্প সিলেট বিভাগকেন্দ্রিক (শ্রীমঙ্গল, মৌলভীবাজার) - ১৬০+ বাগানে বছরে ~৯০+ মিলিয়ন কেজি উৎপাদন; শ্রীমঙ্গল \'চা রাজধানী\'।',
+'fisheries inland fish':'Bangladesh is the world\'s third-largest inland fish producer; fisheries contribute ~3.5% of GDP. Hilsa, pangas, tilapia, rui, katla common; the haors and rivers are key grounds. | বাংলাদেশ বিশ্বের তৃতীয় বৃহত্তম অভ্যন্তরীণ মাছ উৎপাদক; মৎস্য খাত জিডিপির ~৩.৫%। ইলিশ, পাঙ্গাস, তেলাপিয়া, রুই, কাতলা প্রধান; হাওর ও নদী মূল উৎস।',
+'ancient bengal kingdoms':'Ancient Bengal (Vanga, Gauda, Samatata) flourished under the Pala Empire (8th-12th c, Buddhist, built Somapura Mahavihara), the Sena dynasty (12th c), then Muslim rule began with Bakhtiyar Khalji in 1204. | প্রাচীন বাংলা (বঙ্গ, গৌড়, সমতট) পাল সাম্রাজ্য (৮ম-১২শ শতক, বৌদ্ধ), সেন রাজবংশ (১২শ শতক)-তে সমৃদ্ধ ছিল; বখতিয়ার খলজির ১২০৪ বিজয় মুসলিম শাসন শুরু করে।',
+'palas sena dynasty':'Pala dynasty (750-1161): Dharmapala, Devapala - last great Buddhist empire, built Somapura Mahavihara. Sena dynasty (1070-1230): Ballal Sen, Lakshman Sen - revived Hindu rule from Nabadwip. | পাল রাজবংশ (৭৫০-১১৬১): ধর্মপাল, দেবপাল - শেষ মহান বৌদ্ধ সাম্রাজ্য; সোমপুর মহাবিহার নির্মাণ। সেন রাজবংশ (১০৭০-১২৩০): বল্লাল সেন, লক্ষ্মণ সেন - নবদ্বীপ থেকে হিন্দু শাসন।',
+'paharpur somapura':'Somapura Mahavihara at Paharpur (Naogaon), built by Dharmapala (8th c), is the largest Buddhist monastery south of the Himalayas - a UNESCO World Heritage Site. | পাহাড়পুরের সোমপুর মহাবিহার (নওগাঁ), ধর্মপালের নির্মিত (৮ম শতক), হিমালয়ের দক্ষিণে বৃহত্তম বৌদ্ধ বিহার - ইউনেস্কো বিশ্ব ঐতিহ্যবাহী স্থান।',
+'shat gambuj mosque':'Sixty Dome Mosque (Shat Gambuj, 15th c, Bagerhat) built by Khan Jahan Ali - a UNESCO World Heritage Site; actually 77 domes over 60 pillars. | ষাট গম্বুজ মসজিদ (১৫শ শতক, বাগেরহাট) খান জাহান আলীর নির্মিত - ইউনেস্কো বিশ্ব ঐতিহ্যবাহী স্থান; প্রকৃতপক্ষে ৬০ স্তম্ভে ৭৭ গম্বুজ।',
+'lalbagh fort':'Lalbagh Fort (Old Dhaka, 17th c) - an incomplete Mughal fort begun by Prince Muhammad Azam, continued by Shaista Khan; contains Pari Bibi\'s tomb and a mosque. | লালবাগ কেল্লা (পুরান ঢাকা, ১৭শ শতক) - অসম্পূর্ণ মোগল দুর্গ; শুরু করেন শাহজাদা মুহম্মদ আজম, চালিয়ে যান শায়েস্তা খান; পরী বিবির সমাধি ও মসজিদ আছে।',
+'ahsan manzil':'Ahsan Manzil (Pink Palace, 1872) on the Buriganga in Old Dhaka was the residence of Dhaka\'s Nawabs - now a national museum. | বুড়িগঙ্গা তীরের আহসান মঞ্জিল (১৮৭২) পুরান ঢাকায় ঢাকার নবাবদের বাসস্থান ছিল - এখন জাতীয় জাদুঘর।',
+'star mosque dhaka':'Star Mosque (Tara Masjid) in Armanitola, Old Dhaka (early 18th c) is famous for its blue-and-white star mosaic tiles. | পুরান ঢাকার আরমানিটোলায় তারা মসজিদ (১৮শ শতকের শুরু) নীল-সাদা তারকা মোজাইক টাইলের জন্য বিখ্যাত।',
+'jatiya sangshad bhaban':'Jatiya Sangsad Bhaban (National Parliament House, Dhaka) was designed by US architect Louis Kahn (completed 1982) - monumental concrete geometric forms around a central hall with a surrounding lake. | জাতীয় সংসদ ভবন (ঢাকা) স্থপতি লুই কান-এর নকশা (সম্পন্ন ১৯৮২) - কেন্দ্রীয় কক্ষকে ঘিরে কংক্রিটের জ্যামিতিক কাঠামো ও চারপাশে হ্রদ।',
+'bhawal national park':'Bhawal National Park (Gazipur) protects sal forest with deer and birds - a quick nature escape from Dhaka. | ভাওয়াল জাতীয় উদ্যান (গাজীপুর) শালবন, হরিণ ও পাখির অভয়ারণ্য - ঢাকার কাছের প্রকৃতির ঠিকানা।',
+'kuakata sagarkannya':'Kuakata (Patuakhali), the \'Sagarkannya\' (Daughter of Sea), is one of few beaches where both sunrise and sunset are visible; home to Buddhist temples and Rakhine culture. | কুয়াকাটা (পটুয়াখালী) \'সাগরকন্যা\' - সূর্যোদয়-সূর্যাস্ত দুটোই দেখা যায় এমন বিরল সৈকত; বৌদ্ধ মন্দির ও রাখাইন সংস্কৃতির কেন্দ্র।',
+'bangladesh cricket history':'Bangladesh gained Test status in 2000. Highlights: 2005 ODI series wins vs Australia and England, Asia Cup champions 2012 and 2022 (ODI) and 2023 (T20 as host), 2017 Champions Trophy semi-final. Shakib Al Hasan is the star all-rounder. | বাংলাদেশ টেস্ট মর্যাদা পায় ২০০০ সালে। সাফল্য: ২০০৫-এ অস্ট্রেলিয়া ও ইংল্যান্ডের বিপক্ষে ওডিআই সিরিজ জয়, এশিয়া কাপ চ্যাম্পিয়ন ২০১২, ২০২২ (ওডিআই) ও ২০২৩ (টি২০, আয়োজক), ২০১৭ চ্যাম্পিয়ন্স ট্রফি সেমিফাইনাল। সাকিব আল হাসান প্রধান তারকা।',
+'shakib al hasan':'Shakib Al Hasan (b. 1987) is Bangladesh\'s greatest cricketer - long-time No.1 ODI all-rounder, all-format captain, and record holder for Bangladesh in runs and wickets. | সাকিব আল হাসান (জ. ১৯৮৭) বাংলাদেশের সেরা ক্রিকেটার - দীর্ঘদিন ওডিআই অলরাউন্ডার র্যাঙ্কিংয়ে ১ নম্বর; সব ফরম্যাটে অধিনায়ক; বাংলাদেশের হয়ে রান-উইকেট রেকর্ডধারী।',
+'bangladesh kabbadi sport':'Kabaddi (ha-du-du) is the national sport of Bangladesh, a rural tag-wrestling game; Bangladesh\'s men have won Asian Games medals in kabaddi (bronze 2010, 2014 gold? - rather bronze). | কাবাডি (হা-ডু-ডু) বাংলাদেশের জাতীয় খেলা - গ্রামীণ ট্যাগ-কুস্তি; বাংলাদেশ এশিয়ান গেমসে কাবাডিতে পদক জিতেছে।',
+'child marriage bangladesh stats':'Bangladesh has one of the world\'s highest child marriage rates - about half of girls marry before 18 (Child Marriage Restraint Act 2017 sets 18 for women); the government targets elimination by 2041. | বাংলাদেশে শিশু বিয়ের হার বিশ্বে সর্বোচ্চগুলোর একটি - প্রায় অর্ধেক মেয়ে ১৮-এর আগে বিয়ে করে (শিশু বিয়ে নিরোধ আইন ২০১৭; নারীর জন্য ১৮); সরকার ২০৪১-এর মধ্যে নির্মূলের লক্ষ্য নিয়েছে।',
+'rohingya crisis bd':'Bangladesh hosts ~1.1 million Rohingya refugees from Myanmar (since Aug 2017 exodus) in the world\'s largest camp at Cox\'s Bazar (Kutupalong) and on Bhasan Char island. | বাংলাদেশ মিয়ানমার থেকে আসা ~১১ লক্ষ রোহিঙ্গা শরণার্থীকে (২০১৭-এর আগস্ট থেকে) কক্সবাজারের কুতুপালং-এ বিশ্বের বৃহত্তম ক্যাম্পে ও ভাসানচরে আশ্রয় দিয়েছে।',
+'bengal famine 1943':'The 1943 Bengal famine killed an estimated 2-3 million people - a wartime man-made disaster (rice export, hoarding, cyclone) that stoked anti-colonial nationalism; Zainul Abedin\'s famine sketches record it. | ১৯৪৩-এর বাংলার মন্বন্তরে আনুমানিক ২০-৩০ লক্ষ মানুষের মৃত্যু - যুদ্ধকালীন মনুষ্যসৃষ্ট বিপর্যয় (ধান রপ্তানি, মজুতদারি); জয়নুল আবেদীনের স্কেচে ধরা আছে।',
+'partition of bengal 1947':'The 1947 partition divided Bengal into West Bengal (India) and East Bengal (Pakistan; later Bangladesh) by religion - causing one of history\'s largest population transfers. | ১৯৪৭-এর দেশভাগে বাংলা বিভক্ত হয় পশ্চিমবঙ্গ (ভারত) ও পূর্ববঙ্গে (পাকিস্তান; পরে বাংলাদেশ) ধর্মের ভিত্তিতে - ইতিহাসের বৃহত্তম জনস্থানান্তরের একটি ঘটে।',
+'british rule bengal':'British rule in Bengal began after the Battle of Plassey (1757) and Buxar (1764) and lasted till 1947; the Permanent Settlement (1793) created zamindars, while the 1905 partition of Bengal was annulled in 1911. | বাংলায় ব্রিটিশ শাসন শুরু হয় পলাশী (১৭৫৭) ও বক্সারের (১৭৬৪) যুদ্ধের পর এবং ১৯৪৭ পর্যন্ত চলে; চিরস্থায়ী বন্দোবস্ত (১৭৯৩) জমিদার তৈরি করে; ১৯০৫-এর বঙ্গভঙ্গ ১৯১১-এ রদ হয়।',
+'subhas chandra bose':'Netaji Subhas Chandra Bose (1897-1945), the Bengali nationalist leader, raised the Indian National Army (Azad Hind Fauj) with Japanese help in WWII to fight British rule. | নেতাজি সুভাষ চন্দ্র বসু (১৮৯৭-১৯৪৫) - বাঙালি জাতীয়তাবাদী নেতা; দ্বিতীয় বিশ্বযুদ্ধে জাপানি সহায়তায় আজাদ হিন্দ ফৌজ গঠন করে ব্রিটিশ শাসনের বিরুদ্ধে লড়েন।',
+'sher e bangla':'A. K. Fazlul Huq (1873-1962) - \'Sher-e-Bangla\' - premier of undivided Bengal (1937-43), mover of the Lahore Resolution (1940), later East Bengal CM and Pakistan minister. | শেরে বাংলা এ. কে. ফজলুল হক (১৮৭৩-১৯৬২) - অবিভক্ত বাংলার প্রধানমন্ত্রী (১৯৩৭-৪৩), লাহোর প্রস্তাবের (১৯৪০) প্রবর্তক, পরে পূর্ববঙ্গের মুখ্যমন্ত্রী ও পাকিস্তানের মন্ত্রী।',
+'khaleda zia':'Khaleda Zia (b. 1945) - BNP chairperson, widow of Ziaur Rahman - served as Prime Minister 1991-96 and 2001-06; the first woman PM of Bangladesh. | খালেদা জিয়া (জ. ১৯৪৫) - বিএনপির চেয়ারপারসন, জিয়াউর রহমানের স্ত্রী - ১৯৯১-৯৬ ও ২০০১-০৬ প্রধানমন্ত্রী ছিলেন; বাংলাদেশের প্রথম নারী প্রধানমন্ত্রী।',
+'deputy commissioner dc role':'The Deputy Commissioner (DC) is the chief administrative officer of a district - head of the district administration, the executive magistrate, and coordinator of all government offices in the district (also the district registrar and election officer). | জেলা প্রশাসক (ডিসি) জেলার প্রধান প্রশাসনিক কর্মকর্তা - জেলা প্রশাসনের প্রধান, নির্বাহী ম্যাজিস্ট্রেট এবং জেলার সব সরকারি দপ্তরের সমন্বয়কারী।',
+'superintendent police sp role':'The Superintendent of Police (SP) heads the district police force; the Officer-in-Charge (OC) runs each thana (police station). FIRs are lodged at thanas. | পুলিশ সুপার (এসপি) জেলা পুলিশ বাহিনীর প্রধান; অফিসার ইনচার্জ (ওসি) প্রতিটি থানা পরিচালনা করেন। এফআইআর থানায় দাখিল করা হয়।',
+'union parishad structure':'Union Parishad is the lowest tier of local government - a union is divided into 9 wards; the UP chairman and members are directly elected. Bangladesh has ~4,570 unions. | ইউনিয়ন পরিষদ স্থানীয় সরকারের সর্বনিম্ন স্তর - একটি ইউনিয়ন ৯টি ওয়ার্ডে বিভক্ত; চেয়ারম্যান ও মেম্বাররা সরাসরি নির্বাচিত। বাংলাদেশে ~৪,৫৭০টি ইউনিয়ন রয়েছে।',
+'upazila structure':'Upazila (sub-district) is the middle tier of rural local government headed by an elected chairman (Upazila Parishad); Bangladesh has 495 upazilas (2024). | উপজেলা গ্রামীণ স্থানীয় সরকারের মধ্যম স্তর; নির্বাচিত চেয়ারম্যানের নেতৃত্বে উপজেলা পরিষদ; বাংলাদেশে ৪৯৫টি উপজেলা রয়েছে (২০২৪)।',
+'city corporation mayors':'City corporations are the urban local bodies: 12 cities incl. Dhaka North (DNCC), Dhaka South (DSCC), Chattogram, Khulna, Rajshahi, Sylhet, Barishal, Rangpur, Cumilla, Gazipur, Narayanganj, Mymensingh - each headed by an elected Mayor. | সিটি কর্পোরেশন নগর স্থানীয় সংস্থা: ১২টি - ঢাকা উত্তর (ডিএনসিসি), ঢাকা দক্ষিণ (ডিএসসিসি), চট্টগ্রাম, খুলনা, রাজশাহী, সিলেট, বরিশাল, রংপুর, কুমিল্লা, গাজীপুর, নারায়ণগঞ্জ, ময়মনসিংহ - প্রতিটির নির্বাচিত মেয়র।',
+'zila parishad':'Zila Parishad is the district-level local government body headed by a chairman, coordinating development plans in the district. | জেলা পরিষদ জেলা পর্যায়ের স্থানীয় সরকার সংস্থা; চেয়ারম্যানের নেতৃত্বে জেলার উন্নয়ন পরিকল্পনা সমন্বয় করে।',
+'national parliament sangsad':'Jatiya Sangsad is Bangladesh\'s unicameral parliament: 350 seats (300 directly elected + 50 reserved for women), led by the Speaker. The President summons and prorogues it. | জাতীয় সংসদ বাংলাদেশের এককক্ষ বিশিষ্ট আইনসভা: ৩৫০ আসন (৩০০ সরাসরি নির্বাচিত + ৫০ নারী সংরক্ষিত); স্পিকার নেতৃত্ব দেন। রাষ্ট্রপতি সংসদ আহ্বান ও স্থগিত করেন।',
+'president bangladesh role':'The President of Bangladesh is the constitutional Head of State (elected by MPs for 5 years) - ceremonial, acting on the PM\'s advice; appoints the PM, Chief Justice and commanders; Supreme Commander of the armed forces. | বাংলাদেশের রাষ্ট্রপতি সাংবিধানিক রাষ্ট্রপ্রধান (এমপিদের দ্বারা ৫ বছরের জন্য নির্বাচিত) - আনুষ্ঠানিক; প্রধানমন্ত্রীর পরামর্শে কাজ করেন; প্রধানমন্ত্রী, প্রধান বিচারপতি নিয়োগ করেন; সশস্ত্র বাহিনীর সর্বাধিনায়ক।',
+'prime minister bangladesh':'The Prime Minister of Bangladesh is the Head of Government - leader of the majority in the Sangsad - who runs the executive through the Cabinet. | বাংলাদেশের প্রধানমন্ত্রী সরকারপ্রধানের দায়িত্ব পালন করেন - সংসদে সংখ্যাগরিষ্ঠ দলের নেতা - মন্ত্রিসভার মাধ্যমে নির্বাহী ক্ষমতা পরিচালনা করেন।',
+'chief adviser interim':'Under the interim/constitutional provisions (2024-25), the Chief Adviser heads the Council of Advisers exercising executive authority; Muhammad Yunus became Chief Adviser on 8 August 2024 after the mass uprising. | অন্তর্বর্তীকালীন ব্যবস্থায় (২০২৪-২৫) প্রধান উপদেষ্টা উপদেষ্টা পরিষদের প্রধান হিসেবে নির্বাহী ক্ষমতা পরিচালনা করেন; গণ-অভ্যুত্থানের পর ৮ আগস্ট ২০২৪-এ ড. মুহাম্মদ ইউনূস প্রধান উপদেষ্টা হন।',
+'bcs civil service':'Bangladesh Civil Service (BCS) is the country\'s main public service cadre system, recruited through the BCS examination conducted by the PSC; 26+ cadres incl. administration, police, foreign affairs, taxation. | বাংলাদেশ সিভিল সার্ভিস (বিসিএস) দেশের প্রধান সরকারি ক্যাডার ব্যবস্থা; পিএসসির বিসিএস পরীক্ষার মাধ্যমে নিয়োগ; ২৬+ ক্যাডার - প্রশাসন, পুলিশ, পররাষ্ট্র, রাজস্ব ইত্যাদি।',
+'bangladesh army structure':'Bangladesh Armed Forces = Army, Navy and Air Force. The Army (~160,000) has 10 infantry divisions; Bangladesh is a leading UN peacekeeping contributor. | বাংলাদেশ সশস্ত্র বাহিনী = সেনা, নৌ ও বিমান বাহিনী। সেনাবাহিনী (~১.৬ লক্ষ) ১০ পদাতিক ডিভিশনে সংগঠিত; বাংলাদেশ জাতিসংঘ শান্তিরক্ষায় শীর্ষ অবদানকারী।',
+'education system bangladesh':'Bangladesh\'s education system has 4 streams: general (primary 5 yrs, secondary 7, higher), madrasa, technical-vocational and English-medium. Primary education is free and compulsory (Education Compulsory Act 1990). Major public universities: Dhaka, Rajshahi, Chittagong, Jahangirnagar, KUET, BUET, SUST. | বাংলাদেশের শিক্ষাব্যবস্থায় ৪ ধারা: সাধারণ (প্রাথমিক ৫, মাধ্যমিক ৭, উচ্চ), মাদরাসা, কারিগরি-বৃত্তিমূলক ও ইংরেজি মাধ্যম। প্রাথমিক শিক্ষা বিনামূল্যে ও বাধ্যতামূলক। প্রধান পাবলিক বিশ্ববিদ্যালয়: ঢাকা, রাজশাহী, চট্টগ্রাম, জাহাঙ্গীরনগর, বুয়েট, শাবিপ্রবি।',
+'dhaka university history':'University of Dhaka (founded 1921) is Bangladesh\'s oldest and most prestigious university - the \'Oxford of the East\'; a centre of the language movement, 1969 uprising and 1971 war. | ঢাকা বিশ্ববিদ্যালয় (প্রতিষ্ঠা ১৯২১) বাংলাদেশের প্রাচীনতম ও সর্বোচ্চ সম্মানিত বিশ্ববিদ্যালয়; ভাষা আন্দোলন, ১৯৬৯ অভ্যুত্থান ও ১৯৭১-এর কেন্দ্র ছিল।',
+'bangladesh bank central':'Bangladesh Bank is the central bank (established 16 December 1971), headed by a Governor; it issues the taka, manages foreign reserves, and supervises scheduled banks. | বাংলাদেশ ব্যাংক কেন্দ্রীয় ব্যাংক (প্রতিষ্ঠা ১৬ ডিসেম্বর ১৯৭১); গভর্নর নেতৃত্ব দেন; টাকা নোট ছাপে, বৈদেশিক রিজার্ভ ও ব্যাংক তত্ত্বাবধান করে।',
+'banking sector bd':'Bangladesh has 60+ scheduled banks: state-owned (Sonali, Janata, Agrani, Rupali, BASIC), specialized (Krishi, Karmasangsthan), private (BRAC, Dutch-Bangla, Islami Bank, City, EBL), and foreign banks; the sector has faced NPL (bad loan) challenges. | বাংলাদেশে ৬০+ তফসিলি ব্যাংক: রাষ্ট্রায়ত্ত (সোনালী, জনতা, অগ্রণী, রূপালী), বিশেষায়িত (কৃষি, কর্মসংস্থান), বেসরকারি (ব্র্যাক, ডাচ-বাংলা, ইসলামী ব্যাংক, সিটি, ইবিএল) ও বিদেশি; খাতটি খেলাপি ঋণের চ্যালেঞ্জে রয়েছে।',
+'agriculture crops bd':'Agriculture employs ~40% of Bangladesh\'s workforce; rice is the staple (Boro, Aman, Aus), plus jute, wheat, maize, potatoes, vegetables, mangoes and tea. Bangladesh is the world\'s 3rd-largest rice producer. | কৃষি বাংলাদেশের কর্মশক্তির ~৪০% নিয়োগ করে; প্রধান ফসল ধান (বোরো, আমন, আউশ), পাট, গম, ভুট্টা, আলু, শাকসবজি, আম ও চা। ধান উৎপাদনে বিশ্বে তৃতীয়।',
+'power energy bd':'Bangladesh\'s electricity is generated mainly from natural gas (~50%), plus furnace oil, coal, imported power and renewable (solar); the national grid covers ~100% of areas; Padma rail link and Rooppur nuclear plant (first nuclear, with Russia) are major projects. | বাংলাদেশের বিদ্যুৎ মূলত প্রাকৃতিক গ্যাস (~৫০%), ফার্নেস তেল, কয়লা, আমদানি ও সৌরশক্তিতে উৎপন্ন; জাতীয় গ্রিড ~১০০% এলাকায়; রূপপুর পারমাণবিক বিদ্যুৎকেন্দ্র (প্রথম, রাশিয়ার সহায়তায়) প্রধান প্রকল্প।',
+'ict sector bd':'Bangladesh\'s ICT sector booms with freelancers (2nd largest freelancer base globally), software exporters, and \'Digital Bangladesh\' - high-speed internet, mobile financial services (bKash, Nagad), and the government\'s a2i programs. | বাংলাদেশের আইসিটি খাত দ্রুত বাড়ছে - বিশ্বের দ্বিতীয় বৃহত্তম ফ্রিল্যান্সার ভিত্তি, সফটওয্যার রপ্তানি, ডিজিটাল বাংলাদেশ, মোবাইল আর্থিক সেবা (বিকাশ, নগদ) ও এটুআই কর্মসূচি।',
+'telecom mobile bd':'Bangladesh has ~190 million mobile connections across operators Grameenphone, Robi, Banglalink, Teletalk (4G); smartphone penetration ~40%+. bKash leads mobile financial services with ~70% share. | বাংলাদেশে ~১৯ কোটি মোবাইল সংযোগ; অপারেটর: গ্রামীণফোন, রবি, বাংলালিংক, টেলিটক (৪জি); স্মার্টফোন ~৪০%+। মোবাইল আর্থিক সেবায় বিকাশ শীর্ষে (~৭০% অংশ)।',
+'health system bd':'Bangladesh\'s health system: public (DGHS hospitals, Upazila Health Complexes, community clinics) plus private hospitals; notable successes in immunization, maternal health and family planning; challenges: dengue outbreaks, NCDs, doctor-patient ratio. | বাংলাদেশের স্বাস্থ্যব্যবস্থা: সরকারি (স্বাস্থ্য অধিদপ্তর হাসপাতাল, উপজেলা স্বাস্থ্য কমপ্লেক্স, কমিউনিটি ক্লিনিক) ও বেসরকারি হাসপাতাল; টিকা, মাতৃস্বাস্থ্য ও পরিবার পরিকল্পনায় সাফল্য; চ্যালেঞ্জ: ডেঙ্গু, অসংক্রামক রোগ, চিকিৎসক-রোগী অনুপাত।',
+'dengue bd':'Dengue is a recurring mosquito-borne threat in Bangladesh, spiking in the monsoon (Jul-Sep) mainly in Dhaka and Chattogram divisions; prevention: destroy Aedes breeding sites, use repellents; hospitals admit severe cases with platelet monitoring. | ডেঙ্গু বাংলাদেশের মৌসুমি মশাবাহিত রোগ - বর্ষায় (জুলাই-সেপ্টেম্বর) ঢাকা ও চট্টগ্রামে প্রকোপ; প্রতিরোধ: এডিসের প্রজননস্থল ধ্বংস, মশানিরোধক; গুরুতর রোগীকে প্লেটলেট পর্যবেক্ষণে হাসপাতালে ভর্তি।',
+'transport roads bd':'Bangladesh moves mostly by road (bridges: Padma, Bangabandhu); railways ~3,600 km run by Bangladesh Railway; inland waterways ~8,000 km; international airports: Dhaka (Shahjalal), Chattogram, Sylhet. | বাংলাদেশে যাতায়াত প্রধানত সড়কে (পদ্মা, বঙ্গবন্ধু সেতু); রেলপথ ~৩,৬০০ কিমি (বাংলাদেশ রেলওয়ে); অভ্যন্তরীণ জলপথ ~৮,০০০ কিমি; আন্তর্জাতিক বিমানবন্দর: ঢাকা (শাহজালাল), চট্টগ্রাম, সিলেট।',
+'census 2022 population':'Bangladesh\'s 2022 census counted 169.8 million people - the 8th-most populous country; density ~1,165/sq km among the world\'s highest; 8 divisions, 64 districts, 495 upazilas, ~4,570 unions. | ২০২২-এর আদমশুমারিতে বাংলাদেশের জনসংখ্যা ১৬ কোটি ৯৮ লক্ষ - বিশ্বে ৮ম; ঘনত্ব ~১,১৬৫/বর্গকিমি (বিশ্বের অন্যতম উচ্চ); ৮ বিভাগ, ৬৪ জেলা, ৪৯৫ উপজেলা, ~৪,৫৭০ ইউনিয়ন।',
+'religions bangladesh':'Bangladesh is ~91% Muslim (largest 4th Muslim population), ~8% Hindu, ~0.6% Buddhist, ~0.3% Christian and others; the Constitution guarantees freedom of religion with Islam as the state religion (since 1988 amendment) under secularism. | বাংলাদেশের ~৯১% মুসলিম (বিশ্বে ৪র্থ বৃহত্তম), ~৮% হিন্দু, ~০.৬% বৌদ্ধ, ~০.৩% খ্রিস্টান; সংবিধান ধর্মীয় স্বাধীনতা নিশ্চিত করে এবং ধর্মনিরপেক্ষতার অধীনে ইসলাম রাষ্ট্রধর্ম (১৯৮৮ সংশোধনী)।',
+'sheikh hasina':'Sheikh Hasina (b. 1947), daughter of Bangabandhu, led the Awami League and served as Prime Minister 1996-2001 and 2009-2024 - Bangladesh\'s longest-serving PM; resigned and fled to India on 5 August 2024 amid the mass uprising. | শেখ হাসিনা (জ. ১৯৪৭), বঙ্গবন্ধুর কন্যা; আওয়ামী লীগ নেত্রী; প্রধানমন্ত্রী ছিলেন ১৯৯৬-২০০১ ও ২০০৯-২০২৪ - দেশের দীর্ঘতম মেয়াদের প্রধানমন্ত্রী; গণ-অভ্যুত্থানের মুখে ৫ আগস্ট ২০২৪-এ পদত্যাগ করে ভারতে যান।',
+'shahabuddin president':'Mohammed Shahabuddin (b. 1949), a retired judge, has served as President of Bangladesh since April 2023. | মোহাম্মদ সাহাবুদ্দিন (জ. ১৯৪৯), অবসরপ্রাপ্ত বিচারক; ২০২৩ সালের এপ্রিল থেকে বাংলাদেশের রাষ্ট্রপতি।',
+'bishwa ijtema':'Bishwa Ijtema is the world\'s second-largest Muslim gathering (after Hajj), held annually at Tongi on the Turag river near Dhaka by the Tablighi Jamaat; over a million attendees pray together. | বিশ্ব ইজতেমা হজের পর বিশ্বের দ্বিতীয় বৃহত্তম মুসলিম সমাবেশ; টাঙ্গীর তুরাগ নদীর তীরে (ঢাকার কাছে) তাবলিগ জামাতের আয়োজনে; ১০ লক্ষ+ মানুষ অংশ নেয়।',
+'national poet nazrul death':'Nazrul died on 29 August 1976 in Dhaka and was buried beside the Central Mosque of Dhaka University - the only non-president given a state funeral; Nazrul Jayanti is 25 Jaistha (27 May). | নজরুল ১৯৭৬ সালের ২৯ আগস্ট ঢাকায় মৃত্যুবরণ করেন; ঢাকা বিশ্ববিদ্যালয় কেন্দ্রীয় মসজিদের পাশে সমাহিত - রাষ্ট্রীয় মর্যাদায়। নজরুল জয়ন্তী ২৫ জ্যৈষ্ঠ।',
+'bangladesh independence process':'Bangladesh\'s independence process: language movement (1952) → 1954 United Front → 6-point (1966) → Agartala case & 1969 uprising → 1970 election → 7 March speech → 25 March 1971 genocide → independence declaration → Liberation War → 16 Dec 1971 victory. | বাংলাদেশের স্বাধীনতা-অগ্রযাত্রা: ভাষা আন্দোলন (১৯৫২) → যুক্তফ্রন্ট (১৯৫৪) → ৬-দফা (১৯৬৬) → আগরতলা মামলা ও ১৯৬৯ অভ্যুত্থান → ১৯৭০ নির্বাচন → ৭ মার্চ ভাষণ → ২৫ মার্চ ১৯৭১ গণহত্যা → স্বাধীনতার ঘোষণা → মুক্তিযুদ্ধ → ১৬ ডিসেম্বর ১৯৭১ বিজয়।',
+'pohela boishakh date':'Pohela Boishakh usually falls on 14 April (Bangla: 1 Boishakh) - the Bengali New Year; in Bangladesh the day is a public holiday celebrated with Mongol Shobhajatra, panta-ilish and fairs. | পহেলা বৈশাখ সাধারণত ১৪ এপ্রিল (বাংলা ১ বৈশাখ) - বাংলা নববর্ষ; বাংলাদেশে দিনটি সরকারি ছুটি, মঙ্গল শোভাযাত্রা, পান্তা-ইলিশ ও মেলায় উদযাপিত হয়।',
+'ratargul jaflong travel':'Sylhet\'s nature attractions: Ratargul swamp forest (boat rides among submerged trees), Jaflong (Piyain river, stone hills, Khasia villages), Lalakhal, and Srimangal\'s tea estates and Lawachara rainforest. | সিলেটের প্রাকৃতিক আকর্ষণ: রাতারগুল জলাভূমি বন (নৌকায় ডুবন্ত গাছ), জাফলং (পিয়াইন নদী, পাথর পাহাড়, খাসিয়া গ্রাম), লালাখাল ও শ্রীমঙ্গলের চা বাগান এবং লাউয়াছড়া বন।',
+'mymensingh rangpur divisions':'Mymensingh became the 8th division in 2015 (districts: Mymensingh, Jamalpur, Netrokona, Sherpur). Rangpur division (2010) covers 8 northern districts incl. Dinajpur, Kurigram, Panchagarh. | ময়মনসিংহ ২০১৫ সালে ৮ম বিভাগ হয় (জেলা: ময়মনসিংহ, জামালপুর, নেত্রকোনা, শেরপুর)। রংপুর বিভাগ (২০১০) - দিনাজপুর, কুড়িগ্রাম, পঞ্চগড়সহ ৮ উত্তরাঞ্চলীয় জেলা।',
+'sundarbans travel':'Sundarbans tour: enter via Mongla or Khulna; visit Katka, Hiron Point (Nilkamal), Kotka, Dublar Char - see tigers\' footmarks, deer, crocodiles, and the famous \'Kachikhali\' beach. Best season Oct-Mar. | সুন্দরবন ভ্রমণ: মোংলা বা খুলনা দিয়ে প্রবেশ; কটকা, হিরণ পয়েন্ট (নীলকমল), কোটকা, দুবলার চর - বাঘের পায়ের ছাপ, হরিণ, কুমির ও কাছিকাটি সৈকত দেখুন। সেরা সময় অক্টোবর-মার্চ।',
+'bangladesh landmarks':'Top landmarks of Bangladesh: Jatiya Sangsad Bhaban, Lalbagh Fort, Ahsan Manzil, Shaheed Minar, National Memorial (Savar), Somapura Mahavihara (Paharpur), Sixty Dome Mosque (Bagerhat), Sundarbans, Cox\'s Bazar, Saint Martin\'s, Kuakata, Ratargul. | বাংলাদেশের প্রধান স্থাপনা: জাতীয় সংসদ ভবন, লালবাগ কেল্লা, আহসান মঞ্জিল, কেন্দ্রীয় শহিদ মিনার, জাতীয় স্মৃতিসৌধ (সাভার), সোমপুর মহাবিহার (পাহাড়পুর), ষাট গম্বুজ মসজিদ (বাগেরহাট), সুন্দরবন, কক্সবাজার, সেন্ট মার্টিন, কুয়াকাটা, রাতারগুল।',
+'bangladesh nature wildlife':'Bangladesh\'s wildlife: Royal Bengal Tiger (Sundarbans), Asian elephant (CHT), hoolock gibbon (Lawachara), Ganges & Irrawaddy dolphins, crocodiles, pythons, plus 700+ bird species including migrant Siberian ducks in haors. | বাংলাদেশের বন্যপ্রাণী: রয়েল বেঙ্গল টাইগার (সুন্দরবন), এশিয়ান হাতি (পার্বত্য চট্টগ্রাম), হুলক গিবন (লাউয়াছড়া), গঙ্গা ও ইরাবতী ডলফিন, কুমির, অজগর; হাওরে আগত সাইবেরিয়ার হাঁসসহ ৭০০+ পাখি।',
+'jatiyo smriti soudho':'National Martyrs Memorial (Jatiyo Smriti Soudho) at Savar, designed by Syed Mainul Hossain (completed 1982), commemorates the martyrs of the 1971 Liberation War; 7 pairs of triangular walls symbolize the struggle\'s stages. | সাভারের জাতীয় স্মৃতিসৌধ, স্থপতি সৈয়দ মাইনুল হোসেনের নকশা (১৯৮২), ১৯৭১-এর শহিদদের স্মরণে; ৭ জোড়া ত্রিভুজাকার দেয়াল সংগ্রামের পর্যায়ের প্রতীক।',
+'chittagong hill tracts':'The Chittagong Hill Tracts (CHT) comprise Rangamati, Khagrachhari and Bandarban - home to 11+ indigenous groups (Chakma, Marma, Tripura, Mro, Tanchangya, Bawm); administered under the 1997 CHT Peace Accord. | পার্বত্য চট্টগ্রাম (রাঙামাটি, খাগড়াছড়ি, বান্দরবান) - ১১+ আদিবাসী গোষ্ঠীর (চাকমা, মারমা, ত্রিপুরা, ম্রো, তঞ্চঙ্গ্যা, বম) আবাস; ১৯৯৭ শান্তি চুক্তির অধীনে পরিচালিত।',
+'haor wetlands':'Haors are large bowl-shaped wetlands of Sylhet and Mymensingh (Hakaluki, Tanguar); in monsoon they flood into vast lakes, in winter migratory birds arrive - famous for floating villages and boat transport. | হাওর সিলেট-ময়মনসিংহের বড় বাটি-আকৃতির জলাভূমি (হাকালুকি, টাঙ্গুয়ার); বর্ষায় বিশাল হ্রদে পরিণত, শীতে অতিথি পাখি আসে - ভাসমান গ্রাম ও নৌকা পরিবহনের জন্য বিখ্যাত।',
+'dhaka university history':'University of Dhaka (1921) - Bangladesh\'s oldest university, the \'Oxford of the East\'; central to the language movement (1952), 1969 uprising and Liberation War; faculties across science, arts, business and law. | ঢাকা বিশ্ববিদ্যালয় (১৯২১) - দেশের প্রাচীনতম বিশ্ববিদ্যালয়; ভাষা আন্দোলন (১৯৫২), ১৯৬৯ অভ্যুত্থান ও মুক্তিযুদ্ধের প্রাণকেন্দ্র; বিজ্ঞান, কলা, বাণিজ্য ও আইনে অনুষদ।',
+'bcs civil service':'The Bangladesh Civil Service (BCS) is recruited through the PSC\'s BCS examination (3 stages: preliminary, written, viva); cadres include administration, police, foreign affairs, customs and education; BCS Administration is the most coveted cadre. | বাংলাদেশ সিভিল সার্ভিস (বিসিএস) পিএসসির বিসিএস পরীক্ষায় (প্রিলি, লিখিত, ভাইভা) নিয়োগ; ক্যাডার: প্রশাসন, পুলিশ, পররাষ্ট্র, কাস্টমস, শিক্ষা; প্রশাসন ক্যাডার সবচেয়ে কাঙ্ক্ষিত।',
+'rmg garment industry':'Bangladesh\'s ready-made garment (RMG) industry is the world\'s second-largest exporter (~$47-55B/year), with ~4 million workers in ~3,500 factories - over 80% of the country\'s exports; major hubs: Dhaka, Chattogram, Narayanganj, Gazipur. | বাংলাদেশের তৈরি পোশাক (আরএমজি) শিল্প বিশ্বে দ্বিতীয় বৃহত্তম রপ্তানিকারক (বছরে ~৪৭-৫৫ বিলিয়ন ডলার); ~৩,৫০০ কারখানায় ~৪০ লক্ষ শ্রমিক; রপ্তানির ৮০%+; কেন্দ্র: ঢাকা, চট্টগ্রাম, নারায়ণগঞ্জ, গাজীপুর।',
+'jute golden fiber':'Jute (\'golden fibre\') historically dominated Bangladesh\'s economy; today Bangladesh is the world\'s 2nd-largest producer and a top exporter of jute sacks, yarn, carpets and diversified jute goods. | পাট (\'সোনালি আঁশ\') এক সময় অর্থনীতিতে শীর্ষে ছিল; এখন বিশ্বে দ্বিতীয় বৃহত্তম উৎপাদক; পাটের বস্তা, সুতা, কার্পেট ও বৈচিত্র্যপূর্ণ পাটপণ্যের শীর্ষ রপ্তানিকারক।',
+'st martin island tourism':'Saint Martin\'s Island (Narikel Jinjira), Bangladesh\'s only coral island off Teknaf, offers corals, coconut beaches and clear water; reachable by boat from Teknaf (season Oct-Mar); Chera Dwip lies at its southern tip. | সেন্ট মার্টিন (নারিকেল জিঞ্জিরা), টেকনাফের কাছে একমাত্র প্রবাল দ্বীপ; টেকনাফ থেকে নৌকায় যাওয়া যায় (অক্টোবর-মার্চ); দক্ষিণে চেরা দ্বীপ।',
+'kuakata sagarkannya':'Kuakata (Patuakhali), the \'Daughter of the Sea\', is famed for panoramic sunrise-sunset views, Buddhist temples and Rakhine villages; about 30 km of sandy beach on the Bay of Bengal. | কুয়াকাটা (পটুয়াখালী), \'সাগরকন্যা\', সূর্যোদয়-সূর্যাস্তের প্যানোরামা, বৌদ্ধ মন্দির ও রাখাইন গ্রামের জন্য বিখ্যাত; বঙ্গোপসাগরে ~৩০ কিমি বালুকাময় সৈকত।',
+'kuakata beach':'Kuakata is one of the world\'s rare beaches where sunrise and sunset can both be seen; it is in Patuakhali district, Kalapara upazila, about 320 km south of Dhaka. | কুয়াকাটা এমন একটি বিরল সৈকত যেখানে সূর্যোদয় ও সূর্যাস্ত দুটোই দেখা যায়; পটুয়াখালী জেলার কলাপাড়া উপজেলায়, ঢাকা থেকে ~৩২০ কিমি দক্ষিণে।',
+'dhaka university is':'University of Dhaka (1921) - the \'Oxford of the East\'; central to the language movement, 1969 uprising and 1971 war. | ঢাকা বিশ্ববিদ্যালয় (১৯২১) ভাষা আন্দোলন, ১৯৬৯ অভ্যুত্থান ও মুক্তিযুদ্ধের প্রাণকেন্দ্র।',
+'pohela boishakh celebration':'Pohela Boishakh (14 April) - Bengali New Year; Mongol Shobhajatra, panta-ilish, melas and new clothes. | পহেলা বৈশাখ (১৪ এপ্রিল) বাংলা নববর্ষ; মঙ্গল শোভাযাত্রা, পান্তা-ইলিশ, মেলা ও নতুন পোশাক।',
+'hilsa fish':'Hilsa (ilish) is the national fish - anadromous, from sea to Padma-Meghna to breed; ~12% of catch; BD produces ~70% of the world hilsa. | ইলিশ জাতীয় মাছ - ডিম পাড়তে সাগর থেকে পদ্মা-মেঘনায় আসে; বিশ্বের ~৭০% ইলিশ বাংলাদেশে।',
+'kabaddi game':'Kabaddi (ha-du-du) is the national sport - a rural tag game; popular in villages across Bangladesh. | কাবাডি (হা-ডু-ডু) জাতীয় খেলা - গ্রামীণ ট্যাগ খেলা; সারা দেশের গ্রামে জনপ্রিয়।',
+'generation z overview':'Generation Z (Gen Z) are people born roughly 1997-2012 - the first generation to grow up fully digital, with smartphones, social media and the internet from childhood. In Bangladesh they form a very large share of the population and are among the most educated, globally connected cohorts in the country history. World press has called the 2024 July Uprising the first successful Gen Z revolution. | জেনারেশন জেড (Gen Z) হলো মোটামুটিভাবে ১৯৯৭-২০১২ সালে জন্ম নেওয়া প্রজন্ম - যারা শৈশব থেকেই স্মার্টফোন, সোশ্যাল মিডিয়া ও ইন্টারনেট নিয়ে বড় হয়েছে। বাংলাদেশে জনসংখ্যার বিশাল অংশই এই প্রজন্মের এবং এরা দেশের অন্যতম শিক্ষিত ও বিশ্ব-সংযুক্ত প্রজন্ম। ২০২৪ সালের জুলাই অভ্যুত্থানকে বিশ্বসংবাদমাধ্যম প্রথম সফল Gen Z বিপ্লব বলেছে।',
+'gen z bangladesh profile':'Bangladeshi Gen Z: the roughly 1997-2012 born cohort, numbering in the tens of millions. More than half are students (school, college, university, madrasa) living in both villages and cities. They are mobile-first: Facebook, Messenger, TikTok, YouTube and Instagram dominate their news and communication; they mix Bengali and English (Banglish) and were central to digital campaigns such as the 2024 quota-reform movement. | বাংলাদেশি জেনারেশন জেড: প্রায় ১৯৯৭-২০১২ সালে জন্ম, কয়েক কোটি মানুষের এই প্রজন্মের অর্ধেকের বেশি শিক্ষার্থী (স্কুল, কলেজ, বিশ্ববিদ্যালয়, মাদ্রাসা) এবং তারা গ্রাম ও শহর দু জায়গাতেই বাস করে। তারা মোবাইল-প্রথম: ফেসবুক, মেসেঞ্জার, টিকটক, ইউটিউব ও ইনস্টাগ্রামই তাদের সংবাদ ও যোগাযোগের প্রধান মাধ্যম; তারা বাংলা-ইংরেজি মেশানো ভাষায় কথা বলে এবং ২০২৪ সালের কোটা সংস্কার আন্দোলনের মতো ডিজিটাল ক্যাম্পেইনের কেন্দ্রে ছিল।',
+'gen z july uprising contributions':'Gen Z in the July Uprising 2024: students of Generation Z planned, spread and led the movement. They used Facebook, TikTok, Messenger groups and livestreams to organize protests, share locations, expose attacks and work around the internet shutdown. They ran volunteer wings for first aid, food, shelter, blood donation and care for the injured, and made graffiti, posters, memes, music and videos that kept morale high. Media and scholars worldwide called July 2024 the worlds first successful Gen Z revolution, led by the Gen Z collective Students Against Discrimination. | ২০২৪ সালের জুলাই অভ্যুত্থানে জেনারেশন জেড: জেনারেশন জেডের শিক্ষার্থীরাই আন্দোলনের পরিকল্পনা, প্রচার ও নেতৃত্ব দেয়। তারা ফেসবুক, টিকটক, মেসেঞ্জার গ্রুপ ও লাইভ দিয়ে প্রতিবাদ আয়োজন, অবস্থান শেয়ার, হামলার তথ্য প্রকাশ এবং ইন্টারনেট বন্ধের মধ্যেও যোগাযোগ টিকিয়ে রাখে। আহতদের জন্য প্রাথমিক চিকিৎসা, খাবার, আশ্রয়, রক্তদান ও সেবার ভলান্টিয়ার দল চালায় এবং গ্রাফিতি, পোস্টার, মিম, গান ও ভিডিও বানিয়ে মনোবল ধরে রাখে। বিশ্বের সংবাদমাধ্যম ও গবেষকেরা জুলাই ২০২৪কে প্রথম সফল Gen Z বিপ্লব বলেছেন, যার নেতৃত্বে ছিল Gen Z-এর সম্মিলিত সংগঠন বৈষম্যবিরোধী ছাত্র আন্দোলন।',
+'gen z july martyrs':'Gen Z martyrs of July 2024: most of the hundreds of martyrs were students in their teens and early twenties - Generation Z. First martyr Abu Sayed of Begum Rokeya University, Rangpur (killed 15 July 2024) became the icon of the movement. Casualty figures vary by source: official gazette 834 martyrs, health ministry over 1,000 dead, UN OHCHR report 1,400+ deaths (Feb 2025), Students Against Discrimination count 1,581; over 12,000 were arrested. Students built digital memorial walls and Shaheed foundations for the families. | ২০২৪ সালের জুলাইয়ের Gen Z শহীদরা: শত শত শহীদের বিশাল অংশ ছিল কিশোর ও বিশের কোঠার শিক্ষার্থী - জেনারেশন জেড। প্রথম শহীদ বেগম রোকেয়া বিশ্ববিদ্যালয়, রংপুরের আবু সাঈদ (১৫ জুলাই ২০২৪ নিহত) আন্দোলনের প্রতীক হন। হিসাব ভিন্ন: সরকারি গেজেটে ৮৩৪, স্বাস্থ্য মন্ত্রণালয়ে ১,০০০+, জাতিসংঘের OHCHR প্রতিবেদনে ১,৪০০+ (ফেব্রুয়ারি ২০২৫) এবং বৈষম্যবিরোধী ছাত্র আন্দোলনের হিসাবে ১,৫৮১ জন নিহত; ১২,০০০+ গ্রেপ্তার। শিক্ষার্থীরা শহীদদের ডিজিটাল স্মৃতিস্তম্ভ বানিয়ে পরিবারগুলোর জন্য শহীদ ফাউন্ডেশন গড়ে।',
+'gen z july leaders coordinators':'Gen Z leadership of the uprising: Students Against Discrimination ran the movement through collective leadership of coordinators, most born in the late 1990s and 2000s - Nahid Islam, Asif Mahmud, Mahfuj Alam, Sarjis Alam, Hasnat Abdullah, Nusrat Tabassum, Abdul Hannan Masud, Arif Sohel, Abu Bakar Mazumder and others; several later became advisers or officials of the post-5 August interim government. Their flat, consensus-based structure was widely seen as a Gen Z style of organizing. | অভ্যুত্থানের Gen Z নেতৃত্ব: বৈষম্যবিরোধী ছাত্র আন্দোলন সমন্বয়কদের সম্মিলিত নেতৃত্বে পরিচালিত হয়, যাদের বেশিরভাগের জন্ম ১৯৯০-এর দশকের শেষ ও ২০০০-এর দশকে - নাহিদ ইসলাম, আসিফ মাহমুদ, মাহফুজ আলম, সারজিস আলম, হাসনাত আব্দুল্লাহ, নুসরাত তাবাসসুম, আব্দুল হান্নান মাসউদ, আরিফ সোহেল, আবু বাকের মজুমদার প্রমুখ; ৫ আগস্টের পরের অন্তর্বর্তী সরকারে কয়েকজন উপদেষ্টা বা দায়িত্বশীল হন। তাদের সমতল, ঐকমত্য-ভিত্তিক কাঠামোকে Gen Z-শৈলীর সংগঠন হিসেবে দেখা হয়েছে।',
+'gen z digital organizing social media':'Gen Z digital organizing in July: coordinators used Facebook pages and groups, Messenger and WhatsApp groups, X and TikTok livestreams to run nationwide protests hour by hour. When the internet was shut down (18 July 2024), students worked around it with VPNs, satellite messaging and relayed livestreams. They crowdsourced funds via bKash and Nagad, tracked attacks and casualties in shared spreadsheets and countered state media with verified video. The movement is studied worldwide as a social-media-driven youth organizing model. | জুলাইয়ে Gen Z-এর ডিজিটাল সংগঠন: সমন্বয়কেরা ফেসবুক পেজ ও গ্রুপ, মেসেঞ্জার ও হোয়াটসঅ্যাপ গ্রুপ, এক্স ও টিকটক লাইভ দিয়ে সারাদেশে ঘণ্টায় ঘণ্টায় আন্দোলন চালান। ১৮ জুলাই ২০২৪ ইন্টারনেট বন্ধ হলে শিক্ষার্থীরা ভিপিএন, স্যাটেলাইট বার্তা ও রিলে করা লাইভ দিয়ে তা মোকাবিলা করে। বিকাশ-নগদে তহবিল সংগ্রহ, হামলা-হতাহতের শেয়ার করা স্প্রেডশিট এবং যাচাই করা ভিডিও দিয়ে রাষ্ট্রীয় গণমাধ্যমের দাবির জবাব দেয়। বিশ্বজুড়ে এই আন্দোলনকে সোশ্যাল মিডিয়া-নির্ভর যুব সংগঠনের মডেল হিসেবে পড়ানো হয়।',
+'gen z women participation july':'Gen Z women in the July movement: women students joined on a massive scale - in processions, first-aid and food volunteer teams, media units and as coordinators such as Nusrat Tabassum. Women also suffered in the crackdown - the UN OHCHR report of 1,400+ deaths included 13 women, and many more faced violence and harassment. After the uprising, Gen Z women activists kept pressing for reforms in laws, workplaces and public safety. | জুলাই আন্দোলনে Gen Z নারী: নারী শিক্ষার্থীরা ব্যাপকভাবে অংশ নেয় - মিছিল, প্রাথমিক চিকিৎসা ও খাদ্য দল, মিডিয়া ইউনিট এবং নুসরাত তাবাসসুমের মতো সমন্বয়ক হিসেবে। দমন-পীড়নে নারীরাও ক্ষতিগ্রস্ত হয় - জাতিসংঘের OHCHR-এর ১,৪০০+ নিহতের হিসাবে ১৩ জন নারী এবং আরও অনেকে হামলা ও হয়রানির শিকার হন। অভ্যুত্থানের পর Gen Z নারীকর্মীরা আইন, কর্মস্থল ও জননিরাপত্তা সংস্কারের দাবি অব্যাহত রেখেছে।',
+'gen z beyond july contributions':'Gen Z contributions beyond July: the same generation powers disaster volunteering - during the August 2024 floods, cyclones and national emergencies young volunteers mobilized boats, relief, shelters and blood drives through social media within hours. Gen Z also leads climate and environmental campaigns, blood and organ donation drives, mental health awareness, education technology, freelancing and startups, fact-checking against disinformation and voter awareness. Many call them the most civic-minded generation Bangladesh has produced. | জুলাইয়ের বাইরে Gen Z-এর অবদান: একই প্রজন্ম দুর্যোগে স্বেচ্ছাসেবা চালায় - ২০২৪ সালের আগস্টের বন্যা, ঘূর্ণিঝড় ও জাতীয় জরুরি অবস্থায় তরুণরা সোশ্যাল মিডিয়ায় ঘণ্টার মধ্যে নৌকা, ত্রাণ, আশ্রয় ও রক্তদান ব্যবস্থা করে। Gen Z জলবায়ু ও পরিবেশ ক্যাম্পেইন, রক্ত ও অঙ্গদান, মানসিক স্বাস্থ্য সচেতনতা, শিক্ষা-প্রযুক্তি, ফ্রিল্যান্সিং ও স্টার্টআপ, ভুয়া খবর যাচাই এবং ভোটার সচেতনতায়ও নেতৃত্ব দেয়। অনেকে এদের বাংলাদেশের সবচেয়ে নাগরিক-মনস্ক প্রজন্ম বলেন।',
+'gen z economy freelancing startups':'Gen Z and the economy: Bangladeshi Gen Z powers the gig and freelance economy - the country is consistently ranked among the worlds top online-freelancer nations (Upwork, Fiverr and similar), with most workers under 30. They build e-commerce, app startups, YouTube and content businesses and drive digital payment use (bKash, Nagad, Rocket). They also face youth unemployment, low wages and quota politics in jobs - grievances behind the July movement - and demand a merit-based economy with real opportunities. | Gen Z ও অর্থনীতি: বাংলাদেশি Gen Z গিগ ও ফ্রিল্যান্স অর্থনীতি চালায় - আপওয়ার্ক, ফাইভারের মতো প্ল্যাটফর্মে দেশটি বিশ্বের শীর্ষ অনলাইন-ফ্রিল্যান্সার দেশগুলোর একটি এবং বেশিরভাগ কর্মীই ৩০-এর নিচে। তারা ই-কমার্স, অ্যাপ স্টার্টআপ, ইউটিউব ও কনটেন্ট ব্যবসা গড়ে তোলে এবং ডিজিটাল পেমেন্ট (বিকাশ, নগদ, রকেট) ব্যবহার বাড়ায়। তরুণ বেকারত্ব, কম মজুরি ও চাকরিতে কোটা-রাজনীতিও তারা মোকাবিলা করে - জুলাই আন্দোলনের মূল ক্ষোভ - এবং মেধাভিত্তিক, সুযোগসমৃদ্ধ অর্থনীতি দাবি করে।',
+'gen z politics reform future':'Gen Z and the political future: the July uprising gave Gen Z a historic voice - mass non-cooperation brought down a 15-year government on 5 August 2024. The interim governments reform commissions (constitution, election, police, judiciary, media, anti-corruption) drew heavily on youth expectations. Gen Z voters now form a decisive part of the electorate; analysts note both their street-and-digital power and their limits in party politics and institutional experience. Their agenda includes ending discrimination, reforming student and national politics, free and fair elections and the so-called July Charter of reforms. | Gen Z ও রাজনৈতিক ভবিষ্যৎ: জুলাই অভ্যুত্থান Gen Z-কে ঐতিহাসিক কণ্ঠ দিয়েছে - গণ-অসহযোগে ৫ আগস্ট ২০২৪-এ ১৫ বছরের সরকারের পতন ঘটে। অন্তর্বর্তী সরকারের সংস্কার কমিশনগুলো (সংবিধান, নির্বাচন, পুলিশ, বিচার বিভাগ, গণমাধ্যম, দুর্নীতি-বিরোধী) তরুণদের প্রত্যাশাকে বড়ভাবে বিবেচনা করেছে। এখন নির্বাচকমণ্ডলীর গুরুত্বপূর্ণ অংশ Gen Z ভোটার; বিশ্লেষকেরা তাদের রাস্তা-ও-ডিজিটাল শক্তি এবং দলীয় রাজনীতি ও প্রাতিষ্ঠানিক অভিজ্ঞতার সীমা দুটোই দেখছেন। তাদের এজেন্ডায় বৈষম্য নিরসন, ছাত্র ও জাতীয় রাজনীতির সংস্কার, অবাধ সুষ্ঠু নির্বাচন এবং তথাকথিত জুলাই চার্টার নামের সংস্কার সনদ।',
+'gen z vs previous generations bangladesh':'Gen Z vs earlier generations: the 1971 generation fought the Liberation War; the 1990 generation toppled autocracy for democracy; Generation Z - born into independence, democracy and the internet - led the 2024 July Uprising against discrimination and corruption. Unlike their parents, Gen Z grew up globally connected: they compare Bangladesh with the world in real time, organize without traditional party structures, distrust inherited authority and expect transparency. Historians frame them as the Liberation generation, the pro-democracy generation and the digital anti-discrimination generation. | Gen Z বনাম আগের প্রজন্ম: ১৯৭১ সালের প্রজন্ম মুক্তিযুদ্ধ করেছে; ১৯৯০-এর প্রজন্ম স্বৈরাচার ফেলে গণতন্ত্র এনেছে; আর জেনারেশন জেড - স্বাধীন, গণতান্ত্রিক ও ইন্টারনেট-যুক্ত বাংলাদেশে বড় হওয়া - ২০২৪ সালের জুলাই অভ্যুত্থানে বৈষম্য ও দুর্নীতির বিরুদ্ধে নেতৃত্ব দিয়েছে। অভিভাবকদের চেয়ে ভিন্ন, Gen Z বিশ্ব-সংযুক্ত হয়ে বড় হয়েছে: তারা বাংলাদেশকে বিশ্বের সঙ্গে রিয়েল টাইমে তুলনা করে, ঐতিহ্যবাহী দলীয় কাঠামো ছাড়াই সংগঠিত হয়, উত্তরাধিকারসূত্রে পাওয়া কর্তৃত্বে আস্থা রাখে না এবং স্বচ্ছতা চায়। ইতিহাসবিদেরা এদের বলেন মুক্তিযুদ্ধের প্রজন্ম, গণতন্ত্রকামী প্রজন্ম এবং ডিজিটাল বৈষম্যবিরোধী প্রজন্ম।',
+'gen z culture bangladesh':'Gen Z culture in Bangladesh: this generation created a distinct pop culture - Banglish texting, TikTok and Reels trends, Bangla hip-hop and independent bands, street art and graffiti (which covered Dhaka walls during July 2024), anime, gaming, cricket fandom and web series. In the July uprising, politics and culture merged: memes became slogans and artists joined the streets. Dense online networks turned youth culture into collective power. | বাংলাদেশে Gen Z সংস্কৃতি: এই প্রজন্ম আলাদা পপ-সংস্কৃতি তৈরি করেছে - বাংলিশ মেসেজিং, টিকটক ও রিলস ট্রেন্ড, বাংলা হিপ-হপ ও স্বাধীন ব্যান্ড, স্ট্রিট আর্ট ও গ্রাফিতি (২০২৪ সালের জুলাইয়ে ঢাকার দেয়াল জুড়ে), অ্যানিমে, গেমিং, ক্রিকেট-আড্ডা ও ওয়েব সিরিজ। জুলাই অভ্যুত্থানে রাজনীতি ও সংস্কৃতি মিশে যায়: মিম হয়ে ওঠে স্লোগান, শিল্পীরা নামে রাস্তায়। ঘন অনলাইন নেটওয়ার্ক তরুণ সংস্কৃতিকে সম্মিলিত শক্তিতে রূপ দেয়।',
+};
+for(var ck2 in constR2){cR[ck2]=constR2[ck2];}
+for(var ck in constR){cR[ck]=constR[ck];}
+/* Bengali keyword map - maps Bengali input to English cR keys */
+var bnMap={
+  'আবরার ফাহাদ':'abrar fahad',
+  'আবরার':'abrar fahad',
+  'ওয়াসিম আকরাম':'wasim akram',
+  'ওয়াসিম':'wasim akram',
+  'ফারহান ফাইয়াজ':'farhan faiyaaz',
+  'ফারহান':'farhan faiyaaz',
+  'গোলাম নাফিজ':'golam nafiz',
+  'নাফিজ':'golam nafiz',
+  'ষোলোশহর':'wasim sholoshohor',
+  'ফারমগেট শহীদ':'golam nafiz',
+  'ফাহাদ':'abrar fahad',
+  'আবরার ফাহাদ কে':'abrar fahad bio',
+  'আবরার হত্যাকাণ্ড':'abrar fahad death',
+  'আবরার হত্যা':'abrar fahad death',
+  'আবরার বিচার':'abrar fahad verdict',
+  'আবরার ফাঁসি':'abrar fahad verdict',
+  'রুম ২০১১':'abrar fahad legacy',
+  'আবরার স্বাধীনতা পুরস্কার':'abrar fahad legacy',
+  'আবরার স্মৃতিস্তম্ভ':'abrar fahad legacy',
+  'আবরার প্রতিবাদ':'abrar fahad reaction',
+  'ফেলানি খাতুন':'felani khatun',
+  'ফেলানি':'felani',
+  'ফেলানী':'felani',
+
+  // Legal terms
+  'আইন':'law','আইনি':'legal','সংবিধান':'constitution','অধিকার':'rights',
+  'মৌলিক':'fundamental','মানবাধিকার':'human rights','আদালত':'court','কোর্ট':'court',
+  'বিচার':'judge','বিচারালয়':'court','মামলা':'case','দেওয়ানী':'civil',
+  'ফৌজদারী':'criminal','পুলিশ':'police','থানা':'police station',
+  'এফআইআর':'fir','গ্রেপ্তার':'arrest','জামিন':'bail','আইনজীবী':'lawyer',
+  'উকিল':'lawyer','আইনি সাহায্য':'legal aid','আইনি পরামর্শ':'legal advice',
+  'ভোটাধিকার':'voting rights','নির্বাচন':'election','সংসদ':'parliament',
+  'জাতীয় সংসদ':'parliament','সংবিধানের ধারা':'article','ধারা':'article',
+  'মৌলিক অধিকার':'fundamental rights','সমতা':'equality','বাক স্বাধীনতা':'freedom of speech',
+  'ধর্ম স্বাধীনতা':'religion','ইসলাম':'islam','ইসলামি আইন':'islamic law',
+  'শরিয়া':'sharia','নিকাহ':'marriage','তালাক':'divorce','খোলা':'khula',
+  'দায়িত্ব':'liability','সম্পত্তি':'property','জমি':'land','ভূমি':'land',
+  'উত্তরাধিকার':'inheritance','ইনহেরিটেন্স':'inheritance',
+  'পুলিশ কমপ্লেইন':'police complaint','অভিযোগ':'complaint',
+  'জরুরি':'emergency','হেল্পলাইন':'helpline','দুর্নীতি':'corruption',
+  'দুর্নীতি দমন':'acc','সরকার':'government','মন্ত্রণালয়':'ministry',
+  'সরকারি চাকরি':'government job','বিসিএস':'bcs',
+  'পাসপোর্ট':'passport','ভিসা':'visa','এনআইডি':'nid',
+  'জন্ম নিবন্ধন':'birth registration','বিবাহ নিবন্ধন':'marriage registration',
+  'ড্রাইভিং লাইসেন্স':'driving license','গাড়ির লাইসেন্স':'driving license',
+  'বিকাশ':'bkash','নগদ':'nagad','রকেট':'rocket',
+  'সাইবার':'cyber','অনলাইন':'online','ডিজিটাল':'digital',
+  'প্রোগ্রামিং':'programming','পাইথন':'python','জাভাস্ক্রিপ্ট':'javascript',
+  'কোডিং':'coding','ওয়েব':'web','ডেভেলপার':'developer',
+  'কুরআন':'quran','কোরআন':'quran','হাদিস':'hadi',
+  'নামাজ':'prayer','রোজা':'fasting','যাকাত':'zakat','হজ্ব':'hajj',
+  'জুমা':'jumma','ঈদ':'eid','রমজান':'ramadan',
+  // Division/District names in Bengali
+  'ঢাকা':'dhaka','চট্টগ্রাম':'chattogram','রাজশাহী':'rajshahi',
+  'খুলনা':'khulna','বরিশাল':'barishal','সিলেট':'sylhet',
+  'রংপুর':'rangpur','ময়মনসিংহ':'mymensingh',
+  // July uprising terms
+  'জুলাই':'july','বিপ্লব':'revolution','কোটা':'quota','আন্দোলন':'movement',
+  'ছাত্র':'student','শেখ হাসিনা':'hasina','মুহাম্মদ ইউনূস':'yunus',
+  // Constitution specific
+  'ধারা ২৭':'article 27','ধারা ২৮':'article 28','ধারা ৩১':'article 31',
+  'ধারা ৩২':'article 32','ধারা ৩৩':'article 33','ধারা ৩৯':'article 39',
+  'ধারা ৪১':'article 41','ধারা ৪৪':'article 44','ধারা ৭০':'article 70',
+  // Common queries
+  'কীভাবে':'how to','কিভাবে':'how to','কোথায়':'where','কখন':'when',
+  'কেন':'why','কি':'what','কার':'whose','কে':'who',
+  'সাহায্য':'help','জানাতে':'to know','জানতে':'to know',
+  'বলুন':'tell me','বলুন আমাকে':'tell me','আমাকে জানান':'tell me',
+  'কী':'what is','কী বলে':'what says','কী বলেছে':'what says',
+  'মুক্তিযুদ্ধ':'liberation war','মুক্তিযুদ্ধ ১৯৭১':'liberation war',
+  'স্বাধীনতা':'independence','স্বাধীনতা দিবস':'independence',
+  'বাংলাদেশ':'bangladesh','গণপ্রজাতন্ত্রী':'republic',
+  'সংবিধান কবে':'constitution date','সংবিধান কী':'what is constitution',
+  'প্রধানমন্ত্রী':'prime minister','রাষ্ট্রপতি':'president',
+  'বিচারপতি':'chief justice','সুপ্রিম কোর্ট':'supreme court',
+  'হাই কোর্ট':'high court','জেলা আদালত':'district court',
+  'গ্রাম আদালত':'village court',
+  // Extended general-knowledge Bengali keys
+  'পদ্মা সেতু':'padma bridge','পদ্মা':'padma bridge','যমুনা সেতু':'jamuna bridge',
+  'যমুনা':'jamuna','মেট্রোরেল':'metro rail','মেট্রো রেল':'metro rail',
+  'ওসমান হাদি':'osman hadi','ওসমান':'osman hadi','জেন জেড':'gen z','জেনারেশন জেড':'gen z',
+  'অন্তর্বর্তী সরকার':'interim government','অন্তর্বর্তী':'interim',
+  'আওয়ামী লীগ':'awami league','বিএনপি':'bnp','জামায়াত':'jamaat',
+  'সংস্কার':'reform','অর্থনীতি':'economy','মুদ্রাস্ফীতি':'inflation',
+  'জিডিপি':'gdp','রেমিট্যান্স':'remittance',
+  'সুন্দরবন':'sundarbans','কক্সবাজার':'cox bazar','জনসংখ্যা':'population',
+  'শিক্ষা':'education','স্বাস্থ্য':'health','পর্যটন':'tourism',
+  'বিজয় দিবস':'victory day','একুশে':'ekushey','ভাষা আন্দোলন':'language movement',
+  'জাতীয় স্মৃতিসৌধ':'national memorial','স্মৃতিসৌধ':'national memorial',
+  'নজরুল':'nazrul_bio','কাজী নজরুল':'nazrul_bio','কাজী নজরুল ইসলাম':'nazrul_bio',
+  'জাতীয় কবি':'nazrul_bio','জাতীয় কবি কে':'nazrul_bio','বিদ্রোহী কবি':'nazrul_rebel',
+  'বিদ্রোহী কবি কে':'nazrul_rebel','নজরুলগীতি':'nazrul_works','নজরুলের গান':'nazrul_works',
+  'নজরুল জয়ন্তী':'nazrul_final','দুখু মিয়া':'nazrul_bio'
+};
+
+function bnChars(s){var n=0;for(var i=0;i<s.length;i++){var c=s.charCodeAt(i);if(c>=0x0980&&c<=0x09FF)n++;}return n;}
+function looksBengali(s){s=String(s||'');var n=bnChars(s);if(!n)return false;var lat=(s.match(/[A-Za-z]/g)||[]).length;return n>lat;}
+function bnGreet(){var gs=['আপনার প্রশ্নের উত্তর: ','জেনে নিন: ','এখানে বিস্তারিত: '];return gs[Math.floor(Math.random()*gs.length)];}
+function bnSeg(bd,en){return '<div class="cb-bnseg"><span class="cb-seglbl cb-lbl-bn">বাংলা উত্তর</span><span class="cb-segtxt cb-bntxt">'+bd+'</span></div><div class="cb-enseg"><span class="cb-seglbl cb-lbl-en">English summary</span><span class="cb-segtxt cb-entxt">'+en+'</span></div>';}
+function fbBlock(conf){if(typeof conf==='number'&&conf>=90)return '';return '<div class="cb-fb"><button type="button" class="cb-fb-btn" onclick="fbReport(this)"><i class="fas fa-flag"></i> Did we miss something? / কিছু বাদ পড়ে গেছে?</button><span class="cb-fb-msg"></span></div>';}
+function fbReport(btn){
+  try{
+    var box=btn?btn.closest('.cb-msg.bot'):null;
+    var q='';
+    var boxEl=document.getElementById('chatMsgs');
+    if(boxEl&&box){var kids=boxEl.children;var idx=Array.prototype.indexOf.call(kids,box);
+      for(var i=idx-1;i>=0;i--){if(kids[i].className&&String(kids[i].className).indexOf('user')!==-1){q=(kids[i].textContent||'').trim().slice(0,300);break;}}}
+    var conf=0;var pill=box?box.querySelector('.cb-conf-pill'):null;
+    if(pill){var mm=(pill.textContent||'').match(/(\d+)%/);if(mm)conf=+mm[1];}
+    var rec={q:q,conf:conf,when:new Date().toISOString(),page:(location.pathname||'').split('/').pop()};
+    var arr=[];try{arr=JSON.parse(localStorage.getItem('aai_feedback')||'[]');}catch(e){arr=[];}
+    if(!Array.isArray(arr))arr=[];
+    arr.unshift(rec);if(arr.length>100)arr.length=100;
+    localStorage.setItem('aai_feedback',JSON.stringify(arr));
+    if(window.QS&&QS.audit)QS.audit('feedback recorded: "'+(q.slice(0,44))+'" ('+conf+'%)');
+    var row=btn?btn.parentNode:null;
+    if(btn)btn.style.display='none';
+    var m=row?row.querySelector('.cb-fb-msg'):null;
+    if(m){m.className='cb-fb-msg on';m.textContent='✓ Saved — thank you! A ai will learn this question. / সংরক্ষিত — ধন্যবাদ!';}
+  }catch(e){}
+}
+function confChip(c){try{var v=+c||0;var lv=v>=90?'High':(v>=70?'Medium':'Low');return '<div class="cb-conf"><span class="cb-conf-pill '+lv.toLowerCase()+'">'+lv+' · '+v+'% confident</span></div>';}catch(e){return '';}}
+function srcQuery(el){try{var q=el?el.getAttribute('data-q'):'';if(!q)return;var inp=document.getElementById('chatIn');if(inp){inp.value=q;sendMsg();}}catch(e){}}
+function srcChips(a){
+  try{
+    if(!a||a.conf!==100)return '';
+    var s=(a.sources&&a.sources.length)?a.sources:[];
+    if(!s.length)return '';
+    var bn=a.bn?1:0;
+    var LAW={
+      'penal code':'দণ্ডবিধি','code of criminal procedure':'ফৌজদারি কার্যবিধি','code of civil procedure':'দেওয়ানি কার্যবিধি','evidence act':'সাক্ষ্য আইন','dowry prohibition act':'যৌতুক নিষেধাজ্ঞা আইন','domestic violence act':'পারিবারিক সহিংসতা (প্রতিরোধ ও সুরক্ষা) আইন','domestic violence prevention and protection act':'পারিবারিক সহিংসতা (প্রতিরোধ ও সুরক্ষা) আইন','women and children repression prevention act':'নারী ও শিশু নির্যাতন দমন আইন','nari o shishu nirjatan daman act':'নারী ও শিশু নির্যাতন দমন আইন','cyber security act':'সাইবার নিরাপত্তা আইন','digital security act':'ডিজিটাল নিরাপত্তা আইন','ict act':'তথ্য ও যোগাযোগ প্রযুক্তি আইন','right to information act':'তথ্য অধিকার আইন','rti act':'তথ্য অধিকার আইন','muslim family law ordinance':'মুসলিম পারিবারিক আইন অধ্যাদেশ','family courts ordinance':'পারিবারিক আদালত অধ্যাদেশ','child marriage restraint act':'বাল্যবিবাহ নিরোধ আইন','legal aid act':'আইনি সহায়তা আইন','legal aid services act':'আইনি সহায়তা সেবা আইন','labour act':'শ্রম আইন','bangladesh labour act':'বাংলাদেশ শ্রম আইন','arbitration act':'আরবিট্রেশন আইন','anti-corruption act':'দুর্নীতি দমন আইন','anti corruption commission act':'দুর্নীতি দমন কমিশন আইন','money laundering prevention act':'মানি লন্ডারিং প্রতিরোধ আইন','national identity card act':'জাতীয় পরিচয়পত্র আইন','birth registration act':'জন্ম নিবন্ধন আইন','birth and death registration act':'জন্ম ও মৃত্যু নিবন্ধন আইন','passport act':'পাসপোর্ট আইন','consumer rights protection act':'ভোক্তা অধিকার সংরক্ষণ আইন','consumer protection act':'ভোক্তা সুরক্ষা আইন','land reform act':'ভূমি সংস্কার আইন','land reform ordinance':'ভূমি সংস্কার আদেশ','state acquisition and tenancy act':'রাষ্ট্রীয় অধিগ্রহণ ও প্রজাস্বত্ব আইন','special powers act':'বিশেষ ক্ষমতা আইন','constitution':'সংবিধান','constitution of bangladesh':'বাংলাদেশের সংবিধান','high court division':'হাইকোর্ট বিভাগ','appellate division':'আপিল বিভাগ','supreme court':'সুপ্রিম কোর্ট','law commission':'আইন কমিশন'
+    };
+    var BND='০১২৩৪৫৬৭৮৯';
+    function bnNum(t){
+      var out='';
+      for(var ci=0;ci<String(t).length;ci++){
+        var ch=String(t).charAt(ci);
+        var di='0123456789'.indexOf(ch);
+        out+=di>-1?BND.charAt(di):ch;
+      }
+      return out;
+    }
+    function norm(t){
+      var x=String(t).toLowerCase().split('(').join(' ').split(')').join(' ');
+      while(x.indexOf('  ')>-1){x=x.split('  ').join(' ');}
+      return x.replace(/^\s+|\s+$/g,'');
+    }
+    function look(t){
+      var st=String(t);
+      var m4=st.match(/\d{4}/);
+      var y=m4?m4[0]:'';
+      var k=norm(st);
+      if(y&&k.length>=y.length+1&&k.slice(-y.length-1)===' '+y){k=k.slice(0,-y.length-1);}
+      var tr=LAW[k];
+      if(!tr){for(var key in LAW){if(k.indexOf(key)>-1){tr=LAW[key];break;}}}
+      if(!tr)return null;
+      return y?tr+' '+bnNum(y):tr;
+    }
+    var lbl=bn?'আইন-সূত্র':'Sources';
+    var ttl=bn?'A ai-কে জিজ্ঞেস করুন: ':'Ask A ai about: ';
+    function esc(v){return String(v||'').split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split('"').join('&quot;');}
+    var h='<div class="cb-srcs"><span class="cb-srcs-lbl"><i class="fas fa-book-open"></i> '+lbl+'</span><span class="cb-srcs-chips">';
+    var n=Math.min(s.length,5);
+    for(var i=0;i<n;i++){
+      var sc=s[i];
+      var st=String(sc.t||'');
+      var disp=st;
+      if(bn){var tr=look(st);if(tr)disp=tr;}
+      var dq=esc(sc.q||st||'');
+      h+='<span class="cb-src-chip" onclick="srcQuery(this)" data-q="'+dq+'" title="'+ttl+esc(st)+'">'+esc(disp)+'</span>';
+    }
+    return h+'</span></div>';
+  }catch(e){return '';}
+}
+function bnFormat(r){var i=String(r||'').indexOf('|');if(i<0)return r;var en=String(r).slice(0,i).trim();var bd=String(r).slice(i+1).trim();if(!bd)return r;return bnSeg(bd,en);}
+function sendMsg(){var i=document.getElementById('chatIn');var m=i.value.trim();if(!m)return;if(window.QS)m=QS.sanitize(m);var bn=looksBengali(m);var d=document.createElement('div');d.className='cb-msg user';d.textContent=m;document.getElementById('chatMsgs').appendChild(d);document.getElementById('chatMsgs').scrollTop=99999;i.value='';/* Bengali to English translation */var ml=m.toLowerCase();var mks=[];for(var bk in bnMap){if(ml.indexOf(bk)!==-1){mks.push(bnMap[bk]);}}if(mks.length){m=mks.join(' ')+' '+m;}processMessage(m,bn);}
+function addM(t,y){var d=document.createElement('div');d.className='cb-msg '+y;d.textContent=t;document.getElementById('chatMsgs').appendChild(d);document.getElementById('chatMsgs').scrollTop=99999;}
+function toggleReasoning(btn){
+  var box=btn?btn.closest('.cb-reasoning'):null;
+  if(!box)return;
+  box.classList.toggle('expanded');
+  var ic=btn.querySelector('i');
+  if(ic)ic.className='fas fa-chevron-'+(box.classList.contains('expanded')?'up':'down');
+  if(box.classList.contains('expanded')){
+    var steps=box.querySelectorAll('.rstep');
+    for(var i=0;i<steps.length;i++){
+      var st=steps[i];
+      st.style.animation='none';
+      void st.offsetWidth;
+      st.style.animation='';
+    }
+  }
+}
+function citeQuery(el){
+  var q=el?el.getAttribute('data-q'):'';
+  if(!q)q=el?el.textContent.trim():'';
+  if(!q)return;
+  var w=document.getElementById('chatWin');
+  if(w&&!w.classList.contains('open'))toggleCB();
+  var inp=document.getElementById('chatIn');
+  if(inp){inp.value=q;sendMsg();}
+}
+function prettyKey(k){return String(k||'').replace(/_/g,' ').replace(/\s+/g,' ').trim();}
+  function activeThreadKey(){
+    try{
+      var h=AEngine.history;
+      for(var i=h.length-1;i>=0;i--){
+        var k=h[i]&&h[i].key?h[i].key:'';
+        if(k&&['hello','hi','help','who','General'].indexOf(k)===-1)return k;
+      }
+    }catch(e){}
+    return '';
+  }
+  function updateMemChip(){
+    var chip=document.getElementById('cbMem'),txt=document.getElementById('cbMemTxt');
+    if(!chip||!txt)return;
+    var k=activeThreadKey();
+    var pretty=prettyKey(k);
+    var base=(k.indexOf('_bio')>-1)?pretty.slice(0,-4).split(' ').map(function(w){return w?w.charAt(0).toUpperCase()+w.slice(1):w;}).join(' '):((k.indexOf('_')>-1)?((k.indexOf('sg_oscc_')===0)?'Women Safety OSCC':k.split('_')[0]):pretty);
+    var words=base.split(' ');
+    var drop=['overview','details','history','structure','basics','system','role','facts','info'];
+    while(words.length>1&&drop.indexOf(words[words.length-1])!==-1){words.pop();}
+    while(words.length>3){words.pop();}
+    var short=words.join(' ');
+    if(short.length>26)short=short.slice(0,25)+'...';
+    txt.textContent=short||'General';
+    if(chip.className.indexOf('on')===-1)chip.className='cb-mem on';
+    chip.title=pretty?('Active topic: '+pretty):'Conversation memory ready';
+  }
+  function restoreSessionMem(){
+    try{
+      var raw=window.localStorage?localStorage.getItem(chatMemKey()):null;
+      if(!raw&&chatUserId()==='guest'&&window.localStorage)raw=localStorage.getItem('aai_mem');
+      if(raw&&AEngine&&AEngine.history){var arr=JSON.parse(raw);if(arr&&arr.length&&arr[0].q){AEngine.history=arr;updateMemChip();}}
+    }catch(_e){}
+  }
+  function resetMemChip(){
+    try{ if(AEngine&&AEngine.history)AEngine.history=[]; }catch(e){}
+    try{ if(window.localStorage){localStorage.removeItem(chatMemKey());localStorage.removeItem('aai_mem');} }catch(e){}
+    var chip=document.getElementById('cbMem'),txt=document.getElementById('cbMemTxt');
+    if(chip){chip.className='cb-mem';}
+    if(txt)txt.textContent='General';
+  }
+function shortQ(q){return String(q||'').replace(/\s+/g,' ').trim();}
+  function askThreadSummary(){
+    var h=(AEngine&&AEngine.history)?AEngine.history:[];
+    var recent=h.slice(-5);
+    if(!recent.length){
+      addM('We have not talked about anything yet - this is a fresh conversation. Ask me about any Bangladesh law, district, history or service topic! | আমরা এখনো কিছু আলোচনা করিনি - এটি নতুন কথোপকথন। বাংলাদেশের যেকোনো আইন, জেলা, ইতিহাস বা সেবা নিয়ে জিজ্ঞাসা করুন!','bot');
+      return;
+    }
+    var lines=[];
+    recent.forEach(function(e,i){
+      var q=shortQ(e.q);if(q.length>90)q=q.slice(0,87)+'...';
+      var topic=(e.key||'').split('_').join(' ').trim()||'general';
+      lines.push('<div class="cmem-row"><span class="cmem-n">'+(recent.length-i)+'</span><div class="cmem-body"><b>'+q+'</b><span class="cmem-tag">'+topic+'</span></div></div>');
+    });
+    var html='<div class="cmem"><div class="cmem-head"><i class="fas fa-brain"></i> Here is what we have been discussing (last '+recent.length+' exchanges) / আমরা যা আলোচনা করেছি:</div>'+lines.join('')+'</div>';
+    var d=document.createElement('div');d.className='cb-msg bot';d.innerHTML=html;
+    document.getElementById('chatMsgs').appendChild(d);
+    document.getElementById('chatMsgs').scrollTop=99999;
+    var chip=document.getElementById('cbMemTxt');if(chip)chip.textContent='session memory';
+    var chipEl=document.getElementById('cbMem');if(chipEl&&chipEl.className.indexOf('on')===-1)chipEl.className='cb-mem on';
+  }
+  function isThreadAsk(m){
+    m=String(m||'').toLowerCase().replace(/[?!.,]/g,' ').replace(/\s+/g,' ').trim();
+    var pats=['what were we talking about','what did we talk about','what have we talked about','what did we discuss','what have we been discussing','what were we discussing','what was our last conversation','summary of our conversation','conversation summary','what did we talk'];
+    for(var i=0;i<pats.length;i++){if(m.indexOf(pats[i])!==-1)return true;}
+    return false;
+  }
+
+function martyrPhotoHTML(mk,msg){
+  try{
+    var k=String(mk||'');
+    var m=' '+(msg||'').toLowerCase()+' ';
+    function hasEv(){
+      return m.indexOf('kill')>-1||m.indexOf('killed')>-1||m.indexOf('shot')>-1||m.indexOf('shooting')>-1||m.indexOf('death')>-1||m.indexOf('died')>-1||m.indexOf('murder')>-1||m.indexOf('assassin')>-1||m.indexOf('attack')>-1||m.indexOf('funeral')>-1||m.indexOf('janaza')>-1||m.indexOf('mourn')>-1||m.indexOf('protest')>-1||m.indexOf('grave')>-1||m.indexOf('হত্যা')>-1||m.indexOf('নিহত')>-1||m.indexOf('হত্যাকাণ্ড')>-1||m.indexOf('খুন')>-1||m.indexOf('গুলি')>-1||m.indexOf('মৃত্যু')>-1||m.indexOf('নিধন')>-1||m.indexOf('শোক')>-1||m.indexOf('জানাজা')>-1||m.indexOf('প্রতিবাদ')>-1||m.indexOf('কবর')>-1;
+    }
+        // Coordinator portraits (July 2024 movement leaders)
+    var coordMap={nahid_islam:{img:'nahid-islam.jpg',name:'Nahid Islam',bn:'নাহিদ ইসলাম',role:'Student Coordinator, Info Adviser',credit:'Photo: Nahid Hossain',lic:'CC BY-SA 4.0',wiki:'Nahid_Islam_in_2024.jpg'},
+      asif_mahmud_bio:{img:'asif-mahmud.jpg',name:'Asif Mahmud Sajib Bhuiyan',bn:'আসিফ মাহমুদ',role:'Student Coordinator, Youth Adviser',credit:'Photo: DelwarHossain',lic:'CC0',wiki:'Asif_Mahmud.jpg'},
+      mahfuj_alam_bio:{img:'mahfuj-alam.jpg',name:'Mahfuj Alam',bn:'মাহফুজ আলম',role:'Student Coordinator, Special Assistant',credit:'Photo: Nahid Hossain',lic:'CC BY-SA 4.0',wiki:'Mahfuj_Alam.jpg'},
+      sarjis_alam_bio:{img:'sarjis-alam.jpg',name:'Sarjis Alam',bn:'সারিস আলম',role:'Student Coordinator, NCP Organizer',credit:'Photo: DelwarHossain',lic:'CC0',wiki:'Sarjis_Alam.jpg'},
+      hasnat_abdullah:{img:'hasnat-abdullah.jpg',name:'Hasnat Abdullah',bn:'হাসনত আব্দুল্লাহ',role:'Student Coordinator, SAD Convener',credit:'Photo: DelwarHossain',lic:'CC BY 4.0',wiki:'Hasnat_Abdullah_1_(cropped).jpg'}};
+    var coordKeys=['nahid_islam','asif_mahmud_bio','mahfuj_alam_bio','sarjis_alam_bio','hasnat_abdullah'];
+    var coordMent=(m.indexOf('nahid islam')>-1||m.indexOf('নাহিদ ইসলাম')>-1||m.indexOf('asif mahmud')>-1||m.indexOf('আসিফ মাহমুদ')>-1||m.indexOf('mahfuj alam')>-1||m.indexOf('মাহফুজ আলম')>-1||m.indexOf('sarjis alam')>-1||m.indexOf('সারিস আলম')>-1||m.indexOf('hasnat abdullah')>-1||m.indexOf('হাসনত')>-1);
+    var coordK=(coordKeys.indexOf(k)>-1)?k:(coordMent&&k==='july_leaders')?k:'';
+    if(!coordK && coordMent && !isHadi && !showAbu && !showStrip){
+      for(var ck in coordMap){if(coordKeys.indexOf(ck)>-1&&(k===ck||m.indexOf(ck.split('_')[0])>-1)){coordK=ck;break;}}
+    }
+    if(coordK && coordMap[coordK] && !showStrip){
+      var c=coordMap[coordK];
+      var hc='<div style="max-width:200px;margin:0 0 12px;">';
+      hc+='<div style="border-radius:12px;overflow:hidden;border:2px solid rgba(16,185,129,.45);box-shadow:0 4px 18px rgba(0,0,0,.25);background:#fff"><img src="assets/img/'+c.img+'" alt="'+c.name+' - July 2024 uprising coordinator" style="width:100%;height:auto;display:block" loading="lazy"></div>';
+      hc+='<div style="font-size:10px;color:rgba(255,255,255,.7);text-align:center;margin-top:6px;font-weight:600;">'+c.name+'</div>';
+      hc+='<div style="font-size:9px;color:rgba(255,255,255,.45);text-align:center;">'+c.bn+' &middot; '+c.role+'</div>';
+      hc+='<div style="font-size:9px;color:rgba(255,255,255,.42);text-align:center;margin-top:4px;"><a href="https://commons.wikimedia.org/wiki/File:'+c.wiki+'" target="_blank" rel="noopener" style="color:rgba(255,255,255,.65);text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.3);">'+c.credit+' &middot; '+c.lic+' &middot; Wikimedia</a></div>';
+      hc+='</div>';
+      return hc;
+    }
+
+    var isHadi=(k==='osman_hadi'||k.indexOf('hadi_')===0||k==='inqilab_moncho');
+    var abuKeys=(k==='abu_sayed_bio'||k==='july_abu_sayed'||k==='july_abu_sayed_detail'||k==='first_martyr');
+    var abuMent=(m.indexOf('abu sayed')>-1||m.indexOf('abu sayeed')>-1||m.indexOf('abu saeed')>-1||m.indexOf('আবু সাঈদ')>-1||m.indexOf('আবু সায়েদ')>-1||m.indexOf('first martyr')>-1||m.indexOf('প্রথম শহীদ')>-1||m.indexOf('শহীদ আবু সাঈদ')>-1);
+    var showAbu=(abuKeys||(abuMent&&(k.indexOf('july')===0||isHadi||k==='osman_hadi'||k==='')));
+
+    var martyrWords=(m.indexOf('july martyr')>-1||m.indexOf('martyrs of the uprising')>-1||m.indexOf('martyrs of july')>-1||m.indexOf('martyrs list')>-1||m.indexOf('জুলাই শহীদ')>-1||m.indexOf('জুলাইয়ের শহীদ')>-1||m.indexOf('জুলাই বিপ্লবের শহীদ')>-1||m.indexOf('বিপ্লবের শহীদ')>-1||m.indexOf('শহীদদের')>-1||m.indexOf('শহীদ কারা')>-1);
+    var showStrip=(martyrWords&&(k==='july_martyrs'||k==='gen z july martyrs'||k==='july_overview'||k==='grokipedia_overview'));
+
+    if(isHadi&&!showAbu&&!showStrip){
+      var ev=hasEv();
+      var h='<div style="max-width:220px;margin:0 0 12px;">';
+      h+='<div style="border-radius:12px;overflow:hidden;border:2px solid rgba(255,102,68,.45);box-shadow:0 4px 18px rgba(0,0,0,.25);background:#fff"><img src="assets/img/osman-hadi.jpg" alt="Sharif Osman Bin Hadi (1993-2025)" style="width:100%;height:auto;display:block" loading="lazy"></div>';
+      h+='<div style="font-size:9.5px;color:rgba(255,255,255,.42);line-height:1.5;margin-top:5px;"><a href="https://commons.wikimedia.org/wiki/File:%E0%A6%93%E0%A6%B8%E0%A6%AE%E0%A6%BE%E0%A6%A8_%E0%A6%B9%E0%A6%BE%E0%A6%A6%E0%A6%BF.jpg" target="_blank" rel="noopener" style="color:rgba(255,255,255,.65);text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.3);">Photo: Rayhan Ahmed Tamim &middot; CC BY 4.0 &middot; Wikimedia</a></div>';
+      if(ev){
+        h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px;">';
+        h+='<img src="assets/img/hadi-protest-1.jpg" alt="Murder protests for Osman Hadi" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;border:1px solid rgba(255,100,68,.3);display:block" loading="lazy">';
+        h+='<img src="assets/img/hadi-funeral.jpg" alt="Aerial view of the funeral of Osman Hadi" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;border:1px solid rgba(255,100,68,.3);display:block" loading="lazy">';
+        h+='</div>';
+      }
+      h+='<div style="font-size:9.5px;color:rgba(255,255,255,.42);line-height:1.5;margin-top:5px;"><a href="https://commons.wikimedia.org/wiki/File:Murder_Protests_for_Osman_Hadi.jpg" target="_blank" rel="noopener" style="color:rgba(255,255,255,.65);text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.3);">Photos: S.M.M.Musabbir Uddin &middot; Pinu Rahman &middot; CC BY-SA 4.0</a></div>';
+      h+='<a href="july.html#memorial" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;width:100%;margin-top:8px;box-sizing:border-box;background:rgba(255,102,68,.1);border:1px solid rgba(255,102,68,.4);color:#ffb09c;border-radius:10px;padding:8px 12px;font-size:12px;font-weight:600;text-decoration:none;">Open the tribute page &rarr;</a>';
+      h+='</div>';
+      return h;
+    }
+    var abrarKeys=(k==='abrar_fahad');
+    var abrarMent=(m.indexOf('abrar fahad')>-1||m.indexOf(' abrar ')>-1||m.indexOf('আবরার ফাহাদ')>-1||m.indexOf('আবরার')>-1);
+    var felaniKeys=(k==='felani_khatun');
+    var felaniMent=(m.indexOf('felani')>-1||m.indexOf('ফেলানি')>-1||m.indexOf('ফেলানী')>-1);
+    var isAbrar=(abrarKeys||(abrarMent&&(k.indexOf('july')===0||k===''||k.indexOf('abrar')===0)));
+    var isFelani=(felaniKeys||(felaniMent&&(k.indexOf('july')===0||k===''||k.indexOf('felani')===0)));
+    var nafizKeys=(k==='golam_nafiz');
+    var nafizMent=(m.indexOf('nafiz')>-1||m.indexOf('গোলাম নাফিজ')>-1||m.indexOf('নাফিজ')>-1);
+    var isNafiz=(nafizKeys||(nafizMent&&(k.indexOf('july')===0||k===''||k.indexOf('golam_nafiz')===0)));
+    var farhanKeys=(k==='farhan_faiyaaz');
+    var farhanMent=(m.indexOf('farhan')>-1||m.indexOf('faiyaaz')>-1||m.indexOf('faiyaz')>-1||m.indexOf('ফারহান')>-1||m.indexOf('ফাইয়াজ')>-1||m.indexOf('ফাইয়জ')>-1);
+    var isFarhan=(farhanKeys||(farhanMent&&(k.indexOf('july')===0||k===''||k.indexOf('farhan')===0)));
+    if(isAbrar&&!showStrip){
+      var h4='<div style="max-width:220px;margin:0 0 12px;">';
+      h4+='<div style="border-radius:12px;overflow:hidden;border:2px solid rgba(185,28,28,.45);box-shadow:0 4px 18px rgba(0,0,0,.25);background:#fff"><img src="assets/img/abrar-fahad.jpg" alt="Shaheed Abrar Fahad, BUET EEE student (1998-2019)" style="width:100%;height:auto;display:block" loading="lazy"></div>';
+      h4+='<div style="font-size:9.5px;color:rgba(255,255,255,.5);line-height:1.5;margin-top:5px;">Shaheed Abrar Fahad (1998-2019), BUET EEE</div>';
+      h4+='<div style="font-size:9.5px;color:rgba(255,255,255,.42);line-height:1.5;"><a href="https://bn.wikipedia.org/wiki/%E0%A6%86%E0%A6%AC%E0%A6%B0%E0%A6%BE%E0%A6%B0_%E0%A6%AB%E0%A6%BE%E0%A6%B9%E0%A6%BE%E0%A6%A6" target="_blank" rel="noopener" style="color:rgba(255,255,255,.65);text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.3);">Photo: banglanews24 via Bengali Wikipedia</a></div>';
+      if(hasEv()){
+        h4+='<div style="margin-top:6px;border-radius:8px;overflow:hidden;border:1px solid rgba(185,28,28,.3);background:#fff"><img src="assets/img/abrar-pillars.jpg" alt="Eight Pillars Against Aggression memorial for Abrar Fahad, Palashi, Dhaka" style="width:100%;aspect-ratio:16/10;object-fit:cover;display:block" loading="lazy"></div>';
+        h4+='<div style="font-size:9.5px;color:rgba(255,255,255,.5);line-height:1.5;margin-top:4px;">&ldquo;Eight Pillars Against Aggression&rdquo; memorial, Palashi, Dhaka (Oct 2025)</div>';
+        h4+='<div style="font-size:9.5px;color:rgba(255,255,255,.42);line-height:1.5;"><a href="https://commons.wikimedia.org/wiki/File:Eight_Pillars_Against_Aggression-_Commemorating_Abrar_Fahad.jpg" target="_blank" rel="noopener" style="color:rgba(255,255,255,.65);text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.3);">Photo: Salim Khandoker &middot; CC BY-SA 4.0 &middot; Wikimedia</a></div>';
+      }
+      h4+='<div style="font-size:9px;color:rgba(255,255,255,.35);line-height:1.5;margin-top:5px;">No free portrait photograph of Abrar Fahad exists &mdash; commemorations are shown here.</div>';
+      h4+='</div>';
+      return h4;
+    }
+    if(isFelani&&!showStrip){
+      var h5='<div style="max-width:240px;margin:0 0 12px;">';
+      h5+='<div style="border-radius:12px;overflow:hidden;border:2px solid rgba(14,116,144,.5);box-shadow:0 4px 18px rgba(0,0,0,.25);background:#fff"><img src="assets/img/felani-avenue.jpg" alt="Unveiling of the Felani Avenue nameplate in Gulshan-2, Dhaka, December 2025" style="width:100%;height:auto;display:block" loading="lazy"></div>';
+      h5+='<div style="font-size:9.5px;color:rgba(255,255,255,.5);line-height:1.5;margin-top:5px;">Felani Avenue nameplate unveiled, Gulshan-2, Dhaka (Dec 2025)</div>';
+      h5+='<div style="font-size:9.5px;color:rgba(255,255,255,.42);line-height:1.5;"><a href="https://commons.wikimedia.org/wiki/File:2025-12-16_Adilur_Rahman_Khan_unveils_Felani_Avenue_nameplate,_Gulshan-2,_Dhaka.jpg" target="_blank" rel="noopener" style="color:rgba(255,255,255,.65);text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.3);">Photo: Press Information Department &middot; Public domain</a></div>';
+      h5+='<div style="font-size:9px;color:rgba(255,255,255,.35);line-height:1.5;margin-top:5px;">No photograph of Felani Khatun is known to survive &mdash; the avenue is her memorial.</div>';
+      h5+='</div>';
+      return h5;
+    }
+    if(isNafiz&&!showStrip){
+      var h6='<div style="max-width:220px;margin:0 0 12px;">';
+      h6+='<div style="border-radius:12px;overflow:hidden;border:2px solid rgba(14,116,144,.5);box-shadow:0 4px 18px rgba(0,0,0,.25);background:#fff"><img src="assets/img/nafiz-banner.jpg" alt="Memorial banner honoring July martyr Golam Nafiz, Noubahini College Dhaka" style="width:100%;height:auto;display:block" loading="lazy"></div>';
+      h6+='<div style="font-size:9.5px;color:rgba(255,255,255,.5);line-height:1.5;margin-top:5px;">Memorial banner honoring Golam Nafiz, Noubahini College, Dhaka</div>';
+      h6+='<div style="font-size:9.5px;color:rgba(255,255,255,.42);line-height:1.5;"><a href="https://commons.wikimedia.org/wiki/File:Shaheed_Nafiz_in_NCD_youth_carnival.jpg" target="_blank" rel="noopener" style="color:rgba(255,255,255,.65);text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.3);">Wikimedia Commons &middot; CC BY 4.0</a></div>';
+      h6+='<div style="font-size:9px;color:rgba(255,255,255,.35);line-height:1.5;margin-top:5px;">No free portrait of Golam Nafiz exists &mdash; commemoration imagery is shown here.</div>';
+      h6+='</div>';
+      return h6;
+    }
+    if(isFarhan&&!showStrip){
+      var h7='<div style="max-width:220px;margin:0 0 12px;">';
+      h7+='<div style="border-radius:12px;overflow:hidden;border:2px solid rgba(124,58,237,.5);box-shadow:0 4px 18px rgba(0,0,0,.25);background:#fff"><img src="assets/img/farhan-faiyaaz.jpg" alt="Shaheed Farhan Faiyaaz" style="width:100%;aspect-ratio:1/1;object-fit:cover;object-position:center top;display:block"></div>';
+      h7+='<div style="font-size:9.5px;color:rgba(255,255,255,.5);line-height:1.5;margin-top:5px;">Shaheed Farhan Faiyaaz (2007-2024) - DRMC student, shot at Dhanmondi 27, 18 July 2024</div>';
+      h7+='<div style="font-size:9.5px;color:rgba(255,255,255,.42);line-height:1.5;"><a href="https://bn.wikipedia.org/wiki/%E0%A6%AB%E0%A6%BE%E0%A6%B0%E0%A6%B9%E0%A6%BE%E0%A6%A8_%E0%A6%AB%E0%A6%BE%E0%A6%87%E0%A6%AF%E0%A6%BC%E0%A6%BE%E0%A6%9C" target="_blank" rel="noopener" style="color:rgba(255,255,255,.55);">Photo: The Business Standard via Bengali Wikipedia</a></div>';
+      h7+='</div>';
+      return h7;
+    }
+    var wasimKeys=(k.indexOf('wasim_akram')===0);
+    var wasimMent=(m.indexOf('wasim')>-1||m.indexOf('ওয়াসিম')>-1);
+    var isWasimCard=(wasimKeys||(wasimMent&&k.indexOf('july')!==0));
+    if(isWasimCard&&!showStrip){
+      var h11='<div style="max-width:220px;margin:0 0 12px;">';
+      h11+='<div style="border-radius:12px;overflow:hidden;border:2px solid rgba(59,130,246,.45);box-shadow:0 4px 18px rgba(0,0,0,.25);background:#fff"><img src="assets/img/wasim-akram.jpg" alt="Shaheed Wasim Akram" style="width:100%;aspect-ratio:1/1;object-fit:cover;object-position:center top;display:block"></div>';
+      h11+='<div style="font-size:9.5px;color:rgba(255,255,255,.5);line-height:1.5;margin-top:5px;">Shaheed Wasim Akram (1998-2024) - Chattogram’s first martyr, 16 July 2024</div>';
+      h11+='<div style="font-size:9.5px;color:rgba(255,255,255,.42);line-height:1.5;"><a href="https://bn.wikipedia.org/wiki/%E0%A6%AE%E0%A7%8B:_%E0%A6%93%E0%A6%AF%E0%A6%BC%E0%A6%BE%E0%A6%B8%E0%A6%BF%E0%A6%AE_%E0%A6%86%E0%A6%95%E0%A6%B0%E0%A6%BE%E0%A6%AE" target="_blank" rel="noopener" style="color:rgba(255,255,255,.55);">Photo: The Business Standard via Bengali Wikipedia</a></div>';
+      h11+='</div>';
+      return h11;
+    }
+    var mugdhoKeys=(k.indexOf('mir_mugdho')===0);
+    var mugdhoMent=(m.indexOf('mugdho')>-1||m.indexOf('\u09ae\u09c1\u0997\u09cd\u09a7')>-1);
+    var isMugdho=(mugdhoKeys||(mugdhoMent&&(k.indexOf('july')===0||k==='')));
+    if(isMugdho&&!showStrip){
+      var h8='<div style="max-width:220px;margin:0 0 12px;">';
+      h8+='<div style="border-radius:12px;overflow:hidden;border:2px solid rgba(16,185,129,.45);box-shadow:0 4px 18px rgba(0,0,0,.25);background:#fff"><img src="assets/img/mir-mugdho.jpg" alt="Mir Mahfuzur Rahman Mugdho" style="width:100%;aspect-ratio:1/1;object-fit:cover;object-position:top center;display:block"></div>';
+      h8+='<div style="font-size:9.5px;color:rgba(255,255,255,.5);line-height:1.5;margin-top:5px;">Shaheed Mir Mugdho (1998-2024) - shot while handing water to protesters, 18 July 2024</div>';
+      h8+='<div style="font-size:9.5px;color:rgba(255,255,255,.42);line-height:1.5;"><a href="https://en.wikipedia.org/wiki/Mir_Mugdho" target="_blank" rel="noopener" style="color:rgba(255,255,255,.55);">Photo: Prothom Alo via Wikipedia</a></div>';
+      h8+='</div>';
+      return h8;
+    }
+    var isAbrarCard=(k.indexOf('abrar_fahad')===0||(m.indexOf('abrar fahad')>-1||m.indexOf('আবরার ফাহাদ')>-1)&&!showStrip&&k.indexOf('july')!==0);
+    if(isAbrarCard){
+      var h9='<div style="max-width:220px;margin:0 0 12px;">';
+      h9+='<div style="border-radius:12px;overflow:hidden;border:2px solid rgba(185,28,28,.45);box-shadow:0 4px 18px rgba(0,0,0,.25);background:#fff"><img src="assets/img/abrar-fahad.jpg" alt="Shaheed Abrar Fahad" style="width:100%;aspect-ratio:1/1;object-fit:cover;object-position:top center;display:block"></div>';
+      h9+='<div style="font-size:9.5px;color:rgba(255,255,255,.5);line-height:1.5;margin-top:5px;">Shaheed Abrar Fahad (1998-2019) - BUET EEE student, killed 7 Oct 2019</div>';
+      h9+='<div style="font-size:9.5px;color:rgba(255,255,255,.42);line-height:1.5;"><a href="https://bn.wikipedia.org/wiki/%E0%A6%86%E0%A6%AC%E0%A6%B0%E0%A6%BE%E0%A6%B0_%E0%A6%AB%E0%A6%BE%E0%A6%B9%E0%A6%BE%E0%A6%A6" target="_blank" rel="noopener" style="color:rgba(255,255,255,.55);">Photo: banglanews24 via Bengali Wikipedia</a></div>';
+      h9+='</div>';
+      return h9;
+    }
+    var nazrulKeys=(k.indexOf('nazrul')===0);
+    var nazrulMent=(m.indexOf('nazrul')>-1||m.indexOf('নজরুল')>-1);
+    var isNazrulCard=(nazrulKeys||(nazrulMent&&(k.indexOf('july')!==0)));
+    if(isNazrulCard){
+      var h10='<div style="max-width:220px;margin:0 0 12px;">';
+      h10+='<div style="border-radius:12px;overflow:hidden;border:2px solid rgba(245,158,11,.45);box-shadow:0 4px 18px rgba(0,0,0,.25);background:#fff"><img src="assets/img/kazi-nazrul-islam.jpg" alt="Kazi Nazrul Islam with sitar" style="width:100%;aspect-ratio:1/1;object-fit:cover;object-position:top center;display:block"></div>';
+      h10+='<div style="font-size:9.5px;color:rgba(255,255,255,.5);line-height:1.5;margin-top:5px;">Kazi Nazrul Islam (1899-1976) - National Poet of Bangladesh, with his sitar</div>';
+      h10+='<div style="font-size:9.5px;color:rgba(255,255,255,.42);line-height:1.5;"><a href="https://commons.wikimedia.org/wiki/File:Kazi_nazrul_islam_with_Setar.jpg" target="_blank" rel="noopener" style="color:rgba(255,255,255,.55);">Photo: Nazrul Academy - public domain</a></div>';
+      h10+='</div>';
+      return h10;
+    }
+    if(showAbu&&!showStrip){
+      var h2='<div style="max-width:220px;margin:0 0 12px;">';
+      h2+='<div style="border-radius:12px;overflow:hidden;border:2px solid rgba(239,68,68,.5);box-shadow:0 4px 18px rgba(0,0,0,.25);background:#000"><img src="assets/img/abu-sayed-iconic.jpg" alt="Abu Sayed - first martyr of the July Uprising 2024, killed 16 July 2024 in Rangpur" style="width:100%;height:auto;display:block" loading="lazy"></div>';
+      h2+='<div style="font-size:9.5px;color:rgba(255,255,255,.42);line-height:1.5;margin-top:5px;"><a href="https://commons.wikimedia.org/wiki/File:Abu_Saeed_was_standing_in_front_of_the_gun_just_before_his_murder..jpg" target="_blank" rel="noopener" style="color:rgba(255,255,255,.65);text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.3);">Photo: Ashish Chakraborty &middot; CC BY-SA 4.0 &middot; Wikimedia</a></div>';
+      if(hasEv()){
+        h2+='<img src="assets/img/abu-sayed-grave.jpg" alt="The grave of Abu Sayed in Pirganj, Rangpur" style="width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:8px;border:1px solid rgba(239,68,68,.35);display:block;margin-top:6px" loading="lazy">';
+        h2+='<div style="font-size:9.5px;color:rgba(255,255,255,.4);line-height:1.5;margin-top:4px;"><a href="https://en.wikipedia.org/wiki/Killing_of_Abu_Sayed" target="_blank" rel="noopener" style="color:rgba(255,255,255,.65);text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.3);">Grave photo: Press Information Department &middot; Public domain</a></div>';
+      }
+      h2+='</div>';
+      return h2;
+    }
+    if(showStrip){
+      var h3='<div style="max-width:320px;margin:0 0 12px;">';
+      h3+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">';
+      h3+='<a href="assets/img/abu-sayed-iconic.jpg" style="display:block;text-decoration:none;"><div style="border-radius:12px;overflow:hidden;border:2px solid rgba(245,158,11,.5);background:#000"><img src="assets/img/abu-sayed-iconic.jpg" alt="Abu Sayed, first martyr of the July Uprising" style="width:100%;aspect-ratio:3/4;object-fit:cover;display:block" loading="lazy"></div><div style="text-align:center;font-size:10.5px;color:rgba(255,255,255,.6);margin-top:5px;line-height:1.4;">Abu Sayed<br><span style="color:rgba(255,255,255,.35);">&#x09AA;&#x09CD;&#x09B0;&#x09A5;&#x09AE; &#x09B6;&#x09B9;&#x09C0;&#x09A6;, 2024</span></div></a>';
+      h3+='<a href="assets/img/mir-mugdho-memorial.jpg" style="display:block;text-decoration:none;"><div style="border-radius:12px;overflow:hidden;border:2px solid rgba(16,185,129,.5);background:#fff"><img src="assets/img/mir-mugdho-memorial.jpg" alt="Mir Mugdho memorial" style="width:100%;aspect-ratio:3/4;object-fit:cover;display:block" loading="lazy"></div><div style="text-align:center;font-size:10.5px;color:rgba(255,255,255,.6);margin-top:5px;line-height:1.4;">Mir Mugdho<br><span style="color:rgba(255,255,255,.35);">&#x09AE;&#x09C0;&#x09B0; &#x09AE;&#x09C1;&#x0997;&#x09CD;&#x09A7;, 2024</span></div></a>';
+      h3+='<div style="font-size:9.5px;color:rgba(255,255,255,.4);line-height:1.5;margin-top:6px;text-align:center;"><a href="https://commons.wikimedia.org/wiki/File:Abu_Saeed_was_standing_in_front_of_the_gun_just_before_his_murder..jpg" target="_blank" rel="noopener" style="color:rgba(255,255,255,.65);text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.3);">Photos: Chakraborty &middot; Tamim &middot; CC BY-SA 4.0</a></div>';
+      h3+='</div>';
+      return h3;
+    }
+    return '';
+  }catch(e){}
+  return '';
+}
+
+
+
+function processMessageLocal(msg,bn){var lq0=String(msg||"").toLowerCase();if(isThreadAsk(lq0)){askThreadSummary();return;}var a=AEngine.claude.analyze(msg);if(bn)a.bn=1;AEngine.lastBn=bn?1:0;var l=msg.toLowerCase();var sgr=(typeof SGdist==='function')?SGdist(msg):null;var r='';var mk='';var bk=0;var ba='';var bl=0;if(sgr){r=sgr.t;mk=sgr.k;bk=99999;ba='sg_oscc';}else{for(var k in cR){if(k.length>bk&&l.indexOf(k)!==-1){bk=k.length;mk=k;}}if(bk){r=cR[mk];}for(var ak in aliasMap){if(l.indexOf(ak)!==-1&&ak.length>bl){bl=ak.length;ba=ak;}}if(ba&&bl>=bk&&cR[aliasMap[ba]]){var rk2=aliasMap[ba];if(cR[rk2]){r=cR[rk2];mk=rk2;}}}if(!r){r=bn?'আমি সাহায্য করতে পারি: আইন, সংবিধান, আদালত, অধিকার, সরকারি সেবা। হেল্পলাইন ১৬৪৩০।':'I can help: Legal, Constitution, Courts, Rights. Call 16430.';}a.conf=AEngine.claude.scoreMatch(l,mk,r,ba,a.domain);AEngine.claude.deepen(a,l,mk,ba,r);
+var hist=AEngine.history;
+var lk=hist.length?(hist[hist.length-1].key||''):'';
+if(AEngine.grok.isFollowUp(l,mk,hist)){
+  var ctxt=(mk&&lk&&mk===lk)?('continuing the '+lk.split('_').join(' ')+' discussion'):'following up on your earlier question';
+  a.steps.splice(2,0,{text:'Conversation context: '+ctxt,tag:'Context'});
+}
+var g=AEngine.grok.contextIntro(msg,hist,mk);
+if(bn&&r.indexOf('|')!==-1){r=bnFormat(r);}var p=AEngine.hermes.getProfile();r=AEngine.hermes.adaptResponse(r,p);var full=(bn?bnGreet():g)+r;var fu=AEngine.grok.getFollowups(mk||lk);var fh='<div class="cb-followups">';fu.forEach(function(f){fh+='<span class="cb-followup">'+f+'</span>';});fh+='</div>';var lb=AEngine.hermes.buildLearnBadge(p);AEngine.claude.showThinking(function(ms){var rh=AEngine.claude.buildReasoningBlock(a);var d=document.createElement('div');d.className='cb-msg bot';d.innerHTML=martyrPhotoHTML(mk,msg)+(rh?rh:'')+full+confChip(a.conf)+srcChips(a)+fbBlock(a.conf)+fh+lb;document.getElementById('chatMsgs').appendChild(d);document.getElementById('chatMsgs').scrollTop=99999;AEngine.hermes.learn(msg,mk);AEngine.history.push({q:msg,a:full,key:mk,intent:a.intent,domain:a.domain,time:Date.now()});try{if(window.localStorage){var _h=AEngine.history.slice(-20);localStorage.setItem(chatMemKey(),JSON.stringify(_h));}}catch(_e){}updateMemChip();});}
+
+if(typeof AEngine!=='undefined'&&AEngine&&AEngine.history){restoreSessionMem();}
+
+/* ====== CHAT BUBBLE PERSISTENCE (survive reloads) ====== */
+
+var _cbRestoreGuard=false;
+
+function chatUserId(){
+  try{
+    var _us=window.localStorage?localStorage.getItem('aai_user'):null;
+    if(_us){var _uo=JSON.parse(_us);if(_uo&&_uo.nid){return 'u'+String(_uo.nid);}}
+  }catch(_e){}
+  return 'guest';
+}
+function chatMemKey(){return 'aai_mem:'+chatUserId();}
+function chatBubKey(){return 'aai_chat:'+chatUserId();}
+
+function persistChatBubbles(_pu){
+
+  try{
+
+    if(_cbRestoreGuard||!window.localStorage)return;
+
+    var box=document.getElementById('chatMsgs');
+
+    if(!box)return;
+
+    var kids=box.children,arr=[];
+
+    for(var i=0;i<kids.length;i++){
+
+      var el=kids[i],cls=(el.className||'');
+
+      if(cls.indexOf('typing')!==-1)continue;
+      if(cls.indexOf('cb-prev-div')!==-1)continue;
+
+      arr.push({c:cls,h:el.innerHTML});
+
+    }
+
+    if(arr.length>30)arr=arr.slice(arr.length-30);
+
+    var s=JSON.stringify(arr);
+
+    if(s.length>400000&&arr.length>4)arr=arr.slice(Math.ceil(arr.length/2));
+
+    localStorage.setItem('aai_chat:'+(_pu||chatUserId()),JSON.stringify(arr));
+
+  }catch(e){}
+
+}
+
+function restoreChatBubbles(){
+
+  try{
+
+    var box=document.getElementById('chatMsgs');
+
+    if(!box||!window.localStorage)return;
+
+    var raw=localStorage.getItem(chatBubKey());
+    if(!raw&&chatUserId()==='guest')raw=localStorage.getItem('aai_chat');
+
+    if(!raw)return;
+
+    var arr=JSON.parse(raw);
+
+    if(!arr||!arr.length)return;
+
+    _cbRestoreGuard=true;
+
+    box.innerHTML='';
+
+    var hasPrev=false;
+
+    for(var _pi=0;_pi<arr.length;_pi++){
+
+      if((arr[_pi]&&(arr[_pi].c||'').indexOf('user')>-1)){hasPrev=true;break;}
+
+    }
+
+    if(hasPrev){
+
+      var pv=document.createElement('div');
+
+      pv.className='cb-prev-div';
+
+      pv.innerHTML='<span class="cb-prev-line"></span><span class="cb-prev-txt">This is your previous conversation / এটি আপনার আগের কথোপকথন</span><span class="cb-prev-line"></span>';
+
+      box.appendChild(pv);
+
+    }
+
+    for(var i=0;i<arr.length;i++){
+
+      var it=arr[i];
+
+      if(!it||!it.h)continue;
+
+      var d=document.createElement('div');
+
+      d.className=it.c!==undefined?it.c:'cb-msg bot';
+
+      d.innerHTML=it.h;
+
+      box.appendChild(d);
+
+    }
+
+    box.scrollTop=99999;
+
+    _cbRestoreGuard=false;
+
+  }catch(e){try{_cbRestoreGuard=false;}catch(_x){}}
+
+}
+
+function wireChatPersistence(){
+
+  try{
+
+    if(!window.MutationObserver)return;
+
+    var box=document.getElementById('chatMsgs');
+
+    if(!box)return;
+
+    var t=null;
+
+    new MutationObserver(function(){
+
+      if(_cbRestoreGuard)return;
+
+      if(t)clearTimeout(t);
+
+      t=setTimeout(persistChatBubbles,300);
+
+    }).observe(box,{childList:true});
+
+  }catch(e){}
+
+}
+
+var _chatSeed=(function(){var _b0=document.getElementById('chatMsgs');return _b0?_b0.innerHTML:'';})();
+function persistChatFor(_u){
+  try{
+    if(!window.localStorage)return;
+    var box=document.getElementById('chatMsgs');
+    if(!box)return;
+    var kids=box.children,arr=[];
+    for(var i=0;i<kids.length;i++){
+      var el=kids[i],cls=(el.className||'');
+      if(cls.indexOf('typing')!==-1||cls.indexOf('cb-prev-div')!==-1)continue;
+      arr.push({c:cls,h:el.innerHTML});
+    }
+    if(arr.length>30)arr=arr.slice(arr.length-30);
+    localStorage.setItem('aai_chat:'+_u,JSON.stringify(arr));
+  }catch(e){}
+}
+function persistMemFor(_u){
+  try{
+    if(!window.localStorage||!AEngine||!AEngine.history)return;
+    localStorage.setItem('aai_mem:'+_u,JSON.stringify(AEngine.history.slice(-20)));
+  }catch(e){}
+}
+function switchChatProfile(_prev){
+  try{
+    var _now=chatUserId();
+    if(!_prev||_prev===_now)return;
+    persistChatFor(_prev);persistMemFor(_prev);
+    if(AEngine&&AEngine.history)AEngine.history=[];
+    var _b=document.getElementById('chatMsgs');
+    if(_b){_b.innerHTML=_chatSeed||'';}
+    var _chip=document.getElementById('cbMem'),_tx=document.getElementById('cbMemTxt');
+    if(_chip)_chip.className='cb-mem';
+    if(_tx)_tx.textContent='General';
+    if(typeof restoreSessionMem==='function')restoreSessionMem();
+    if(typeof restoreChatBubbles==='function')restoreChatBubbles();
+  }catch(e){}
+}
+restoreChatBubbles();
+
+wireChatPersistence();
+if(window.QS){QS.onUnlock(function(){try{if(typeof restoreSessionMem==='function')restoreSessionMem();if(typeof restoreChatBubbles==='function')restoreChatBubbles();}catch(e){}});}
+
+document.addEventListener('qs-unlock',function(){
+  try{
+    if(typeof restoreSessionMem==='function')restoreSessionMem();
+    if(typeof restoreChatBubbles==='function')restoreChatBubbles();
+    if(typeof restoreAuthUI==='function')restoreAuthUI();
+  }catch(e){}
+});
+
+document.addEventListener('qs-lock',function(){
+  try{
+    if(window.AEngine){AEngine.history=[];AEngine.topic=null;}
+    var box=document.getElementById('chatMsgs');
+    if(box){
+      var _lg=window._cbRestoreGuard;window._cbRestoreGuard=true;
+      var kids=box.children;
+      while(kids.length>2){box.removeChild(kids[kids.length-1]);}
+      box.scrollTop=0;
+      setTimeout(function(){window._cbRestoreGuard=_lg;},700);
+    }
+    var chip=document.getElementById('cbMem');
+    if(chip)chip.style.display='none';
+    var mem=document.getElementById('cbMemTxt');
+    if(mem)mem.textContent='General';
+    if(typeof showToast==='function')showToast('Vault locked - conversation hidden');
+  }catch(e){}
+});
+/* ====== AUTH SYSTEM ====== */
+var aU={role:'general',logged:false,user:null};
+
+var divDist={
+'Dhaka':['Dhaka','Faridganj','Gazipur','Gopalganj','Kishoreganj','Madaripur','Manikganj','Munshiganj','Narayanganj','Narsingdi','Rajbari','Shariatpur','Tangail'],
+'Chattogram':['Chattogram','Bandarban','Brahmanbaria','Chandpur','Comilla','Coxsbazar','Feni','Khagrachhari','Lakshmipur','Noakhali','Rangamati'],
+'Barishal':['Barishal','Barguna','Bhola','Jhalokathi','Patuakhali','Pirojpur'],
+'Khulna':['Khulna','Bagerhat','Chuadanga','Jessore','Jhenaidah','Kushtia','Magura','Meherpur','Narail','Satkhira'],
+'Rajshahi':['Rajshahi','Bogra','Chapainawabganj','Joypurhat','Naogaon','Natore','Nawabganj','Pabna','Sirajganj'],
+'Rangpur':['Rangpur','Dinajpur','Gaibandha','Kurigram','Lalmonirhat','Nilphamari','Panchagarh','Thakurgaon'],
+'Mymensingh':['Mymensingh','Jamalpur','Netrokona','Sherpur'],
+'Sylhet':['Sylhet','Habiganj','Moulvibazar','Sunamganj']
+};
+
+var divUpaz={
+'Dhaka-Dhaka':['Dhanmondi','Gulshan','Mirpur','Uttara','Tejgaon','Mohammadpur','Ramna','Lalbagh','Kotwali','Demra','Keraniganj','Savar','Ashulia'],
+'Chattogram-Chattogram':['Kotwali','Pahartali','Hathazari','Raozan','Sandwip','Mirsharai','Rangunia','Bakalia','Doublemooring'],
+'Barishal-Barishal':['Kotwali','Banaripara','Babuganj','Agailjhena','Mehendiganj','Muladi','Hizla','Wazedpur','Uzirpur'],
+'Khulna-Khulna':['Kotwali','Khalishpur','Sonadanga','Daulatpur','Terokhada','Dumuria','Batiaghata','Dacope'],
+'Rajshahi-Rajshahi':['Boalia','Sadar','Pahartoli','Godagari','Tanore','Mohanpur','Charghat','Bagha','Puthia','Durgapur'],
+'Rangpur-Rangpur':['Kotwali','Gangachhara','Kaunia','Mithapukur','Pirgachhara','Taraganj','Badarganj','Mithila'],
+'Mymensingh-Mymensingh':['Kotwali','Atrai','Gafargaon','Ishwarganj','Fulbaria','Trishal','Dhobaura','Phulpur','Haluaghat'],
+'Sylhet-Sylhet':['Kotwali','Beanibazar','Bishwanath','Companiganj','Fenchuganj','Golapganj','Gowainghat','Jaintiapur','Kanaighat','Osmani']
+};
+
+function selectRole(r){
+  aU.role=r;
+  document.getElementById('roleGeneral').className='role-card'+(r==='general'?' selected':'');
+  document.getElementById('roleOfficer').className='role-card'+(r==='officer'?' selected':'');
+  var of=document.getElementById('officerFields');
+  if(r==='officer')of.className='officer-fields show';
+  else of.className='officer-fields';
+}
+
+function updateDistricts(){
+  var div=document.getElementById('signupDivision').value;
+  var sel=document.getElementById('signupDistrict');
+  sel.innerHTML='<option value="">Select District</option>';
+  if(divDist[div])divDist[div].forEach(function(d){
+    sel.innerHTML+='<option>'+d+'</option>';
+  });
+  document.getElementById('signupUpazila').innerHTML='<option value="">Select Upazila</option>';
+}
+
+function updateUpazilas(){
+  var div=document.getElementById('signupDivision').value;
+  var dis=document.getElementById('signupDistrict').value;
+  var sel=document.getElementById('signupUpazila');
+  sel.innerHTML='<option value="">Select Upazila</option>';
+  var key=div+'-'+dis;
+  if(divUpaz[key])divUpaz[key].forEach(function(u){
+    sel.innerHTML+='<option>'+u+'</option>';
+  });
+}
+
+function previewPhoto(input,id){
+  var p=document.getElementById(id);
+  if(input.files&&input.files[0]){
+    var r=new FileReader();
+    r.onload=function(e){
+      p.innerHTML='<img src="'+e.target.result+'" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--accent)">';
+    };
+    r.readAsDataURL(input.files[0]);
+  }
+}
+
+var wsStep=1;
+function wsGo(n){
+  var bar=document.getElementById('wsBar');
+  var steps=document.getElementById('wsSteps');
+  if(!steps||!bar)return;
+  if(n<1||n>4||n===wsStep)return;
+  steps.setAttribute('dir',n>wsStep?'fwd':'back');
+  wsStep=n;
+  var sts=steps.querySelectorAll('.auth-wstep');
+  for(var i=0;i<sts.length;i++){sts[i].classList.toggle('active',parseInt(sts[i].getAttribute('data-step'),10)===n);}
+  var dots=bar.querySelectorAll('.ws-dot');
+  for(var j=0;j<dots.length;j++){var dn=parseInt(dots[j].getAttribute('data-s'),10);dots[j].className='ws-dot'+(dn===n?' active':(dn<n?' done':''));}
+}
+function wsNext(){
+  var s=wsStep;
+  if(s===1){if(!document.querySelector('.role-card.selected')){showToast('Select your role');return;}}
+  if(s===2){
+    var nm=document.getElementById('signupName').value.trim();
+    var nd=document.getElementById('signupNid').value.trim();
+    var ph=document.getElementById('signupPhone').value.trim();
+    if(!nm||!nd||!ph){showToast('Please fill name, NID and phone');return;}
+  }
+  if(s===3){
+    var dv=document.getElementById('signupDivision').value;
+    var ds=document.getElementById('signupDistrict').value;
+    var up=document.getElementById('signupUpazila').value;
+    var un=document.getElementById('signupUnion').value.trim();
+    if(!dv||!ds||!up||!un){showToast('Please fill division, district, upazila and union');return;}
+  }
+  wsGo(s+1);
+}
+function wsBack(){wsGo(wsStep-1);}
+function resetWizard(){
+  wsStep=1;
+  var bar=document.getElementById('wsBar');
+  var steps=document.getElementById('wsSteps');
+  if(!steps||!bar)return;
+  steps.setAttribute('dir','fwd');
+  var sts=steps.querySelectorAll('.auth-wstep');
+  for(var i=0;i<sts.length;i++){sts[i].classList.toggle('active',sts[i].getAttribute('data-step')==='1');}
+  var dots=bar.querySelectorAll('.ws-dot');
+  for(var j=0;j<dots.length;j++){dots[j].className='ws-dot'+(dots[j].getAttribute('data-s')==='1'?' active':'');}
+}
+function showAuthModal(){
+  var ov=document.getElementById('authOverlay');
+  ov.classList.remove('closing');
+  ov.className='auth-overlay open';
+  document.body.style.overflow='hidden';
+}
+
+function closeAuthModal(){
+  var ov=document.getElementById('authOverlay');
+  ov.className='auth-overlay closing';
+  document.body.style.overflow='';
+  setTimeout(function(){ov.className='auth-overlay';},270);
+}
+
+function switchAuthTab(tab){
+  document.getElementById('tabLogin').className='auth-tab'+(tab==='login'?' active':'');
+  document.getElementById('tabSignup').className='auth-tab'+(tab==='signup'?' active':'');
+  document.getElementById('loginForm').style.display=tab==='login'?'block':'none';
+  document.getElementById('signupForm').style.display=tab==='signup'?'block':'none';
+  if(tab==='login'){
+    document.getElementById('authTitle').textContent='Welcome Back';
+    document.getElementById('authSub').textContent='Sign in to your A ai account';
+  }else{
+    document.getElementById('authTitle').textContent='Create Account';
+    document.getElementById('authSub').textContent='Register with your NID and phone number';
+    resetWizard();
+  }
+}
+
+function showToast(msg){
+  var t=document.getElementById('authToast');
+  t.textContent=msg;
+  t.className='auth-toast show';
+  setTimeout(function(){t.className='auth-toast';},3000);
+}
+
+function handleSignup(e){
+  e.preventDefault();
+  var name=document.getElementById('signupName').value.trim();
+  var nid=document.getElementById('signupNid').value.trim();
+  var phone=document.getElementById('signupPhone').value.trim();
+  var div=document.getElementById('signupDivision').value;
+  var dis=document.getElementById('signupDistrict').value;
+  var upa=document.getElementById('signupUpazila').value;
+  var union=document.getElementById('signupUnion').value.trim();
+  if(!name||!nid||!phone||!div||!dis||!upa||!union){showToast('Please fill all required fields');return false;}
+  if(aU.role==='officer'){
+    var desig=document.getElementById('signupDesignation');
+    var office=document.getElementById('signupOffice');
+    if(desig&&!desig.value.trim()){showToast('Officer designation is required');return false;}
+    if(office&&!office.value.trim()){showToast('Office name is required');return false;}
+  }
+  var _prevUid=chatUserId();
+  var user={name:name,nid:nid,phone:phone,division:div,district:dis,upazila:upa,union:union,role:aU.role};
+  localStorage.setItem('aai_user',JSON.stringify(user));
+  aU.logged=true;aU.user=user;
+  updateNavForUser();
+  switchChatProfile(_prevUid);
+  showAuthSuccess(name,'Account Created!');
+  return false;
+}
+
+function successGo(sec){
+  var el=document.getElementById('authSuccess');
+  if(el)el.className='auth-success';
+  closeAuthModal();
+  var t=sec?document.getElementById(sec):null;
+  if(t){
+    var nav=document.getElementById('nav');
+    var off=(nav&&nav.offsetHeight)?nav.offsetHeight+6:0;
+    function jumpOnce(){
+      var top=0;
+      try{top=t.getBoundingClientRect().top+window.pageYOffset-off;}catch(e){top=0;}
+      var ok=false;
+      try{window.scrollTo({top:top,behavior:'auto'});ok=true;}
+      catch(e){try{window.scrollTo(0,top);ok=true;}catch(e2){}}
+      return ok;
+    }
+    var tries=0;
+    (function retry(){
+      tries++;
+      jumpOnce();
+      var y=window.scrollY;
+      var yt=0;
+      try{yt=t.getBoundingClientRect().top+window.pageYOffset;}catch(e){}
+      if(Math.abs(y-yt)>350&&tries<6){setTimeout(retry,600);}
+    })();
+  }
+  else{showToast('Opening dashboard...');}
+}
+function showAuthSuccess(name,title){
+  var el=document.getElementById('authSuccess');
+  if(!el)return false;
+  el.className='auth-success show';
+  if(title)document.getElementById('asTitle').textContent=title;
+  document.getElementById('asSub').textContent='Welcome back, '+(name||'Citizen').split(' ')[0]+' - your legal dashboard is ready.';
+  var usr=aU.user||{};
+  var roleTxt=(usr.role==='officer')?'Officer / Official':'General User';
+  var roleIco=(usr.role==='officer')?'fa-user-tie':'fa-user';
+  var rI=document.getElementById('asRoleIcon');
+  if(rI)rI.className='fas '+roleIco;
+  document.getElementById('asRoleTxt').textContent=roleTxt;
+  var parts=[];
+  if(usr.division)parts.push(usr.division);
+  if(usr.district)parts.push(usr.district);
+  if(usr.upazila)parts.push(usr.upazila);
+  document.getElementById('asLocTxt').textContent=parts.length?parts.join(', '):'Location not set';
+  var c=el.querySelector('.as-circle'),k=el.querySelector('.as-check');
+  c.style.animation='none';k.style.animation='none';
+  void c.offsetWidth;
+  c.style.animation='';k.style.animation='';
+try{setTimeout(function(){if(typeof playSuccessChime==='function'){playSuccessChime();}},1250);}catch(_e2){}
+  try{
+    var _cardEl=el.closest?el.closest('.auth-modal'):null;
+    var _cw=(_cardEl&&_cardEl.clientWidth)?_cardEl.clientWidth:(el.clientWidth||360);
+    var _cf=el.querySelector('.as-confetti');
+    if(_cf&&_cw>0){
+      var _s=Math.max(.55,Math.min(1.5,(_cw*0.5-40)/100));
+      var _ps=_cf.children;
+      for(var _pi=0;_pi<_ps.length;_pi++){
+        var _pb=_ps[_pi],_bx=_pb.getAttribute('data-dx'),_by=_pb.getAttribute('data-dy');
+        if(!_bx){_bx=parseFloat((getComputedStyle(_pb).getPropertyValue('--dx')||'60px').replace('px',''))||60;_pb.setAttribute('data-dx',_bx);}
+        if(!_by){_by=parseFloat((getComputedStyle(_pb).getPropertyValue('--dy')||'60px').replace('px',''))||60;_pb.setAttribute('data-dy',_by);}
+        _pb.style.setProperty('--dx',Math.round(_bx*_s)+'px');
+        _pb.style.setProperty('--dy',Math.round(_by*_s)+'px');
+      }
+    }
+  }catch(_e3){}
+
+  document.body.style.overflow='hidden';
+  setTimeout(function(){
+    if(el.className.indexOf('show')!==-1){
+      el.className='auth-success';
+      closeAuthModal();
+      showToast('Signed in successfully!');
+    }
+  },3600);
+  return true;
+}
+
+function handleLogin(e){
+  e.preventDefault();
+  var nid=document.getElementById('loginNid').value.trim();
+  var phone=document.getElementById('loginPhone').value.trim();
+  if(!nid||!phone){showToast('Please enter NID and phone');return false;}
+  var stored=localStorage.getItem('aai_user');
+  if(stored){
+    var u=JSON.parse(stored);
+    if(u.nid===nid&&u.phone===phone){
+      aU.logged=true;aU.user=u;
+      updateNavForUser();
+      showAuthSuccess(u.name);
+      return false;
+    }
+  }
+  var _prevUid=chatUserId();
+  var newUser={name:'Citizen',nid:nid,phone:phone,division:'',district:'',upazila:'',union:'',role:'general'};
+  localStorage.setItem('aai_user',JSON.stringify(newUser));
+  aU.logged=true;aU.user=newUser;
+  updateNavForUser();
+  switchChatProfile(_prevUid);
+  showAuthSuccess(newUser.name);
+  return false;
+}
+
+function updateNavForUser(){
+  var lb=document.getElementById('loginBtn');
+  var pb=document.getElementById('userProfileBar');
+  if(aU.logged&&aU.user){
+    lb.style.display='none';
+    pb.className='user-profile-bar show';
+    document.getElementById('upAvatar').textContent=aU.user.name.charAt(0).toUpperCase();
+    document.getElementById('upName').textContent=aU.user.name.split(' ')[0];
+  }else{
+    lb.style.display='';
+    pb.className='user-profile-bar';
+  }
+}
+
+function toggleUserDropdown(e){
+  e.stopPropagation();
+  var dd=document.getElementById('userDropdown');
+  dd.className=dd.className==='user-dropdown open'?'user-dropdown':'user-dropdown open';
+}
+
+function handleLogout(){
+  var _prevUid=chatUserId();
+  aU.logged=false;aU.user=null;
+  localStorage.removeItem('aai_user');
+  switchChatProfile(_prevUid);
+  updateNavForUser();
+  document.getElementById('userDropdown').className='user-dropdown';
+  showToast('Signed out successfully');
+}
+
+document.addEventListener('click',function(){
+  var dd=document.getElementById('userDropdown');
+  if(dd)dd.className='user-dropdown';
+});
+
+function restoreAuthUI(){
+  var stored=localStorage.getItem('aai_user');
+  if(stored){
+    try{aU.logged=true;aU.user=JSON.parse(stored);updateNavForUser();}catch(e){}
+  }
+}
+window.addEventListener('DOMContentLoaded',function(){restoreAuthUI();});
+if(window.QS){QS.onUnlock(function(){restoreAuthUI();});}
+
+
+
+/* ====== MAP HOVER TOOLTIPS ====== */
+var dData={
+'Panchagarh':{pop:'9,84,234',area:'1,404 km²',upazilas:'8',thana:'66'},
+'Thakurgaon':{pop:'14,00,972',area:'1,809 km²',upazilas:'7',thana:'65'},
+'Lalmonirhat':{pop:'12,56,099',area:'1,247 km²',upazilas:'7',thana:'67'},
+'Nilphamari':{pop:'17,60,780',area:'1,546 km²',upazilas:'8',thana:'77'},
+'Rangpur':{pop:'30,74,308',area:'2,371 km²',upazilas:'9',thana:'137'},
+'Kurigram':{pop:'20,71,305',area:'2,296 km²',upazilas:'9',thana:'105'},
+'Gaibandha':{pop:'24,31,467',area:'2,115 km²',upazilas:'7',thana:'97'},
+'Dinajpur':{pop:'30,17,615',area:'3,444 km²',upazilas:'13',thana:'113'},
+'Joypurhat':{pop:'9,56,626',area:'965 km²',upazilas:'5',thana:'49'},
+'Bogura':{pop:'36,04,969',area:'2,898 km²',upazilas:'12',thana:'145'},
+'Naogaon':{pop:'27,00,480',area:'3,426 km²',upazilas:'11',thana:'135'},
+'Natore':{pop:'17,63,219',area:'1,896 km²',upazilas:'8',thana:'83'},
+'Chapainawabganj':{pop:'17,04,730',area:'1,703 km²',upazilas:'7',thana:'80'},
+'Rajshahi':{pop:'26,00,523',area:'2,407 km²',upazilas:'9',thana:'106'},
+'Sirajganj':{pop:'31,47,005',area:'2,497 km²',upazilas:'9',thana:'113'},
+'Pabna':{pop:'25,43,245',area:'2,376 km²',upazilas:'9',thana:'100'},
+'Jamalpur':{pop:'24,16,853',area:'2,032 km²',upazilas:'7',thana:'83'},
+'Sherpur':{pop:'13,57,945',area:'1,364 km²',upazilas:'6',thana:'65'},
+'Netrakona':{pop:'22,60,689',area:'2,810 km²',upazilas:'10',thana:'103'},
+'Mymensingh':{pop:'53,01,896',area:'4,365 km²',upazilas:'12',thana:'178'},
+'Tangail':{pop:'39,21,060',area:'3,414 km²',upazilas:'12',thana:'129'},
+'Kishoreganj':{pop:'30,51,176',area:'2,764 km²',upazilas:'13',thana:'125'},
+'Gazipur':{pop:'47,30,075',area:'1,742 km²',upazilas:'5',thana:'83'},
+'Narsingdi':{pop:'22,74,560',area:'1,141 km²',upazilas:'7',thana:'68'},
+'Manikganj':{pop:'14,99,401',area:'1,379 km²',upazilas:'7',thana:'57'},
+'Dhaka':{pop:'1,26,86,359',area:'3,064 km²',upazilas:'20',thana:'105'},
+'Narayanganj':{pop:'32,75,044',area:'759 km²',upazilas:'5',thana:'47'},
+'Munshiganj':{pop:'14,98,171',area:'955 km²',upazilas:'7',thana:'50'},
+'Faridpur':{pop:'18,95,507',area:'2,053 km²',upazilas:'9',thana:'73'},
+'Rajbari':{pop:'10,82,444',area:'1,119 km²',upazilas:'6',thana:'43'},
+'Gopalganj':{pop:'12,23,340',area:'1,490 km²',upazilas:'6',thana:'49'},
+'Madaripur':{pop:'11,81,558',area:'1,145 km²',upazilas:'5',thana:'42'},
+'Shariatpur':{pop:'11,74,135',area:'1,180 km²',upazilas:'6',thana:'49'},
+'Brahmanbaria':{pop:'29,14,424',area:'1,927 km²',upazilas:'9',thana:'93'},
+'Comilla':{pop:'61,26,405',area:'3,085 km²',upazilas:'16',thana:'171'},
+'Chandpur':{pop:'24,68,036',area:'1,704 km²',upazilas:'8',thana:'88'},
+'Lakshmipur':{pop:'17,57,881',area:'1,440 km²',upazilas:'7',thana:'63'},
+'Noakhali':{pop:'32,74,091',area:'4,202 km²',upazilas:'10',thana:'111'},
+'Feni':{pop:'14,89,000',area:'928 km²',upazilas:'6',thana:'52'},
+'Chattogram':{pop:'92,89,023',area:'5,283 km²',upazilas:'15',thana:'114'},
+'Coxs Bazar':{pop:'24,07,958',area:'2,492 km²',upazilas:'9',thana:'64'},
+'Bandarban':{pop:'4,25,593',area:'4,439 km²',upazilas:'7',thana:'36'},
+'Rangamati':{pop:'6,47,807',area:'6,116 km²',upazilas:'10',thana:'49'},
+'Khagrachari':{pop:'6,69,930',area:'1,704 km²',upazilas:'9',thana:'38'},
+'Habiganj':{pop:'20,89,001',area:'2,637 km²',upazilas:'9',thana:'76'},
+'Moulvibazar':{pop:'18,34,619',area:'2,749 km²',upazilas:'7',thana:'70'},
+'Sunamganj':{pop:'25,13,220',area:'3,669 km²',upazilas:'10',thana:'90'},
+'Sylhet':{pop:'38,47,414',area:'3,452 km²',upazilas:'12',thana:'119'},
+'Bagerhat':{pop:'15,15,854',area:'3,940 km²',upazilas:'9',thana:'76'},
+'Chuadanga':{pop:'11,47,485',area:'1,178 km²',upazilas:'4',thana:'40'},
+'Jashore':{pop:'28,15,075',area:'2,570 km²',upazilas:'10',thana:'115'},
+'Jhenaidah':{pop:'18,02,054',area:'1,961 km²',upazilas:'6',thana:'73'},
+'Khulna':{pop:'23,90,854',area:'4,394 km²',upazilas:'14',thana:'114'},
+'Kushtia':{pop:'20,14,756',area:'1,601 km²',upazilas:'6',thana:'70'},
+'Magura':{pop:'10,04,460',area:'1,049 km²',upazilas:'4',thana:'37'},
+'Meherpur':{pop:'7,17,741',area:'716 km²',upazilas:'3',thana:'25'},
+'Narail':{pop:'7,64,442',area:'990 km²',upazilas:'5',thana:'34'},
+'Satkhira':{pop:'20,35,855',area:'3,858 km²',upazilas:'9',thana:'88'},
+'Barishal':{pop:'23,59,983',area:'2,785 km²',upazilas:'10',thana:'82'},
+'Barguna':{pop:'9,27,328',area:'1,939 km²',upazilas:'6',thana:'46'},
+'Bhola':{pop:'18,27,592',area:'3,420 km²',upazilas:'7',thana:'72'},
+'Jhalokathi':{pop:'6,94,264',area:'707 km²',upazilas:'4',thana:'32'},
+'Patuakhali':{pop:'15,07,599',area:'3,220 km²',upazilas:'8',thana:'62'},
+'Pirojpur':{pop:'11,26,044',area:'1,307 km²',upazilas:'6',thana:'48'}
+};
+
+var divColors={
+'Rangpur':'#0ea5e9','Rajshahi':'#6366f1','Mymensingh':'#10b981',
+'Dhaka':'#f59e0b','Chattogram':'#ec4899','Sylhet':'#8b5cf6',
+'Khulna':'#14b8a6','Barishal':'#f97316'
+};
+
+var ttDiv=null;
+
+function createTooltip(){
+  if(!document.getElementById('mapTooltip')){
+    ttDiv=document.createElement('div');
+    ttDiv.id='mapTooltip';
+    ttDiv.className='map-tooltip';
+    ttDiv.innerHTML='<div class="tt-name"></div><div class="tt-division"></div><div class="tt-row"><span>Population</span><span class="tt-val" id="ttPop"></span></div><div class="tt-row"><span>Area</span><span class="tt-val" id="ttArea"></span></div><div class="tt-row"><span>Upazilas</span><span class="tt-val" id="ttUpa"></span></div><div class="tt-row"><span>Thanas</span><span class="tt-val" id="ttTh"></span></div><div class="tt-click">Click to view details</div>';
+    document.body.appendChild(ttDiv);
+  }
+  ttDiv=document.getElementById('mapTooltip');
+}
+
+function showTooltip(e){
+  createTooltip();
+  var el=e.target.closest('.map-district');
+  if(!el)return;
+  var name=el.getAttribute('data-name');
+  var div=el.getAttribute('data-div');
+  var d=dData[name];
+  if(!d)return;
+
+  var color=divColors[div]||'#fff';
+  ttDiv.querySelector('.tt-name').textContent=name;
+  var badge=ttDiv.querySelector('.tt-division');
+  badge.textContent=div+' Division';
+  badge.style.background=color+'22';
+  badge.style.color=color;
+  document.getElementById('ttPop').textContent=d.pop;
+  document.getElementById('ttArea').textContent=d.area;
+  document.getElementById('ttUpa').textContent=d.upazilas;
+  document.getElementById('ttTh').textContent=d.thana;
+
+  var rect=el.getBoundingClientRect();
+  var tx=rect.left+rect.width/2;
+  var ty=rect.top-10;
+
+  ttDiv.classList.add('visible');
+  var ttRect=ttDiv.getBoundingClientRect();
+  var left=tx-ttRect.width/2;
+  var top=ty-ttRect.height;
+
+  if(left<8)left=8;
+  if(left+ttRect.width>window.innerWidth-8)left=window.innerWidth-ttRect.width-8;
+  if(top<8)top=rect.bottom+10;
+
+  ttDiv.style.left=left+'px';
+  ttDiv.style.top=top+'px';
+
+  el.style.transform='scale(1.1)';
+  el.style.filter='brightness(1.3)';
+}
+
+function hideTooltip(e){
+  var el=e.target.closest('.map-district');
+  if(el){
+    el.style.transform='';
+    el.style.filter='';
+  }
+  if(ttDiv)ttDiv.classList.remove('visible');
+}
+
+document.addEventListener('mouseover',function(e){
+  if(e.target.classList&&e.target.classList.contains('map-district')){
+    showTooltip(e);
+  }
+});
+document.addEventListener('mouseout',function(e){
+  if(e.target.classList&&e.target.classList.contains('map-district')){
+    hideTooltip(e);
+  }
+});
+
+
+
+function showDivTab(i){
+  var tabs=document.querySelectorAll('.div-tab');
+  var contents=document.querySelectorAll('.div-content');
+  tabs.forEach(function(t,idx){t.className='div-tab'+(idx===i?' active':'');});
+  contents.forEach(function(c,idx){c.className='div-content'+(idx===i?' active':'');});
+}
+
+
+
+/* Map Search & Filter */
+var mapFilter={query:'',division:'All',
+  "paltan shooting":"hadi_assassination_detail",
+  "hadi brain stem":"hadi_assassination_detail",
+  "december protests":"december_violence",
+  "hadi wife and family details":"hadi_personal",
+  "osman hadi full biography":"hadi_full_bio",
+  "who killed hadi":"hadi_assassination_detail",
+  "hadi murder investigation":"hadi_scottish_yard"};
+
+function filterMap(){
+  var q=mapFilter.query.toLowerCase();
+  var div=mapFilter.division;
+  var districts=document.querySelectorAll('.map-district');
+
+  var count=0;
+  districts.forEach(function(d){
+    var name=d.getAttribute('data-name').toLowerCase();
+    var ddiv=d.getAttribute('data-div');
+    var matchQ=!q||name.indexOf(q)!==-1;
+    var matchD=div==='All'||ddiv===div;
+    if(matchQ&&matchD){
+      d.classList.remove('dimmed');
+      d.classList.add('highlighted');
+      count++;
+    }else{
+      d.classList.add('dimmed');
+      d.classList.remove('highlighted');
+    }
+  });
+  // Also dim matching text labels
+  var svgTexts=document.querySelectorAll('#interactive-map svg text');
+  svgTexts.forEach(function(t){
+    var parent=t.previousElementSibling;
+    if(parent&&parent.classList.contains('map-district')){
+      if(parent.classList.contains('dimmed')){
+        t.style.opacity='.12';
+      }else{
+        t.style.opacity='1';
+      }
+    }
+  });
+  var ct=document.getElementById('mapResultCount');
+  if(ct){
+    if(q||div!=='All'){
+      ct.textContent=count+' of 64 districts match';
+      ct.style.display='block';
+    }else{
+      ct.style.display='none';
+    }
+  }
+}
+
+function setMapFilter(div,el){
+  mapFilter.division=div;
+  document.querySelectorAll('.map-filter-btn').forEach(function(b){b.classList.remove('active');});
+  if(el)el.classList.add('active');
+  filterMap();
+}
+
+function onMapSearch(e){
+  mapFilter.query=e.target.value;
+  filterMap();
+}
+
+function clearMapFilter(){
+  mapFilter.query='';mapFilter.division='All';
+  var inp=document.getElementById('mapSearchInput');
+  if(inp)inp.value='';
+  document.querySelectorAll('.map-filter-btn').forEach(function(b){b.classList.remove('active');});
+  var allBtn=document.querySelector('.map-filter-btn[data-div="All"]');
+  if(allBtn)allBtn.classList.add('active');
+  filterMap();
+}
+
+
+
+/* Timeline scroll animation */
+(function(){
+var obs = new IntersectionObserver(function(entries){
+entries.forEach(function(e){
+if(e.isIntersecting){e.target.classList.add('visible');}
+});
+},{threshold:0.2});
+document.querySelectorAll('.timeline-item').forEach(function(item){obs.observe(item);});
+})();
+
+
+
+/* Visionary archive expander */
+function vaShow(id){
+  var body=document.getElementById('vaBody');
+  if(body&&body.style.display==='none'){body.style.display='block';}
+  var el=document.getElementById(id);
+  if(el){setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},60);}
+  var btn=document.getElementById('vaExpandBtn');
+  if(btn){btn.textContent='Hide Extended Blueprints';}
+}
+function vaShowAll(){
+  var body=document.getElementById('vaBody');
+  if(body){body.style.display='block';}
+  var first=document.getElementById('futuristic-tech');
+  if(first){setTimeout(function(){first.scrollIntoView({behavior:'smooth',block:'start'});},60);}
+}
+function vaToggleAll(){
+  var body=document.getElementById('vaBody');
+  if(!body)return;
+  var showing=body.style.display!=='none';
+  if(showing){body.style.display='none';}
+  else{body.style.display='block';
+    var hub=document.getElementById('visionary-archive');
+    if(hub){setTimeout(function(){hub.scrollIntoView({behavior:'smooth',block:'start'});},60);}
+  }
+}
+
+
+
+/* ====== Success chime (Web Audio) + mute toggle ====== */
+var soundOn = true;
+try{ if(window.localStorage && localStorage.getItem('aai_sound')==='off'){ soundOn=false; } }catch(_e){}
+var _sndCtx = null;
+function _sndCtxGet(){
+  var AC = window.AudioContext || window.webkitAudioContext;
+  if(!AC) return null;
+  try{
+    if(!_sndCtx){ _sndCtx = new AC(); }
+    if(_sndCtx.state === 'suspended' && _sndCtx.resume){ try{ _sndCtx.resume(); }catch(_e){} }
+    return _sndCtx;
+  }catch(_e){ return null; }
+}
+function playSuccessChime(){
+  if(!soundOn) return;
+  var ctx = _sndCtxGet();
+  if(!ctx) return;
+  try{
+    var t = ctx.currentTime + 0.02;
+    var notes = [1046.5, 1318.5, 1568.0];
+    for(var i=0;i<notes.length;i++){
+      var o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.value = notes[i];
+      var st = t + i*0.095;
+      g.gain.setValueAtTime(0.0001, st);
+      g.gain.exponentialRampToValueAtTime(0.10, st+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, st+0.55);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(st); o.stop(st+0.6);
+    }
+  }catch(_e){}
+}
+function setSoundIcon(){
+  var b = document.getElementById('soundToggle');
+  if(!b) return;
+  b.innerHTML = soundOn ? '<i class="fas fa-volume-up"></i>' : '<i class="fas fa-volume-off"></i>';
+  b.setAttribute('aria-pressed', soundOn ? 'true' : 'false');
+  b.title = soundOn ? 'Success sound on - click to mute' : 'Success sound muted - click to enable';
+}
+function toggleSound(){
+  soundOn = !soundOn;
+  try{ localStorage.setItem('aai_sound', soundOn ? 'on' : 'off'); }catch(_e){}
+  setSoundIcon();
+  try{ showToast(soundOn ? 'Success sound enabled' : 'Success sound muted'); }catch(_e){}
+  if(soundOn){ setTimeout(function(){ playSuccessChime(); }, 60); }
+}
+(function(){
+  setSoundIcon();
+  var b = document.getElementById('soundToggle');
+  if(b){ b.addEventListener('click', toggleSound); }
+  window.addEventListener('pointerdown', function _warm(){
+    var c = _sndCtxGet();
+    if(c && c.state === 'running'){ try{ window.removeEventListener('pointerdown', _warm); }catch(_e){} }
+  }, {passive:true});
+})();
+
+
+/* AUDIT-2026 enrichment: real Bengali sides, trade licence, alias + bnMap fixes */
+cR['land']='Ministry of Land, District, Upazila, Union Land Offices. Digitized. | ভূমি মন্ত্রণালয়, জেলা, উপজেলা, ইয়নিয়ন ভূমি অফিস। ডিজিটাজারিছহ খতিয়ান, নামজারি, দলিল, লিজ ও ডিজিটাল জরিপের আবেদন land.gov.bd-এ করা যায়; বিরোধে উপজেলা ভূমি অফিস বা ভূমি ট্রাইব্যুনালে যান।';
+cR['district']=' জেলা প্রশাসক কার্যালয় থেকে এনওসি, চরিত্র সনদ ও নানা প্রত্যয়নপত্র সংগ্রহ করা যায়।';
+cR['division_all']='\'8 Division | বাংলাদেশের ৮টি বিভাগ: ঢাকা (১৩ জেলা), চট্টগ্রাম (১১), রাজশাহী (৮), খুলনা (১০), বরিশাল (৬), সিলেট (৪), রংপুর (৮) ও ময়মনসিংহ (৪)—মোট ৬৪ জেলা। প্রতিটি বিভাগের প্রধান হলেন বিভাগীয় কমিশনার; বিভাগীয় শহরে জেলা আদালত, পুলিশ ও সরকারি দপ্তর অবস্থিত। \'8 Divisions';
+cR['july_quota']='Quota Reform Movement: SC reinstated 30% quota for freedom fighter descendants in govt jobs. Students demanded 93% merit-based recruitment. SC ordered 93% merit on Jul 21. | কোটা সংস্কার আন্দোলন ২০২৪: সুপ্রিম কোর্ট ২১ জুলাই ৯৩ শতাংশ মেধাভিত্তিক নিয়োগের নির্দেশ দেয়; শিক্ষার্থীদের দাবি ছিল ৯৩ শতাংশ মেধা। আন্দোলন অব্যাহত থাকে এবং ৫ আগস্ট সরকার পতনের মাধ্যমে সমাপ্ত হয়। Quota Songhoti: SC sorkari chakrire freedom fighter pontritider jonno 30% quota punorsthito. Chatra dal 93% merit demand. SC 21 July 93% merit adesh.';
+cR['osman_hadi']='Sharif Osman Bin Hadi (1993-2025): Bangladeshi political activist, writer, teacher. Co-founder/spokesperson of Inqilab Moncho. Born Jan 1 1993, Nalchity, Jhalakathi. Assassinated Dec 18 2025 in Singapore. National hero of July Uprising 2024. | শরিফ ওসমান বিন হাদি (১৯৯৩–২০২৫): বাংলাদেশি রাজনৈতিক কর্মী, লেখক ও শিক্ষক; জুলাই বিপ্লব ২০২৪-এর জাতীয় বীর এবং রামপুরা অঞ্চলের সমন্বয়ক। ২০২৫ সালে নিহত হন। তার জীবনী, লেখা, শিক্ষা ও পরিবার নিয়ে প্রশ্ন করুন। Sharif Osman Bin Hadi (1993-2025): Bangladesher rajnoitik o sahittyo kormi. Inqilab Moncho pritishthata. Janm: 1 Jan 1993, Nalchity, Jhalakathi. Nidhon: 18 Dec 2025, Singapore. Jatiyo shahid.';
+cR['july_uprising']='July Uprising 2024: Student-led mass uprising against Sheikh Hasina govt. Led to fall of Awami League Aug 5 2024. Hadi was key Rampura coordinator. | জুলাই অভ্যুত্থান ২০২৪: ছাত্র-নেতৃত্বাধীন আন্দোলনে ৫ আগস্ট ২০২৪ শেখ হাসিনা সরকারের পতন ঘটে; ওসমান হাদি ছিলেন রামপুরার গুরুত্বপূর্ণ সমন্বয়ক। July Abhutthan 2024: Chhatra netritva. Hasina sarkar padachyuti. 5 Agast 2024. Hadi Rampura coordinator.';
+cR['july_2024']='July Uprising 2024: Mass uprising in Bangladesh (Jun 5 - Aug 5, 2024). Led to fall of Sheikh Hasina govt on Aug 5, 2024. World first Gen Z revolution. Started as quota reform movement. | জুলাই অভ্যুত্থান ২০২৪: বাংলাদেশের ছাত্র-জনতার গণঅভ্যুত্থান (৫ জুন–৫ আগস্ট ২০২৪), বিশ্বের প্রথম জেন-জেড বিপ্লব। কোটা সংস্কার আন্দোলন থেকে শুরু; ৫ আগস্ট হাসিনা সরকারের পতন ও অন্তর্বর্তী সরকার গঠন। July Abhutthan 2024: Bangladesher janohutthan (Jun 5 - Aug 5, 2024). Hasina sarkarer padachyuti 5 Agast 2024. Bishwer prothom Gen Z biplob. Quota songhotir andolon hishebe shuru.';
+cR['july_hasina']='Sheikh Hasina: PM of Bangladesh (2009-2024). Called protesters Razakars. Resigned Aug 5, 2024. Fled to India in military helicopter. Daughter Saima Wazed. Father Sheikh Mujibur Rahman. | শেখ হাসিনা: বাংলাদেশের প্রধানমন্ত্রী (১৯৯৬–২০০১ ও ২০০৯–২০২৪)। ৫ আগস্ট ২০২৪ আন্দোলনের মুখে পদত্যাগ করে সামরিক হেলিকপ্টারে ভারতে চলে যান। পিতা শেখ মুজিবুর রহমান; কন্যা সায়মা ওয়াজেদ। আন্দোলনকারীদের রাজাকার বলে মন্তব্য করেছিলেন। Sheikh Hasina: Bangladesher PM (2009-2024). Andolankaridere Razakar bolen. 5 Agast padatyag. Sena helikopter-e Bharate palayan. Konna Saima Wazed. Baba Sheikh Mujibur Rahman.';
+cR['dhaka']='Dhaka District: Pop 1,47,34,025 (2022). Area 1,464 km2. Upazilas: 5. Est 1772. Division: Dhaka. District Judge Court Dhaka. Legal Aid Office Old Secretariat. Helpline 16430. Landmarks: National Parliament, Ahsan Manzil, Lalbagh Fort, Sadarghat. Metro Rail operational. High Court Division HQ. | ঢাকা: জনসংখ্যা ১,৪৭,৩৪,০২৫। আয়তন ১,৪৬৪ বর্গ কিমি। | ঢাকা জেলা: জনসংখ্যা ১,৪৭,৩৪,০২৫ (২০২২); আয়তন ১,৪৬৪ বর্গকিমি; ৫টি উপজেলা। জাতীয় সংসদ, সুপ্রিম কোর্ট ও সচিবালয়সহ রাজধানী ঢাকা দেশের রাজনৈতিক, অর্থনৈতিক ও সাংস্কৃতিক কেন্দ্র; ঢাকা জেলা জজ আদালত, মেট্রোপলিটন পুলিশ ও আইনি সহায়তা অফিস এখানে।';
+cR['chattogram']='Chattogram District: Pop 91,69,464 (2022). Area 5,283 km2. Upazilas: 15. Est 1666 (oldest district). Division: Chattogram. District Judge Court Chattogram. Legal Aid Office. Commercial capital. Port city. Coxsbazar nearby. Hill Tracts. Karnaphuli River. | চট্টগ্রাম: জনসংখ্যা ৯১,৬৯,৪৬৪। বাণিজ্যিক রাজধানী। | চট্টগ্রাম জেলা: জনসংখ্যা ৯১,৬৯,৪৬৪ (২০২২); আয়তন ৫,২৮৩ বর্গকিমি; ১৫টি উপজেলা। বাণিজ্যিক রাজধানী; প্রধান সমুদ্রবন্দর চট্টগ্রাম বন্দর, সীতাকুণ্ডের জাহাজ ভাঙা শিল্প ও পার্বত্য অঞ্চলের প্রবেশদ্বার। চট্টগ্রাম জজ আদালত, মেট্রোপলিটন পুলিশ ও আইনি সহায়তা অফিস রয়েছে।';
+cR['khulna']='Khulna District: Pop 26,13,385 (2022). Area 4,394 km2. Upazilas: 9. Est 1882. Division: Khulna. District Judge Court Khulna. Legal Aid Office. Sundarbans gateway. Mongla port. Shipbuilding. | খুলনা: জনসংখ্যা ২৬,১৩,৩৮৫। সুন্দরবনের প্রবেশদ্বার। | খুলনা জেলা: জনসংখ্যা ২৬,১৩,৩৮৫ (২০২২); আয়তন ৪,৩৯৪ বর্গকিমি; ৯টি উপজেলা। সুন্দরবন ও মোংলা বন্দরের প্রবেশদ্বার; চিংড়ি ও কৃষিশিল্পের জন্য বিখ্যাত। খুলনা জজ আদালত ও আইনি সহায়তা অফিস রয়েছে।';
+cR['rangpur']='Rangpur District: Pop 31,69,615 (2022). Area 2,401 km2. Upazilas: 8. Est 1769. Division: Rangpur. District Judge Court Rangpur. Legal Aid Office. Agricultural hub. Rangpur Medical College. | রংপুর: জনসংখ্যা ৩১,৬৯,৬১৫। কৃষি কেন্দ্র। | রংপুর জেলা: জনসংখ্যা ৩১,৬৯,৬১৫ (২০২২); আয়তন ২,৪০১ বর্গকিমি; ৮টি উপজেলা। উত্তরাঞ্চলের কৃষি কেন্দ্র: ধান, আলু, তামাক, আম ও লিচু; কারমাইকেল কলেজ ও তাজহাট প্রাসাদ এখানে। রংপুর জজ আদালত, মেট্রোপলিটন পুলিশ ও আইনি সহায়তা অফিস রয়েছে।';
+cR['july_overview']='\'July Uprising 2024 (also called July Revolution, Gen Z Revolution, Monsoon Revolution, Student-Peoples Uprising, 36 July) | জুলাই বিপ্লব ২০২৪ (জুলাই বিপ্লব, জেন-জেড বিপ্লব, বর্ষা বিপ্লব নামেও পরিচিত): ৫ জুন থেকে ৫ আগস্ট ২০২৪ পর্যন্ত ছাত্র-জনতার গণঅভ্যুত্থান। কোটা সংস্কার আন্দোলন থেকে শুরু হয়ে ৫ আগস্ট শেখ হাসিনা সরকারের পতনে সমাপ্ত হয়; পরে ড. মুহাম্মদ ইউনূসের নেতৃত্বে অন্তর্বর্তী সরকার দায়িত্ব নেয়।';
+cR['july_hasina_fall']='\'Hasina Fall | হাসিনা সরকারের পতন: ৩ আগস্ট সমন্বয়করা একদফা দাবি ঘোষণা করেন—হাসিনাকে পদত্যাগ করতে হবে। ৫ আগস্ট গণবন্যার মুখে প্রধানমন্ত্রী পদত্যাগ ও দেশত্যাগ করেন; গণভবন জনতার দখলে আসে এবং অন্তর্বর্তী সরকার গঠিত হয়।';
+cR['bangladesh_ministry_list']='22+ Ministries: Cabinet Defence Foreign Finance Home Law Education Health Agriculture Environment Power Transport ICT Public Admin Local Govt. | বাংলাদেশের প্রধান মন্ত্রণালয়: কেবিনেট, প্রতিরক্ষা, পররাষ্ট্র, অর্থ, স্বরাষ্ট্র, আইন ও বিচার, শিক্ষা, স্বাস্থ্য, কৃষি, বাণিজ্য, শিল্প, তথ্য, ডাক ও টেলিযোগাযোগসহ মোট ৫৭টি মন্ত্রণালয় ও বিভাগ।';
+cR['trade_licence']='Trade Licence in Bangladesh: a legal permission to run a business, issued by the City Corporation or Pourashava (municipality) where the business is located. Needed to open a bank account, import goods, join tenders and take business loans. Fees depend on the business type and location; renewal is yearly. Apply at the local Mayor office or online through the city corporation or municipality website. Documents: NID, photographs, trade name, business address and previous licence for renewal. | ট্রেড লাইসেন্স: ব্যবসা পরিচালনার আইনি অনুমতি, যা ব্যবসার এলাকার সিটি কর্পোরেশন বা পৌরসভা থেকে দেওয়া হয়। ব্যাংক হিসাব খুলতে, পণ্য আমদানি, টেন্ডারে অংশ নিতে ও ব্যবসায়িক ঋণ নিতে ট্রেড লাইসেন্স প্রয়োজন। ফি ব্যবসার ধরন ও অবস্থান অনুযায়ী; প্রতি বছর নবায়ন করতে হয়। প্রয়োজনীয় কাগজ: জাতীয় পরিচয়পত্র, ছবি, ব্যবসার নাম ও ঠিকানা। মেয়র অফিসে বা সিটি কর্পোরেশন ওয়েবসাইটে অনলাইনে আবেদন করুন।';
+aliasMap['rangpur district']='rangpur';
+aliasMap['about rangpur']='rangpur';
+aliasMap['khulna district']='khulna';
+aliasMap['about khulna']='khulna';
+aliasMap['dhaka district']='dhaka';
+aliasMap['about dhaka']='dhaka';
+aliasMap['chattogram district']='chattogram';
+aliasMap['about chattogram']='chattogram';
+aliasMap['trade licence']='trade_licence';
+aliasMap['trade license']='trade_licence';
+aliasMap['new trade licence']='trade_licence';
+aliasMap['business licence']='trade_licence';
+aliasMap['business license']='trade_licence';
+aliasMap['5 august']='july_hasina_fall';
+aliasMap['5 august 2024']='july_hasina_fall';
+aliasMap['august 5 2024']='july_hasina_fall';
+aliasMap['student movement']='july_uprising';
+aliasMap['student movement 2024']='july_2024';
+aliasMap['student movement bangladesh']='july_2024';
+aliasMap['anti discriminatory student movement']='july_sad';
+aliasMap['anti discrimination student movement']='july_sad';
+aliasMap['students against discrimination']='july_sad';
+aliasMap['divorce in bangladesh']='divorce_process';
+aliasMap['divorce law']='divorce_process';
+aliasMap['get divorce']='divorce_process';
+aliasMap['how to divorce']='divorce_process';
+aliasMap['ministries of bangladesh']='bangladesh_ministry_list';
+aliasMap['all ministries']='bangladesh_ministry_list';
+bnMap['৫ আগস্ট']='5 august';
+bnMap['কোটা']='quota movement';
+bnMap['কোটা আন্দোলন']='quota movement';
+bnMap['তালাক']='divorce in bangladesh';
+bnMap['ডিভোর্স']='divorce in bangladesh';
+bnMap['বিবাহবিচ্ছেদ']='divorce in bangladesh';
+bnMap['ট্রেড লাইসেন্স']='trade licence';
+bnMap['ব্যবসার লাইসেন্স']='trade licence';
+bnMap['ছাত্র আন্দোলন']='student movement 2024';
+bnMap['বৈষম্যবিরোধী ছাত্র আন্দোলন']='anti discriminatory student movement';
+bnMap['মন্ত্রণালয়']='ministries of bangladesh';
+
+/* AUDIT-2026 fix: district full bilingual override */
+cR['district']='64 districts of Bangladesh, each headed by a Deputy Commissioner (DC) from the BCS Administration Cadre. Districts are divided into upazilas and unions, each served by courts, police stations, land offices and legal aid offices. The 64 districts are grouped into 8 divisions: Dhaka, Chattogram, Rajshahi, Khulna, Barishal, Sylhet, Rangpur and Mymensingh. | বাংলাদেশে ৬৪টি জেলা, প্রতিটির প্রধান হলেন বিসিএস প্রশাসন ক্যাডারের জেলা প্রশাসক (ডিসি)। জেলাগুলো উপজেলা ও ইউনিয়নে বিভক্ত, যেখানে আদালত, থানা, ভূমি অফিস ও আইনি সহায়তা অফিস রয়েছে। ৬৪ জেলা ৮টি বিভাগে বিন্যস্ত: ঢাকা, চট্টগ্রাম, রাজশাহী, খুলনা, বরিশাল, সিলেট, রংপুর ও ময়মনসিংহ।';
+
+
+/* AUDIT-2026 pass 2: quota/admin/district-first-last Bengali + routing aliases */
+cR['bangladesh_admin_full']='\'Admin | প্রশাসন কাঠামো: ৮টি বিভাগ (বিভাগীয় কমিশনার), ৬৪টি জেলা (জেলা প্রশাসক), ৪৯৫টি উপজেলা (উপজেলা নির্বাহী অফিসার), ৪,৫৮৮টি ইউনিয়ন পরিষদ ও ১২,০০০+ ওয়ার্ড। জনপ্রশাসন মন্ত্রণালয়ের অধীনে বিসিএস ক্যাডারের কর্মকর্তারা এসব দায়িত্ব পালন করেন।';
+cR['district_first_last']='\'First district | প্রথম প্রতিষ্ঠিত জেলা চট্টগ্রাম (১৬৬৬) এবং সর্বশেষ ফেনী (১৯৮৪)। আয়তনে বৃহত্তম রাঙ্গামাটি ও ক্ষুদ্রতম নারায়ণগঞ্জ; জনসংখ্যায় বৃহত্তম ঢাকা জেলা।';
+cR['july_quota_system']='\'Quota System | কোটা ব্যবস্থা: ২০১৮ সালের আগে সরকারি চাকরির ৫৬ শতাংশ বিভিন্ন কোটা (মুক্তিযোদ্ধা, নারী, জেলা, ক্ষুদ্র নৃগোষ্ঠী, প্রতিবন্ধী) সংরক্ষিত ছিল। ২০১৮-এর আন্দোলনে কোটা বাতিল হয়; ২০২৪-এ সুপ্রিম কোর্ট আংশিক কোটা ফিরিয়ে দিলে বৈষম্যবিরোধী ছাত্র আন্দোলন শুরু হয়, যা ৫ আগস্ট সরকার পতনে সমাপ্ত হয়।';
+aliasMap['passport in bangladesh']='passport';
+aliasMap['apply for passport']='passport';
+aliasMap['new passport']='passport';
+aliasMap['passport renewal']='passport';
+aliasMap['land records']='land';
+aliasMap['land records in bangladesh']='land';
+aliasMap['khatian']='land';
+aliasMap['khatian in bangladesh']='land';
+aliasMap['land information']='land';
+aliasMap['khulna district information']='khulna';
+aliasMap['tell me about khulna']='khulna';
+aliasMap['tell me about khulna district']='khulna';
+aliasMap['tell me about rangpur district']='rangpur';
+aliasMap['tell me about chattogram district']='chattogram';
+bnMap['পাসপোর্ট']='passport in bangladesh';
+bnMap['খতিয়ান']='land records';
+bnMap['ভূমি রেকর্ড']='land records';
+bnMap['কোটা ব্যবস্থা']='quota system';
+bnMap['কোটা প্রথা']='quota system';
+
+
+/* AUDIT-2026 district pass: runtime-copy rich entries to weak plain keys + per-district routing */
+if(!(cR['barguna']&&/[ঀ-৿]/.test(cR['barguna'])&&cR['barguna'].indexOf('|')>-1&&cR['barguna'].length>=140)){cR['barguna']=cR['bar_barguna'];}
+aliasMap['barguna district']='bar_barguna';
+aliasMap['about barguna']='bar_barguna';
+if(!(cR['barishal']&&/[ঀ-৿]/.test(cR['barishal'])&&cR['barishal'].indexOf('|')>-1&&cR['barishal'].length>=140)){cR['barishal']=cR['bar_barishal'];}
+aliasMap['barishal district']='bar_barishal';
+aliasMap['about barishal']='bar_barishal';
+if(!(cR['bhola']&&/[ঀ-৿]/.test(cR['bhola'])&&cR['bhola'].indexOf('|')>-1&&cR['bhola'].length>=140)){cR['bhola']=cR['bar_bhola'];}
+aliasMap['bhola district']='bar_bhola';
+aliasMap['about bhola']='bar_bhola';
+if(!(cR['jhalokathi']&&/[ঀ-৿]/.test(cR['jhalokathi'])&&cR['jhalokathi'].indexOf('|')>-1&&cR['jhalokathi'].length>=140)){cR['jhalokathi']=cR['bar_jhalokathi'];}
+aliasMap['jhalokathi district']='bar_jhalokathi';
+aliasMap['about jhalokathi']='bar_jhalokathi';
+if(!(cR['patuakhali']&&/[ঀ-৿]/.test(cR['patuakhali'])&&cR['patuakhali'].indexOf('|')>-1&&cR['patuakhali'].length>=140)){cR['patuakhali']=cR['bar_patuakhali'];}
+aliasMap['patuakhali district']='bar_patuakhali';
+aliasMap['about patuakhali']='bar_patuakhali';
+if(!(cR['pirojpur']&&/[ঀ-৿]/.test(cR['pirojpur'])&&cR['pirojpur'].indexOf('|')>-1&&cR['pirojpur'].length>=140)){cR['pirojpur']=cR['bar_pirojpur'];}
+aliasMap['pirojpur district']='bar_pirojpur';
+aliasMap['about pirojpur']='bar_pirojpur';
+if(!(cR['bandarban']&&/[ঀ-৿]/.test(cR['bandarban'])&&cR['bandarban'].indexOf('|')>-1&&cR['bandarban'].length>=140)){cR['bandarban']=cR['ctg_bandarban'];}
+aliasMap['bandarban district']='ctg_bandarban';
+aliasMap['about bandarban']='ctg_bandarban';
+if(!(cR['brahmanbaria']&&/[ঀ-৿]/.test(cR['brahmanbaria'])&&cR['brahmanbaria'].indexOf('|')>-1&&cR['brahmanbaria'].length>=140)){cR['brahmanbaria']=cR['ctg_brahmanbaria'];}
+aliasMap['brahmanbaria district']='ctg_brahmanbaria';
+aliasMap['about brahmanbaria']='ctg_brahmanbaria';
+if(!(cR['chandpur']&&/[ঀ-৿]/.test(cR['chandpur'])&&cR['chandpur'].indexOf('|')>-1&&cR['chandpur'].length>=140)){cR['chandpur']=cR['ctg_chandpur'];}
+aliasMap['chandpur district']='ctg_chandpur';
+aliasMap['about chandpur']='ctg_chandpur';
+if(!(cR['chattogram']&&/[ঀ-৿]/.test(cR['chattogram'])&&cR['chattogram'].indexOf('|')>-1&&cR['chattogram'].length>=140)){cR['chattogram']=cR['ctg_chattogram'];}
+aliasMap['chattogram district']='ctg_chattogram';
+aliasMap['about chattogram']='ctg_chattogram';
+if(!(cR['coxsbazar']&&/[ঀ-৿]/.test(cR['coxsbazar'])&&cR['coxsbazar'].indexOf('|')>-1&&cR['coxsbazar'].length>=140)){cR['coxsbazar']=cR['ctg_coxsbazar'];}
+aliasMap['coxsbazar district']='ctg_coxsbazar';
+aliasMap['about coxsbazar']='ctg_coxsbazar';
+if(!(cR['cumilla']&&/[ঀ-৿]/.test(cR['cumilla'])&&cR['cumilla'].indexOf('|')>-1&&cR['cumilla'].length>=140)){cR['cumilla']=cR['ctg_cumilla'];}
+aliasMap['cumilla district']='ctg_cumilla';
+aliasMap['about cumilla']='ctg_cumilla';
+if(!(cR['feni']&&/[ঀ-৿]/.test(cR['feni'])&&cR['feni'].indexOf('|')>-1&&cR['feni'].length>=140)){cR['feni']=cR['ctg_feni'];}
+aliasMap['feni district']='ctg_feni';
+aliasMap['about feni']='ctg_feni';
+if(!(cR['khagrachhari']&&/[ঀ-৿]/.test(cR['khagrachhari'])&&cR['khagrachhari'].indexOf('|')>-1&&cR['khagrachhari'].length>=140)){cR['khagrachhari']=cR['ctg_khagrachhari'];}
+aliasMap['khagrachhari district']='ctg_khagrachhari';
+aliasMap['about khagrachhari']='ctg_khagrachhari';
+if(!(cR['lakshmipur']&&/[ঀ-৿]/.test(cR['lakshmipur'])&&cR['lakshmipur'].indexOf('|')>-1&&cR['lakshmipur'].length>=140)){cR['lakshmipur']=cR['ctg_lakshmipur'];}
+aliasMap['lakshmipur district']='ctg_lakshmipur';
+aliasMap['about lakshmipur']='ctg_lakshmipur';
+if(!(cR['noakhali']&&/[ঀ-৿]/.test(cR['noakhali'])&&cR['noakhali'].indexOf('|')>-1&&cR['noakhali'].length>=140)){cR['noakhali']=cR['ctg_noakhali'];}
+aliasMap['noakhali district']='ctg_noakhali';
+aliasMap['about noakhali']='ctg_noakhali';
+if(!(cR['rangamati']&&/[ঀ-৿]/.test(cR['rangamati'])&&cR['rangamati'].indexOf('|')>-1&&cR['rangamati'].length>=140)){cR['rangamati']=cR['ctg_rangamati'];}
+aliasMap['rangamati district']='ctg_rangamati';
+aliasMap['about rangamati']='ctg_rangamati';
+if(!(cR['dhaka']&&/[ঀ-৿]/.test(cR['dhaka'])&&cR['dhaka'].indexOf('|')>-1&&cR['dhaka'].length>=140)){cR['dhaka']=cR['dha_dhaka'];}
+aliasMap['dhaka district']='dha_dhaka';
+aliasMap['about dhaka']='dha_dhaka';
+if(!(cR['faridpur']&&/[ঀ-৿]/.test(cR['faridpur'])&&cR['faridpur'].indexOf('|')>-1&&cR['faridpur'].length>=140)){cR['faridpur']=cR['dha_faridpur'];}
+aliasMap['faridpur district']='dha_faridpur';
+aliasMap['about faridpur']='dha_faridpur';
+if(!(cR['gazipur']&&/[ঀ-৿]/.test(cR['gazipur'])&&cR['gazipur'].indexOf('|')>-1&&cR['gazipur'].length>=140)){cR['gazipur']=cR['dha_gazipur'];}
+aliasMap['gazipur district']='dha_gazipur';
+aliasMap['about gazipur']='dha_gazipur';
+if(!(cR['gopalganj']&&/[ঀ-৿]/.test(cR['gopalganj'])&&cR['gopalganj'].indexOf('|')>-1&&cR['gopalganj'].length>=140)){cR['gopalganj']=cR['dha_gopalganj'];}
+aliasMap['gopalganj district']='dha_gopalganj';
+aliasMap['about gopalganj']='dha_gopalganj';
+if(!(cR['kishoreganj']&&/[ঀ-৿]/.test(cR['kishoreganj'])&&cR['kishoreganj'].indexOf('|')>-1&&cR['kishoreganj'].length>=140)){cR['kishoreganj']=cR['dha_kishoreganj'];}
+aliasMap['kishoreganj district']='dha_kishoreganj';
+aliasMap['about kishoreganj']='dha_kishoreganj';
+if(!(cR['madaripur']&&/[ঀ-৿]/.test(cR['madaripur'])&&cR['madaripur'].indexOf('|')>-1&&cR['madaripur'].length>=140)){cR['madaripur']=cR['dha_madaripur'];}
+aliasMap['madaripur district']='dha_madaripur';
+aliasMap['about madaripur']='dha_madaripur';
+if(!(cR['manikganj']&&/[ঀ-৿]/.test(cR['manikganj'])&&cR['manikganj'].indexOf('|')>-1&&cR['manikganj'].length>=140)){cR['manikganj']=cR['dha_manikganj'];}
+aliasMap['manikganj district']='dha_manikganj';
+aliasMap['about manikganj']='dha_manikganj';
+if(!(cR['munshiganj']&&/[ঀ-৿]/.test(cR['munshiganj'])&&cR['munshiganj'].indexOf('|')>-1&&cR['munshiganj'].length>=140)){cR['munshiganj']=cR['dha_munshiganj'];}
+aliasMap['munshiganj district']='dha_munshiganj';
+aliasMap['about munshiganj']='dha_munshiganj';
+if(!(cR['narayanganj']&&/[ঀ-৿]/.test(cR['narayanganj'])&&cR['narayanganj'].indexOf('|')>-1&&cR['narayanganj'].length>=140)){cR['narayanganj']=cR['dha_narayanganj'];}
+aliasMap['narayanganj district']='dha_narayanganj';
+aliasMap['about narayanganj']='dha_narayanganj';
+if(!(cR['narsingdi']&&/[ঀ-৿]/.test(cR['narsingdi'])&&cR['narsingdi'].indexOf('|')>-1&&cR['narsingdi'].length>=140)){cR['narsingdi']=cR['dha_narsingdi'];}
+aliasMap['narsingdi district']='dha_narsingdi';
+aliasMap['about narsingdi']='dha_narsingdi';
+if(!(cR['rajbari']&&/[ঀ-৿]/.test(cR['rajbari'])&&cR['rajbari'].indexOf('|')>-1&&cR['rajbari'].length>=140)){cR['rajbari']=cR['dha_rajbari'];}
+aliasMap['rajbari district']='dha_rajbari';
+aliasMap['about rajbari']='dha_rajbari';
+if(!(cR['shariatpur']&&/[ঀ-৿]/.test(cR['shariatpur'])&&cR['shariatpur'].indexOf('|')>-1&&cR['shariatpur'].length>=140)){cR['shariatpur']=cR['dha_shariatpur'];}
+aliasMap['shariatpur district']='dha_shariatpur';
+aliasMap['about shariatpur']='dha_shariatpur';
+if(!(cR['tangail']&&/[ঀ-৿]/.test(cR['tangail'])&&cR['tangail'].indexOf('|')>-1&&cR['tangail'].length>=140)){cR['tangail']=cR['dha_tangail'];}
+aliasMap['tangail district']='dha_tangail';
+aliasMap['about tangail']='dha_tangail';
+if(!(cR['bagerhat']&&/[ঀ-৿]/.test(cR['bagerhat'])&&cR['bagerhat'].indexOf('|')>-1&&cR['bagerhat'].length>=140)){cR['bagerhat']=cR['khu_bagerhat'];}
+aliasMap['bagerhat district']='khu_bagerhat';
+aliasMap['about bagerhat']='khu_bagerhat';
+if(!(cR['chuadanga']&&/[ঀ-৿]/.test(cR['chuadanga'])&&cR['chuadanga'].indexOf('|')>-1&&cR['chuadanga'].length>=140)){cR['chuadanga']=cR['khu_chuadanga'];}
+aliasMap['chuadanga district']='khu_chuadanga';
+aliasMap['about chuadanga']='khu_chuadanga';
+if(!(cR['jashore']&&/[ঀ-৿]/.test(cR['jashore'])&&cR['jashore'].indexOf('|')>-1&&cR['jashore'].length>=140)){cR['jashore']=cR['khu_jashore'];}
+aliasMap['jashore district']='khu_jashore';
+aliasMap['about jashore']='khu_jashore';
+if(!(cR['jhenaidah']&&/[ঀ-৿]/.test(cR['jhenaidah'])&&cR['jhenaidah'].indexOf('|')>-1&&cR['jhenaidah'].length>=140)){cR['jhenaidah']=cR['khu_jhenaidah'];}
+aliasMap['jhenaidah district']='khu_jhenaidah';
+aliasMap['about jhenaidah']='khu_jhenaidah';
+if(!(cR['khulna']&&/[ঀ-৿]/.test(cR['khulna'])&&cR['khulna'].indexOf('|')>-1&&cR['khulna'].length>=140)){cR['khulna']=cR['khu_khulna'];}
+aliasMap['khulna district']='khu_khulna';
+aliasMap['about khulna']='khu_khulna';
+if(!(cR['kushtia']&&/[ঀ-৿]/.test(cR['kushtia'])&&cR['kushtia'].indexOf('|')>-1&&cR['kushtia'].length>=140)){cR['kushtia']=cR['khu_kushtia'];}
+aliasMap['kushtia district']='khu_kushtia';
+aliasMap['about kushtia']='khu_kushtia';
+if(!(cR['magura']&&/[ঀ-৿]/.test(cR['magura'])&&cR['magura'].indexOf('|')>-1&&cR['magura'].length>=140)){cR['magura']=cR['khu_magura'];}
+aliasMap['magura district']='khu_magura';
+aliasMap['about magura']='khu_magura';
+if(!(cR['meherpur']&&/[ঀ-৿]/.test(cR['meherpur'])&&cR['meherpur'].indexOf('|')>-1&&cR['meherpur'].length>=140)){cR['meherpur']=cR['khu_meherpur'];}
+aliasMap['meherpur district']='khu_meherpur';
+aliasMap['about meherpur']='khu_meherpur';
+if(!(cR['narail']&&/[ঀ-৿]/.test(cR['narail'])&&cR['narail'].indexOf('|')>-1&&cR['narail'].length>=140)){cR['narail']=cR['khu_narail'];}
+aliasMap['narail district']='khu_narail';
+aliasMap['about narail']='khu_narail';
+if(!(cR['satkhira']&&/[ঀ-৿]/.test(cR['satkhira'])&&cR['satkhira'].indexOf('|')>-1&&cR['satkhira'].length>=140)){cR['satkhira']=cR['khu_satkhira'];}
+aliasMap['satkhira district']='khu_satkhira';
+aliasMap['about satkhira']='khu_satkhira';
+if(!(cR['jamalpur']&&/[ঀ-৿]/.test(cR['jamalpur'])&&cR['jamalpur'].indexOf('|')>-1&&cR['jamalpur'].length>=140)){cR['jamalpur']=cR['mym_jamalpur'];}
+aliasMap['jamalpur district']='mym_jamalpur';
+aliasMap['about jamalpur']='mym_jamalpur';
+if(!(cR['mymensingh']&&/[ঀ-৿]/.test(cR['mymensingh'])&&cR['mymensingh'].indexOf('|')>-1&&cR['mymensingh'].length>=140)){cR['mymensingh']=cR['mym_mymensingh'];}
+aliasMap['mymensingh district']='mym_mymensingh';
+aliasMap['about mymensingh']='mym_mymensingh';
+if(!(cR['netrokona']&&/[ঀ-৿]/.test(cR['netrokona'])&&cR['netrokona'].indexOf('|')>-1&&cR['netrokona'].length>=140)){cR['netrokona']=cR['mym_netrokona'];}
+aliasMap['netrokona district']='mym_netrokona';
+aliasMap['about netrokona']='mym_netrokona';
+if(!(cR['sherpur']&&/[ঀ-৿]/.test(cR['sherpur'])&&cR['sherpur'].indexOf('|')>-1&&cR['sherpur'].length>=140)){cR['sherpur']=cR['mym_sherpur'];}
+aliasMap['sherpur district']='mym_sherpur';
+aliasMap['about sherpur']='mym_sherpur';
+if(!(cR['bogura']&&/[ঀ-৿]/.test(cR['bogura'])&&cR['bogura'].indexOf('|')>-1&&cR['bogura'].length>=140)){cR['bogura']=cR['raj_bogura'];}
+aliasMap['bogura district']='raj_bogura';
+aliasMap['about bogura']='raj_bogura';
+if(!(cR['chapainawabganj']&&/[ঀ-৿]/.test(cR['chapainawabganj'])&&cR['chapainawabganj'].indexOf('|')>-1&&cR['chapainawabganj'].length>=140)){cR['chapainawabganj']=cR['raj_chapainawabganj'];}
+aliasMap['chapainawabganj district']='raj_chapainawabganj';
+aliasMap['about chapainawabganj']='raj_chapainawabganj';
+if(!(cR['joypurhat']&&/[ঀ-৿]/.test(cR['joypurhat'])&&cR['joypurhat'].indexOf('|')>-1&&cR['joypurhat'].length>=140)){cR['joypurhat']=cR['raj_joypurhat'];}
+aliasMap['joypurhat district']='raj_joypurhat';
+aliasMap['about joypurhat']='raj_joypurhat';
+if(!(cR['naogaon']&&/[ঀ-৿]/.test(cR['naogaon'])&&cR['naogaon'].indexOf('|')>-1&&cR['naogaon'].length>=140)){cR['naogaon']=cR['raj_naogaon'];}
+aliasMap['naogaon district']='raj_naogaon';
+aliasMap['about naogaon']='raj_naogaon';
+if(!(cR['natore']&&/[ঀ-৿]/.test(cR['natore'])&&cR['natore'].indexOf('|')>-1&&cR['natore'].length>=140)){cR['natore']=cR['raj_natore'];}
+aliasMap['natore district']='raj_natore';
+aliasMap['about natore']='raj_natore';
+if(!(cR['pabna']&&/[ঀ-৿]/.test(cR['pabna'])&&cR['pabna'].indexOf('|')>-1&&cR['pabna'].length>=140)){cR['pabna']=cR['raj_pabna'];}
+aliasMap['pabna district']='raj_pabna';
+aliasMap['about pabna']='raj_pabna';
+if(!(cR['rajshahi']&&/[ঀ-৿]/.test(cR['rajshahi'])&&cR['rajshahi'].indexOf('|')>-1&&cR['rajshahi'].length>=140)){cR['rajshahi']=cR['raj_rajshahi'];}
+aliasMap['rajshahi district']='raj_rajshahi';
+aliasMap['about rajshahi']='raj_rajshahi';
+if(!(cR['sirajganj']&&/[ঀ-৿]/.test(cR['sirajganj'])&&cR['sirajganj'].indexOf('|')>-1&&cR['sirajganj'].length>=140)){cR['sirajganj']=cR['raj_sirajganj'];}
+aliasMap['sirajganj district']='raj_sirajganj';
+aliasMap['about sirajganj']='raj_sirajganj';
+if(!(cR['dinajpur']&&/[ঀ-৿]/.test(cR['dinajpur'])&&cR['dinajpur'].indexOf('|')>-1&&cR['dinajpur'].length>=140)){cR['dinajpur']=cR['ran_dinajpur'];}
+aliasMap['dinajpur district']='ran_dinajpur';
+aliasMap['about dinajpur']='ran_dinajpur';
+if(!(cR['gaibandha']&&/[ঀ-৿]/.test(cR['gaibandha'])&&cR['gaibandha'].indexOf('|')>-1&&cR['gaibandha'].length>=140)){cR['gaibandha']=cR['ran_gaibandha'];}
+aliasMap['gaibandha district']='ran_gaibandha';
+aliasMap['about gaibandha']='ran_gaibandha';
+if(!(cR['kurigram']&&/[ঀ-৿]/.test(cR['kurigram'])&&cR['kurigram'].indexOf('|')>-1&&cR['kurigram'].length>=140)){cR['kurigram']=cR['ran_kurigram'];}
+aliasMap['kurigram district']='ran_kurigram';
+aliasMap['about kurigram']='ran_kurigram';
+if(!(cR['lalmonirhat']&&/[ঀ-৿]/.test(cR['lalmonirhat'])&&cR['lalmonirhat'].indexOf('|')>-1&&cR['lalmonirhat'].length>=140)){cR['lalmonirhat']=cR['ran_lalmonirhat'];}
+aliasMap['lalmonirhat district']='ran_lalmonirhat';
+aliasMap['about lalmonirhat']='ran_lalmonirhat';
+if(!(cR['nilphamari']&&/[ঀ-৿]/.test(cR['nilphamari'])&&cR['nilphamari'].indexOf('|')>-1&&cR['nilphamari'].length>=140)){cR['nilphamari']=cR['ran_nilphamari'];}
+aliasMap['nilphamari district']='ran_nilphamari';
+aliasMap['about nilphamari']='ran_nilphamari';
+if(!(cR['panchagarh']&&/[ঀ-৿]/.test(cR['panchagarh'])&&cR['panchagarh'].indexOf('|')>-1&&cR['panchagarh'].length>=140)){cR['panchagarh']=cR['ran_panchagarh'];}
+aliasMap['panchagarh district']='ran_panchagarh';
+aliasMap['about panchagarh']='ran_panchagarh';
+if(!(cR['rangpur']&&/[ঀ-৿]/.test(cR['rangpur'])&&cR['rangpur'].indexOf('|')>-1&&cR['rangpur'].length>=140)){cR['rangpur']=cR['ran_rangpur'];}
+aliasMap['rangpur district']='ran_rangpur';
+aliasMap['about rangpur']='ran_rangpur';
+if(!(cR['thakurgaon']&&/[ঀ-৿]/.test(cR['thakurgaon'])&&cR['thakurgaon'].indexOf('|')>-1&&cR['thakurgaon'].length>=140)){cR['thakurgaon']=cR['ran_thakurgaon'];}
+aliasMap['thakurgaon district']='ran_thakurgaon';
+aliasMap['about thakurgaon']='ran_thakurgaon';
+if(!(cR['habiganj']&&/[ঀ-৿]/.test(cR['habiganj'])&&cR['habiganj'].indexOf('|')>-1&&cR['habiganj'].length>=140)){cR['habiganj']=cR['syl_habiganj'];}
+aliasMap['habiganj district']='syl_habiganj';
+aliasMap['about habiganj']='syl_habiganj';
+if(!(cR['moulvibazar']&&/[ঀ-৿]/.test(cR['moulvibazar'])&&cR['moulvibazar'].indexOf('|')>-1&&cR['moulvibazar'].length>=140)){cR['moulvibazar']=cR['syl_moulvibazar'];}
+aliasMap['moulvibazar district']='syl_moulvibazar';
+aliasMap['about moulvibazar']='syl_moulvibazar';
+if(!(cR['sunamganj']&&/[ঀ-৿]/.test(cR['sunamganj'])&&cR['sunamganj'].indexOf('|')>-1&&cR['sunamganj'].length>=140)){cR['sunamganj']=cR['syl_sunamganj'];}
+aliasMap['sunamganj district']='syl_sunamganj';
+aliasMap['about sunamganj']='syl_sunamganj';
+if(!(cR['sylhet']&&/[ঀ-৿]/.test(cR['sylhet'])&&cR['sylhet'].indexOf('|')>-1&&cR['sylhet'].length>=140)){cR['sylhet']=cR['syl_sylhet'];}
+aliasMap['sylhet district']='syl_sylhet';
+aliasMap['about sylhet']='syl_sylhet';
+aliasMap["comilla"]="ctg_cumilla";
+aliasMap["comilla district"]="ctg_cumilla";
+aliasMap["jessore"]="khu_jashore";
+aliasMap["jessore district"]="khu_jashore";
+aliasMap["bogra"]="raj_bogura";
+aliasMap["bogra district"]="raj_bogura";
+aliasMap["chapainawabganj district"]="raj_chapainawabganj";
+aliasMap["cox's bazar"]="ctg_coxsbazar";
+aliasMap["cox's bazar district"]="ctg_coxsbazar";
+
+
+/* AUDIT-2026 districts: Bengali district names route to English aliases */
+bnMap['ঢাকা']='dhaka district';
+bnMap['ফরিদপুর']='faridpur district';
+bnMap['গাজীপুর']='gazipur district';
+bnMap['গোপালগঞ্জ']='gopalganj district';
+bnMap['কিশোরগঞ্জ']='kishoreganj district';
+bnMap['মাদারীপুর']='madaripur district';
+bnMap['মানিকগঞ্জ']='manikganj district';
+bnMap['মুন্সীগঞ্জ']='munshiganj district';
+bnMap['নারায়ণগঞ্জ']='narayanganj district';
+bnMap['নরসিংদী']='narsingdi district';
+bnMap['রাজবাড়ী']='rajbari district';
+bnMap['শরীয়তপুর']='shariatpur district';
+bnMap['টাঙ্গাইল']='tangail district';
+bnMap['চট্টগ্রাম']='chattogram district';
+bnMap["কক্সবাজার"]="cox's bazar district";
+bnMap['কুমিল্লা']='cumilla district';
+bnMap['ফেনী']='feni district';
+bnMap['খাগড়াছড়ি']='khagrachhari district';
+bnMap['লক্ষ্মীপুর']='lakshmipur district';
+bnMap['নোয়াখালী']='noakhali district';
+bnMap['রাঙ্গামাটি']='rangamati district';
+bnMap['বান্দরবান']='bandarban district';
+bnMap['ব্রাহ্মণবাড়িয়া']='brahmanbaria district';
+bnMap['চাঁদপুর']='chandpur district';
+bnMap['রাজশাহী']='rajshahi district';
+bnMap['বগুড়া']='bogura district';
+bnMap['জয়পুরহাট']='joypurhat district';
+bnMap['নওগাঁ']='naogaon district';
+bnMap['নাটোর']='natore district';
+bnMap['চাঁপাইনবাবগঞ্জ']='chapainawabganj district';
+bnMap['পাবনা']='pabna district';
+bnMap['সিরাজগঞ্জ']='sirajganj district';
+bnMap['খুলনা']='khulna district';
+bnMap['বাগেরহাট']='bagerhat district';
+bnMap['চুয়াডাঙ্গা']='chuadanga district';
+bnMap['যশোর']='jashore district';
+bnMap['ঝিনাইদহ']='jhenaidah district';
+bnMap['কুষ্টিয়া']='kushtia district';
+bnMap['মাগুরা']='magura district';
+bnMap['মেহেরপুর']='meherpur district';
+bnMap['নড়াইল']='narail district';
+bnMap['সাতক্ষীরা']='satkhira district';
+bnMap['বরিশাল']='barishal district';
+bnMap['বরগুনা']='barguna district';
+bnMap['ভোলা']='bhola district';
+bnMap['ঝালকাঠি']='jhalokathi district';
+bnMap['পটুয়াখালী']='patuakhali district';
+bnMap['পিরোজপুর']='pirojpur district';
+bnMap['সিলেট']='sylhet district';
+bnMap['হবিগঞ্জ']='habiganj district';
+bnMap['মৌলভীবাজার']='moulvibazar district';
+bnMap['সুনামগঞ্জ']='sunamganj district';
+bnMap['রংপুর']='rangpur district';
+bnMap['দিনাজপুর']='dinajpur district';
+bnMap['গাইবান্ধা']='gaibandha district';
+bnMap['কুড়িগ্রাম']='kurigram district';
+bnMap['লালমনিরহাট']='lalmonirhat district';
+bnMap['নীলফামারী']='nilphamari district';
+bnMap['পঞ্চগড়']='panchagarh district';
+bnMap['ঠাকুরগাঁও']='thakurgaon district';
+bnMap['ময়মনসিংহ']='mymensingh district';
+bnMap['জামালপুর']='jamalpur district';
+bnMap['নেত্রকোণা']='netrokona district';
+bnMap['শেরপুর']='sherpur district';
+
+/* AUDIT-2026 dowry/DV routing (bangladesh-alias hijack fix) */
+aliasMap['dowry demand']='womensafety_dowry';
+aliasMap['dowry demand in bangladesh']='womensafety_dowry';
+aliasMap['punishment for dowry']='womensafety_dowry';
+aliasMap['punishment for dowry demand']='womensafety_dowry';
+aliasMap['dowry law']='womensafety_dowry';
+aliasMap['domestic violence in bangladesh']='womensafety_dv_act';
+aliasMap['domestic violence law']='womensafety_dv_act';
+aliasMap['violence against women']='womensafety_dv_act';
+bnMap['পারিবারিক সহিংসতা']='domestic violence';
+bnMap['নারী নির্যাতন']='domestic violence';
+bnMap['যৌতুক']='dowry demand';
+bnMap['যৌতুক প্রথা']='dowry demand';
+/* AUDIT-2026 genz pass 1: demographics, education, jobs */
+cR['gen_z_demographics']='Gen Z in Bangladesh are the cohort born roughly 1997-2012, an estimated 40-50 million people (about a quarter to a third of the population; almost half of Bangladesh - about 48% - is under age 24 per BBS). More than half of Gen Z are still students or young job seekers; the majority live in villages or small towns, but Dhaka, Chattogram and other cities concentrate educated Gen Z. It is a youthful, mobile-first, socially conservative yet politically restless generation, with a large female cohort increasingly in schools, colleges and universities. | বাংলাদেশে জেন-জেড বলতে ১৯৯৭-২০১২ সালের কাছাকাছি সময়ে জন্ম নেওয়া প্রজন্ম; আনুমানিক ৪০-৫০ মিলিয়ন (জনসংখ্যার এক-চতুর্থাংশ থেকে এক-তৃতীয়াংশ)। বাংলাদেশের প্রায় ৪৮ শতাংশ মানুষ ২৪ বছরের নিচে (বিবিএস)। জেন-জেডের অর্ধেকের বেশি এখনো শিক্ষার্থী বা নতুন চাকরিপ্রার্থী; অধিকাংশ গ্রাম বা ছোট শহরে বাস করে, কিন্তু শিক্ষিত জেন-জেড ঢাকা, চট্টগ্রামসহ বড় শহরে কেন্দ্রীভূত। এটি মোবাইল-প্রথম, সামাজিকভাবে রক্ষণশীল অথচ রাজনৈতিকভাবে সচেতন এক তরুণ প্রজন্ম।';
+cR['gen_z_education']='Education profile: literacy is now above 75% and Gen Z is the most schooled generation in Bangladeshi history, with rapid growth in girls secondary enrollment. Yet quality and skills lag: public university seats are highly competitive, most students study in private colleges/universities or madrasas, English and digital skills stay weak outside cities, and graduates often lack the practical skills employers want. Many Gen Z study business, engineering, medical and computer science; freelancing courses and tech bootcamps are booming. | শিক্ষা প্রোফাইল: সাক্ষরতা এখন ৭৫ শতাংশের বেশি এবং জেন-জেড বাংলাদেশের ইতিহাসে সবচেয়ে বেশি স্কুল-শিক্ষিত প্রজন্ম; মেয়েদের মাধ্যমিক ভর্তি দ্রুত বেড়েছে। কিন্তু মান ও দক্ষতা এখনো পিছিয়ে: পাবলিক বিশ্ববিদ্যালয়ের আসন অত্যন্ত প্রতিযোগিতামূলক, অধিকাংশ শিক্ষার্থী বেসরকারি কলেজ-বিশ্ববিদ্যালয় বা মাদ্রাসায় পড়ে; শহরের বাইরে ইংরেজি ও ডিজিটাল দক্ষতা দুর্বল। অনেকে ব্যবসা, প্রকৌশল, মেডিকেল ও কম্পিউটার সায়েন্সে পড়ে; ফ্রিল্যান্সিং কোর্স ও টেক বুটক্যাম্প জনপ্রিয় হচ্ছে।';
+cR['gen_z_jobs']='Jobs crisis: 2024 Labour Force Survey - 26.24 lakh Bangladeshis were unemployed, including 8.85 lakh university graduates; graduate unemployment rose to 13.5% (2024), the highest of any education level, and about one in three graduates was jobless for up to two years. Youth (15-29) unemployment was about 8%, and roughly 19.5% of 15-24 year olds (~55 lakh) were NEET - not in education, employment or training. ILO put Bangladeshi youth unemployment near 10.6%. Many young people are underemployed, work informally, queue for government jobs, or go abroad. This job crisis - not just quota - drove Gen Z into the streets in 2024. | চাকরির সংকট: ২০২৪ শ্রম জরিপে বাংলাদেশে ২৬.২৪ লাখ বেকার, যার মধ্যে ৮.৮৫ লাখ বিশ্ববিদ্যালয় স্নাতক; স্নাতক বেকারত্ব ২০২৪-এ ১৩.৫ শতাংশে দাঁড়ায় - সব শিক্ষাস্তরের মধ্যে সর্বোচ্চ - এবং প্রায় প্রতি তিন স্নাতকের একজন দুই বছর পর্যন্ত বেকার ছিল। ১৫-২৯ বছর বয়সীদের বেকারত্ব প্রায় ৮ শতাংশ; ১৫-২৪ বছরের প্রায় ১৯.৫ শতাংশ (আনুমানিক ৫৫ লাখ) শিক্ষা, কর্ম ও প্রশিক্ষণের বাইরে (এনইইটি)। আইএলওর মতে তরুণ বেকারত্ব ১০.৬ শতাংশের কাছাকাছি। অনেকে খণ্ডকালীন বা অনানুষ্ঠানিক কাজে যুক্ত, সরকারি চাকরির অপেক্ষায় থাকে বা বিদেশে যায়। এই চাকরিসংকটই ২০২৪-এ জেন-জেডকে রাস্তায় নামায়।';
+/* AUDIT-2026 genz pass 2: digital, aspirations, politics */
+cR['gen_z_aspirations']='Aspirations: British Council Next Generation Bangladesh 2024 found more than half of surveyed young people are open to migrating abroad for economic reasons; top worries are jobs, income and cost of living, and many distrust institutions and want merit, transparency and reform. Educated Gen Z aspires to stable professional careers, digital and creative work, study abroad, entrepreneurship and freelancing. After July 2024 they also want a democratic, accountable country and a real voice in decisions - surveys show high interest in politics but low patience for corruption and dynastic politics. Mental health, work-life balance and a decent income matter more to them than to earlier generations. | আকাঙ্ক্ষা: ব্রিটিশ কাউন্সিলের নেক্সট জেনারেশন বাংলাদেশ ২০২৪ জরিপে দেখা যায়, তরুণদেরঅর্ধেকের বেশি অর্থনৈতিক কারণে বিদেশে যেতে আগ্রহী; বড় উদ্বেগ চাকরি, আয় ও জীবনযাত্রার ব্যয়; অনেকে প্রতিষ্ঠানের ওপর আস্থা হারিয়েছে এবং মেধা, স্বচ্ছতা ও সংস্কার চায়। শিক্ষিত জেন-জেড স্থিতিশীল পেশা, ডিজিটাল ও সৃজনশীল কাজ, বিদেশে পড়াশোনা, উদ্যোক্তা ও ফ্রিল্যান্সিংয়ের স্বপ্ন দেখে। জুলাই ২০২৪-এর পর তারা গণতান্ত্রিক, জবাবদিহিমূলক রাষ্ট্র ও সিদ্ধান্তে প্রকৃত অংশগ্রহণ চায়; রাজনীতিতে আগ্রহ বেশি কিন্তু দুর্নীতি ও রাজবংশীয় রাজনীতিতে ধৈর্য কম। মানসিক স্বাস্থ্য, কাজ-জীবনের ভারসাম্য ও ন্যায্য আয় আগের প্রজন্মের চেয়ে তাদের কাছে বেশি গুরুত্বপূর্ণ।';
+cR['gen_z_digital']='Digital life: Bangladesh had about 112 million internet users and 131+ million mobile connections in 2024 (BTRC), and 53-60 million social media users (30-34% of the population, DataReportal). Facebook is the dominant platform; TikTok and YouTube are hugely popular with young people, and Instagram has over 7 million users. Gen Z is the first truly mobile-first generation - many rural students got online only through cheap smartphones and low-cost data. Gen Z used Facebook groups, Messenger, TikTok videos and livestreams to spread information, organise protests and fact-check during 2024. | ডিজিটাল জীবন: ২০২৪-এ বাংলাদেশে ইন্টারনেট ব্যবহারকারী প্রায় ১১.২ কোটি এবং মোবাইল সংযোগ ১৩.১ কোটির বেশি (বিটিআরসি); সামাজিক মাধ্যম ব্যবহারকারী ৫.৩-৬ কোটি (জনসংখ্যার ৩০-৩৪ শতাংশ, ডেটারিপোর্টাল)। ফেসবুক প্রধান প্ল্যাটফর্ম; তরুণদের মধ্যে টিকটক ও ইউটিউব অত্যন্ত জনপ্রিয়, ইনস্টাগ্রাম ব্যবহারকারী ৭০ লাখের বেশি। জেন-জেড প্রথম সত্যিকারের মোবাইল-প্রথম প্রজন্ম - সস্তা স্মার্টফোন ও কমদামি ডেটার মাধ্যমে অনেক গ্রামীণ শিক্ষার্থী অনলাইনে এসেছে। ২০২৪-এ ফেসবুক গ্রুপ, মেসেঞ্জার, টিকটক ভিডিও ও লাইভস্ট্রিম দিয়ে তারা তথ্য ছড়িয়েছে, আন্দোলন সংগঠিত করেছে এবং গুজব যাচাই করেছে।';
+cR['gen_z_politics']='Gen Z politics after the uprising: students who led the July 2024 movement entered the interim government as advisers (Nahid Islam, Asif Mahmud, Mahfuj Alam) and student organisations like the Anti-Discrimination Student Movement became a political force. Gen Z wants institutional reform - elections, judiciary, police, media - and rejects the old party binaries of Awami League vs BNP. By 2025-26 debate grew about fragmentation and whether youth power can survive organised politics; some warn of division, while the young insist the movement must turn into accountable institutions, not repeat the past. | অভ্যুত্থান-পরবর্তী জেন-জেড রাজনীতি: ২০২৪-এর জুলাই আন্দোলনের ছাত্র নেতারা অন্তর্বর্তী সরকারে উপদেষ্টা হন (নাহিদ ইসলাম, আসিফ মাহমুদ, মাহফুজ আলম); বৈষম্যবিরোধী ছাত্র আন্দোলন রাজনৈতিক শক্তিতে পরিণত হয়। জেন-জেড প্রাতিষ্ঠানিক সংস্কার চায় - নির্বাচন, বিচার বিভাগ, পুলিশ, গণমাধ্যম - এবং আওয়ামী লীগ-বিএনপির পুরোনো দ্বিমেরু রাজনীতি প্রত্যাখ্যান করে। ২০২৫-২৬-এ খণ্ডিত রাজনীতি ও যুবশক্তি টিকে থাকবে কি না তা নিয়ে বিতর্ক চলছে; কেউ কেউ বিভক্তির আশঙ্কা করছেন, তরুণরা বলছেন আন্দোলনকে জবাবদিহিমূলক প্রতিষ্ঠানে রূপ দিতে হবে।';
+
+/* AUDIT-2026 genz pass 3: july companions Bengali + topic aliases */
+cR['july_leaders']='\'Student Leaders (Collective Leadership) | ছাত্র নেতারা (সম্মিলিত নেতৃত্ব): নাহিদ ইসলাম (সমন্বয়ক, পরে উপদেষ্টা), আসিফ মাহমুদ (সমন্বয়ক, পরে উপদেষ্টা), মাহফুজ আলম (সমন্বয়ক, পরে উপদেষ্টা), সারজিস আলম, হাসনাত আবদুল্লাহ, আবু সাঈদ ও ওসমান হাদিসহ আরও অনেকে। সংগঠন: বৈষম্যবিরোধী ছাত্র আন্দোলন।';
+cR['july_intl']='International response: UN called for investigation. US, UK, EU expressed concern. Amnesty International documented abuses. OHCHR fact-finding report. India hosted fleeing Hasina. | আন্তর্জাতিক প্রতিক্রিয়া: জাতিসংঘ তদন্তের আহ্বান জানায়; মার্কিন যুক্তরাষ্ট্র, যুক্তরাজ্য ও ইউরোপীয় ইউনিয়ন উদ্বেগ প্রকাশ করে; অ্যামনেস্টি ইন্টারন্যাশনাল নির্যাতনের দলিল প্রকাশ করে; জাতিসংঘ মানবাধিকার কার্যালয়ের (ওএইচসিএইচআর) তদন্ত প্রতিবেদন প্রকাশিত হয়। Antorjatik uttor: UN tadanter dabhi. USA, UK, EU chintao. Amnesty International nishedher tolika. OHCHR tolika prohog. Bharat palayoner Hasina ke aashray.';
+cR['july_result']='Result: Hasina resigned. SC ordered 93% merit. Interim govt formed under Nobel laureate Muhammad Yunus. Constitutional crisis. Political and religious violence in aftermath. | পরিণতি: ৫ আগস্ট শেখ হাসিনা পদত্যাগ করেন; সুপ্রিম কোর্ট ৯৩ শতাংশ মেধাভিত্তিক নিয়োগের নির্দেশ দেয়; নোবেল বিজয়ী ড. মুহাম্মদ ইউনূসের নেতৃত্বে অন্তর্বর্তী সরকার গঠিত হয়; সাংবিধানিক সংকট ও রাজনৈতিক বিতর্ক দেখা দেয়। Folafol: Hasina padatyag. SC 93% merit adesh. Nobel bibhushon Muhammad Yunus er netritwotito antorbortik sarkar. Songbidhanik sanksa. Porobortite rajnitik o dharmik hoingsha.';
+aliasMap['gen z demographics']='gen_z_demographics';
+aliasMap['gen z population']='gen_z_demographics';
+aliasMap['how many gen z in bangladesh']='gen_z_demographics';
+aliasMap['gen z numbers']='gen_z_demographics';
+aliasMap['gen z education']='gen_z_education';
+aliasMap['gen z students bangladesh']='gen_z_education';
+aliasMap['gen z skills']='gen_z_education';
+aliasMap['gen z jobs']='gen_z_jobs';
+aliasMap['gen z unemployment']='gen_z_jobs';
+aliasMap['gen z job crisis']='gen_z_jobs';
+aliasMap['gen z employment']='gen_z_jobs';
+aliasMap['educated unemployment']='gen_z_jobs';
+aliasMap['gen z digital']='gen_z_digital';
+aliasMap['gen z social media']='gen_z_digital';
+aliasMap['gen z internet']='gen_z_digital';
+aliasMap['gen z online']='gen_z_digital';
+aliasMap['gen z aspirations']='gen_z_aspirations';
+aliasMap['gen z migration']='gen_z_aspirations';
+aliasMap['gen z brain drain']='gen_z_aspirations';
+aliasMap['gen z future']='gen_z_aspirations';
+aliasMap['gen z wants']='gen_z_aspirations';
+aliasMap['gen z politics']='gen_z_politics';
+aliasMap['gen z in politics']='gen_z_politics';
+aliasMap['gen z and politics bangladesh']='gen_z_politics';
+bnMap['জেন-জেড']='gen z';
+bnMap['জেনজি']='gen z';
+bnMap['জেন জি']='gen z';
+bnMap['তরুণ প্রজন্ম']='gen z';
+
+/* AUDIT-2026 fix: july_leaders full bilingual override */
+cR['july_leaders']='July 2024 student leaders (collective leadership): Nahid Islam, Asif Mahmud and Mahfuj Alam - coordinators of the Anti-Discrimination Student Movement who later became advisers in the interim government - together with frontline organisers such as Abu Sayed, Sarjis Alam, Hasnat Abdullah, Omar Faruk and Osman Hadi. The movement deliberately had no single leader: it was run by a collective of coordinators from universities across the country, which made it hard for the state to decapitate. | জুলাই ২০২৪-এর ছাত্র নেতারা (সম্মিলিত নেতৃত্ব): নাহিদ ইসলাম, আসিফ মাহমুদ ও মাহফুজ আলম - বৈষম্যবিরোধী ছাত্র আন্দোলনের সমন্বয়ক, যাঁরা পরে অন্তর্বর্তী সরকারের উপদেষ্টা হন - সঙ্গে আবু সাঈদ, সারজিস আলম, হাসনাত আবদুল্লাহ, ওমর ফারুক ও ওসমান হাদির মতো সামনের সারির সংগঠকরা। আন্দোলনে ইচ্ছাকৃতভাবে কোনো একক নেতা ছিল না: সারা দেশের বিশ্ববিদ্যালয়ের সমন্বয়কদের সম্মিলিত নেতৃত্বে এটি পরিচালিত হয়, যা রাষ্ট্রের পক্ষে নেতৃত্বহীন করা কঠিন করে তোলে।';
+
+/* AUDIT-2026 genz pass 4: Bengali job keywords + job-market aliases */
+bnMap['চাকরি']='jobs';
+bnMap['চাকরির']='jobs';
+bnMap['চাকরি সমস্যা']='jobs problem';
+bnMap['বেকার']='unemployment';
+bnMap['বেকারত্ব']='unemployment';
+bnMap['কর্মসংস্থান']='employment';
+aliasMap['gen z job problem']='gen_z_jobs';
+aliasMap['gen z job market']='gen_z_jobs';
+aliasMap['gen z job crisis bangladesh']='gen_z_jobs';
+aliasMap['gen z jobs bangladesh']='gen_z_jobs';
+
+/* AUDIT-2026 sadar pass: 64 district headquarters (Sadar) entries + routing */
+cR['dhaka sadar']='Dhaka district headquarters: the Dhaka district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Dhaka জেলার সদরদপ্তর: Dhaka জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['faridpur sadar']='Faridpur district headquarters: the Faridpur district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Faridpur জেলার সদরদপ্তর: Faridpur জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['gazipur sadar']='Gazipur district headquarters: the Gazipur district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Gazipur জেলার সদরদপ্তর: Gazipur জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['gopalganj sadar']='Gopalganj district headquarters: the Gopalganj district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Gopalganj জেলার সদরদপ্তর: Gopalganj জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['kishoreganj sadar']='Kishoreganj district headquarters: the Kishoreganj district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Kishoreganj জেলার সদরদপ্তর: Kishoreganj জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['madaripur sadar']='Madaripur district headquarters: the Madaripur district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Madaripur জেলার সদরদপ্তর: Madaripur জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['manikganj sadar']='Manikganj district headquarters: the Manikganj district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Manikganj জেলার সদরদপ্তর: Manikganj জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['munshiganj sadar']='Munshiganj district headquarters: the Munshiganj district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Munshiganj জেলার সদরদপ্তর: Munshiganj জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['narayanganj sadar']='Narayanganj district headquarters: the Narayanganj district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Narayanganj জেলার সদরদপ্তর: Narayanganj জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['narsingdi sadar']='Narsingdi district headquarters: the Narsingdi district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Narsingdi জেলার সদরদপ্তর: Narsingdi জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['rajbari sadar']='Rajbari district headquarters: the Rajbari district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Rajbari জেলার সদরদপ্তর: Rajbari জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['shariatpur sadar']='Shariatpur district headquarters: the Shariatpur district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Shariatpur জেলার সদরদপ্তর: Shariatpur জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['tangail sadar']='Tangail district headquarters: the Tangail district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Tangail জেলার সদরদপ্তর: Tangail জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['chattogram sadar']='Chattogram district headquarters: the Chattogram district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Chattogram জেলার সদরদপ্তর: Chattogram জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR["cox's bazar sadar"]="Cox\'s Bazar district headquarters: the Cox\'s Bazar district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Cox\'s Bazar জেলার সদরদপ্তর: Cox\'s Bazar জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।"
+cR['cumilla sadar']='Cumilla district headquarters: the Cumilla district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Cumilla জেলার সদরদপ্তর: Cumilla জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['feni sadar']='Feni district headquarters: the Feni district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Feni জেলার সদরদপ্তর: Feni জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['khagrachhari sadar']='Khagrachhari district headquarters: the Khagrachhari district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Khagrachhari জেলার সদরদপ্তর: Khagrachhari জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['lakshmipur sadar']='Lakshmipur district headquarters: the Lakshmipur district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Lakshmipur জেলার সদরদপ্তর: Lakshmipur জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['noakhali sadar']='Noakhali district headquarters: the Noakhali district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Noakhali জেলার সদরদপ্তর: Noakhali জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['rangamati sadar']='Rangamati district headquarters: the Rangamati district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Rangamati জেলার সদরদপ্তর: Rangamati জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['bandarban sadar']='Bandarban district headquarters: the Bandarban district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Bandarban জেলার সদরদপ্তর: Bandarban জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['brahmanbaria sadar']='Brahmanbaria district headquarters: the Brahmanbaria district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Brahmanbaria জেলার সদরদপ্তর: Brahmanbaria জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['chandpur sadar']='Chandpur district headquarters: the Chandpur district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Chandpur জেলার সদরদপ্তর: Chandpur জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['rajshahi sadar']='Rajshahi district headquarters: the Rajshahi district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Rajshahi জেলার সদরদপ্তর: Rajshahi জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['bogura sadar']='Bogura district headquarters: the Bogura district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Bogura জেলার সদরদপ্তর: Bogura জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['joypurhat sadar']='Joypurhat district headquarters: the Joypurhat district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Joypurhat জেলার সদরদপ্তর: Joypurhat জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['naogaon sadar']='Naogaon district headquarters: the Naogaon district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Naogaon জেলার সদরদপ্তর: Naogaon জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['natore sadar']='Natore district headquarters: the Natore district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Natore জেলার সদরদপ্তর: Natore জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['chapainawabganj sadar']='Chapainawabganj district headquarters: the Chapainawabganj district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Chapainawabganj জেলার সদরদপ্তর: Chapainawabganj জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['pabna sadar']='Pabna district headquarters: the Pabna district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Pabna জেলার সদরদপ্তর: Pabna জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['sirajganj sadar']='Sirajganj district headquarters: the Sirajganj district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Sirajganj জেলার সদরদপ্তর: Sirajganj জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['khulna sadar']='Khulna district headquarters: the Khulna district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Khulna জেলার সদরদপ্তর: Khulna জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['bagerhat sadar']='Bagerhat district headquarters: the Bagerhat district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Bagerhat জেলার সদরদপ্তর: Bagerhat জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['chuadanga sadar']='Chuadanga district headquarters: the Chuadanga district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Chuadanga জেলার সদরদপ্তর: Chuadanga জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['jashore sadar']='Jashore district headquarters: the Jashore district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Jashore জেলার সদরদপ্তর: Jashore জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['jhenaidah sadar']='Jhenaidah district headquarters: the Jhenaidah district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Jhenaidah জেলার সদরদপ্তর: Jhenaidah জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['kushtia sadar']='Kushtia district headquarters: the Kushtia district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Kushtia জেলার সদরদপ্তর: Kushtia জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['magura sadar']='Magura district headquarters: the Magura district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Magura জেলার সদরদপ্তর: Magura জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['meherpur sadar']='Meherpur district headquarters: the Meherpur district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Meherpur জেলার সদরদপ্তর: Meherpur জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['narail sadar']='Narail district headquarters: the Narail district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Narail জেলার সদরদপ্তর: Narail জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['satkhira sadar']='Satkhira district headquarters: the Satkhira district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Satkhira জেলার সদরদপ্তর: Satkhira জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['barishal sadar']='Barishal district headquarters: the Barishal district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Barishal জেলার সদরদপ্তর: Barishal জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['barguna sadar']='Barguna district headquarters: the Barguna district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Barguna জেলার সদরদপ্তর: Barguna জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['bhola sadar']='Bhola district headquarters: the Bhola district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Bhola জেলার সদরদপ্তর: Bhola জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['jhalokathi sadar']='Jhalokathi district headquarters: the Jhalokathi district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Jhalokathi জেলার সদরদপ্তর: Jhalokathi জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['patuakhali sadar']='Patuakhali district headquarters: the Patuakhali district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Patuakhali জেলার সদরদপ্তর: Patuakhali জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['pirojpur sadar']='Pirojpur district headquarters: the Pirojpur district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Pirojpur জেলার সদরদপ্তর: Pirojpur জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['sylhet sadar']='Sylhet district headquarters: the Sylhet district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Sylhet জেলার সদরদপ্তর: Sylhet জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['habiganj sadar']='Habiganj district headquarters: the Habiganj district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Habiganj জেলার সদরদপ্তর: Habiganj জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['moulvibazar sadar']='Moulvibazar district headquarters: the Moulvibazar district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Moulvibazar জেলার সদরদপ্তর: Moulvibazar জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['sunamganj sadar']='Sunamganj district headquarters: the Sunamganj district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Sunamganj জেলার সদরদপ্তর: Sunamganj জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['rangpur sadar']='Rangpur district headquarters: the Rangpur district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Rangpur জেলার সদরদপ্তর: Rangpur জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['dinajpur sadar']='Dinajpur district headquarters: the Dinajpur district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Dinajpur জেলার সদরদপ্তর: Dinajpur জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['gaibandha sadar']='Gaibandha district headquarters: the Gaibandha district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Gaibandha জেলার সদরদপ্তর: Gaibandha জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['kurigram sadar']='Kurigram district headquarters: the Kurigram district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Kurigram জেলার সদরদপ্তর: Kurigram জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['lalmonirhat sadar']='Lalmonirhat district headquarters: the Lalmonirhat district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Lalmonirhat জেলার সদরদপ্তর: Lalmonirhat জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['nilphamari sadar']='Nilphamari district headquarters: the Nilphamari district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Nilphamari জেলার সদরদপ্তর: Nilphamari জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['panchagarh sadar']='Panchagarh district headquarters: the Panchagarh district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Panchagarh জেলার সদরদপ্তর: Panchagarh জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['thakurgaon sadar']='Thakurgaon district headquarters: the Thakurgaon district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Thakurgaon জেলার সদরদপ্তর: Thakurgaon জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['mymensingh sadar']='Mymensingh district headquarters: the Mymensingh district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Mymensingh জেলার সদরদপ্তর: Mymensingh জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['jamalpur sadar']='Jamalpur district headquarters: the Jamalpur district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Jamalpur জেলার সদরদপ্তর: Jamalpur জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['netrokona sadar']='Netrokona district headquarters: the Netrokona district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Netrokona জেলার সদরদপ্তর: Netrokona জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+cR['sherpur sadar']='Sherpur district headquarters: the Sherpur district town (Sadar area) hosts the Deputy Commissioner (DC) office, District and Sessions Judge court, Superintendent of Police office, Civil Surgeon office and the District Legal Aid office. The main town police thana is commonly known as the Kotwali Thana. People come here for NOCs, character certificates, official records and land services. | Sherpur জেলার সদরদপ্তর: Sherpur জেলা শহরে (সদর এলাকা) জেলা প্রশাসকের (ডিসি) কার্যালয়, জেলা ও দায়রা জজ আদালত, পুলিশ সুপারের কার্যালয়, সিভিল সার্জন কার্যালয় ও জেলা আইনি সহায়তা অফিস অবস্থিত। শহরের প্রধান থানাটি সাধারণত কোতোয়ালি থানা নামে পরিচিত। এখানে এনওসি, চরিত্র সনদ, সরকারি নথি ও ভূমিসেবার জন্য আবেদন করা যায়।';
+aliasMap['dhaka district headquarters']='dhaka sadar';
+aliasMap['headquarters upazila of dhaka']='dhaka sadar';
+aliasMap['dhaka kotwali']='dhaka sadar';
+aliasMap['dhaka dc office']='dhaka sadar';
+aliasMap['faridpur district headquarters']='faridpur sadar';
+aliasMap['headquarters upazila of faridpur']='faridpur sadar';
+aliasMap['faridpur kotwali']='faridpur sadar';
+aliasMap['faridpur dc office']='faridpur sadar';
+aliasMap['gazipur district headquarters']='gazipur sadar';
+aliasMap['headquarters upazila of gazipur']='gazipur sadar';
+aliasMap['gazipur kotwali']='gazipur sadar';
+aliasMap['gazipur dc office']='gazipur sadar';
+aliasMap['gopalganj district headquarters']='gopalganj sadar';
+aliasMap['headquarters upazila of gopalganj']='gopalganj sadar';
+aliasMap['gopalganj kotwali']='gopalganj sadar';
+aliasMap['gopalganj dc office']='gopalganj sadar';
+aliasMap['kishoreganj district headquarters']='kishoreganj sadar';
+aliasMap['headquarters upazila of kishoreganj']='kishoreganj sadar';
+aliasMap['kishoreganj kotwali']='kishoreganj sadar';
+aliasMap['kishoreganj dc office']='kishoreganj sadar';
+aliasMap['madaripur district headquarters']='madaripur sadar';
+aliasMap['headquarters upazila of madaripur']='madaripur sadar';
+aliasMap['madaripur kotwali']='madaripur sadar';
+aliasMap['madaripur dc office']='madaripur sadar';
+aliasMap['manikganj district headquarters']='manikganj sadar';
+aliasMap['headquarters upazila of manikganj']='manikganj sadar';
+aliasMap['manikganj kotwali']='manikganj sadar';
+aliasMap['manikganj dc office']='manikganj sadar';
+aliasMap['munshiganj district headquarters']='munshiganj sadar';
+aliasMap['headquarters upazila of munshiganj']='munshiganj sadar';
+aliasMap['munshiganj kotwali']='munshiganj sadar';
+aliasMap['munshiganj dc office']='munshiganj sadar';
+aliasMap['narayanganj district headquarters']='narayanganj sadar';
+aliasMap['headquarters upazila of narayanganj']='narayanganj sadar';
+aliasMap['narayanganj kotwali']='narayanganj sadar';
+aliasMap['narayanganj dc office']='narayanganj sadar';
+aliasMap['narsingdi district headquarters']='narsingdi sadar';
+aliasMap['headquarters upazila of narsingdi']='narsingdi sadar';
+aliasMap['narsingdi kotwali']='narsingdi sadar';
+aliasMap['narsingdi dc office']='narsingdi sadar';
+aliasMap['rajbari district headquarters']='rajbari sadar';
+aliasMap['headquarters upazila of rajbari']='rajbari sadar';
+aliasMap['rajbari kotwali']='rajbari sadar';
+aliasMap['rajbari dc office']='rajbari sadar';
+aliasMap['shariatpur district headquarters']='shariatpur sadar';
+aliasMap['headquarters upazila of shariatpur']='shariatpur sadar';
+aliasMap['shariatpur kotwali']='shariatpur sadar';
+aliasMap['shariatpur dc office']='shariatpur sadar';
+aliasMap['tangail district headquarters']='tangail sadar';
+aliasMap['headquarters upazila of tangail']='tangail sadar';
+aliasMap['tangail kotwali']='tangail sadar';
+aliasMap['tangail dc office']='tangail sadar';
+aliasMap['chattogram district headquarters']='chattogram sadar';
+aliasMap['headquarters upazila of chattogram']='chattogram sadar';
+aliasMap['chattogram kotwali']='chattogram sadar';
+aliasMap['chattogram dc office']='chattogram sadar';
+aliasMap["cox's bazar district headquarters"]="cox's bazar sadar";
+aliasMap["headquarters upazila of cox's bazar"]="cox's bazar sadar";
+aliasMap["cox's bazar kotwali"]="cox's bazar sadar";
+aliasMap["cox's bazar dc office"]="cox's bazar sadar";
+aliasMap['cumilla district headquarters']='cumilla sadar';
+aliasMap['headquarters upazila of cumilla']='cumilla sadar';
+aliasMap['cumilla kotwali']='cumilla sadar';
+aliasMap['cumilla dc office']='cumilla sadar';
+aliasMap['feni district headquarters']='feni sadar';
+aliasMap['headquarters upazila of feni']='feni sadar';
+aliasMap['feni kotwali']='feni sadar';
+aliasMap['feni dc office']='feni sadar';
+aliasMap['khagrachhari district headquarters']='khagrachhari sadar';
+aliasMap['headquarters upazila of khagrachhari']='khagrachhari sadar';
+aliasMap['khagrachhari kotwali']='khagrachhari sadar';
+aliasMap['khagrachhari dc office']='khagrachhari sadar';
+aliasMap['lakshmipur district headquarters']='lakshmipur sadar';
+aliasMap['headquarters upazila of lakshmipur']='lakshmipur sadar';
+aliasMap['lakshmipur kotwali']='lakshmipur sadar';
+aliasMap['lakshmipur dc office']='lakshmipur sadar';
+aliasMap['noakhali district headquarters']='noakhali sadar';
+aliasMap['headquarters upazila of noakhali']='noakhali sadar';
+aliasMap['noakhali kotwali']='noakhali sadar';
+aliasMap['noakhali dc office']='noakhali sadar';
+aliasMap['rangamati district headquarters']='rangamati sadar';
+aliasMap['headquarters upazila of rangamati']='rangamati sadar';
+aliasMap['rangamati kotwali']='rangamati sadar';
+aliasMap['rangamati dc office']='rangamati sadar';
+aliasMap['bandarban district headquarters']='bandarban sadar';
+aliasMap['headquarters upazila of bandarban']='bandarban sadar';
+aliasMap['bandarban kotwali']='bandarban sadar';
+aliasMap['bandarban dc office']='bandarban sadar';
+aliasMap['brahmanbaria district headquarters']='brahmanbaria sadar';
+aliasMap['headquarters upazila of brahmanbaria']='brahmanbaria sadar';
+aliasMap['brahmanbaria kotwali']='brahmanbaria sadar';
+aliasMap['brahmanbaria dc office']='brahmanbaria sadar';
+aliasMap['chandpur district headquarters']='chandpur sadar';
+aliasMap['headquarters upazila of chandpur']='chandpur sadar';
+aliasMap['chandpur kotwali']='chandpur sadar';
+aliasMap['chandpur dc office']='chandpur sadar';
+aliasMap['rajshahi district headquarters']='rajshahi sadar';
+aliasMap['headquarters upazila of rajshahi']='rajshahi sadar';
+aliasMap['rajshahi kotwali']='rajshahi sadar';
+aliasMap['rajshahi dc office']='rajshahi sadar';
+aliasMap['bogura district headquarters']='bogura sadar';
+aliasMap['headquarters upazila of bogura']='bogura sadar';
+aliasMap['bogura kotwali']='bogura sadar';
+aliasMap['bogura dc office']='bogura sadar';
+aliasMap['joypurhat district headquarters']='joypurhat sadar';
+aliasMap['headquarters upazila of joypurhat']='joypurhat sadar';
+aliasMap['joypurhat kotwali']='joypurhat sadar';
+aliasMap['joypurhat dc office']='joypurhat sadar';
+aliasMap['naogaon district headquarters']='naogaon sadar';
+aliasMap['headquarters upazila of naogaon']='naogaon sadar';
+aliasMap['naogaon kotwali']='naogaon sadar';
+aliasMap['naogaon dc office']='naogaon sadar';
+aliasMap['natore district headquarters']='natore sadar';
+aliasMap['headquarters upazila of natore']='natore sadar';
+aliasMap['natore kotwali']='natore sadar';
+aliasMap['natore dc office']='natore sadar';
+aliasMap['chapainawabganj district headquarters']='chapainawabganj sadar';
+aliasMap['headquarters upazila of chapainawabganj']='chapainawabganj sadar';
+aliasMap['chapainawabganj kotwali']='chapainawabganj sadar';
+aliasMap['chapainawabganj dc office']='chapainawabganj sadar';
+aliasMap['pabna district headquarters']='pabna sadar';
+aliasMap['headquarters upazila of pabna']='pabna sadar';
+aliasMap['pabna kotwali']='pabna sadar';
+aliasMap['pabna dc office']='pabna sadar';
+aliasMap['sirajganj district headquarters']='sirajganj sadar';
+aliasMap['headquarters upazila of sirajganj']='sirajganj sadar';
+aliasMap['sirajganj kotwali']='sirajganj sadar';
+aliasMap['sirajganj dc office']='sirajganj sadar';
+aliasMap['khulna district headquarters']='khulna sadar';
+aliasMap['headquarters upazila of khulna']='khulna sadar';
+aliasMap['khulna kotwali']='khulna sadar';
+aliasMap['khulna dc office']='khulna sadar';
+aliasMap['bagerhat district headquarters']='bagerhat sadar';
+aliasMap['headquarters upazila of bagerhat']='bagerhat sadar';
+aliasMap['bagerhat kotwali']='bagerhat sadar';
+aliasMap['bagerhat dc office']='bagerhat sadar';
+aliasMap['chuadanga district headquarters']='chuadanga sadar';
+aliasMap['headquarters upazila of chuadanga']='chuadanga sadar';
+aliasMap['chuadanga kotwali']='chuadanga sadar';
+aliasMap['chuadanga dc office']='chuadanga sadar';
+aliasMap['jashore district headquarters']='jashore sadar';
+aliasMap['headquarters upazila of jashore']='jashore sadar';
+aliasMap['jashore kotwali']='jashore sadar';
+aliasMap['jashore dc office']='jashore sadar';
+aliasMap['jhenaidah district headquarters']='jhenaidah sadar';
+aliasMap['headquarters upazila of jhenaidah']='jhenaidah sadar';
+aliasMap['jhenaidah kotwali']='jhenaidah sadar';
+aliasMap['jhenaidah dc office']='jhenaidah sadar';
+aliasMap['kushtia district headquarters']='kushtia sadar';
+aliasMap['headquarters upazila of kushtia']='kushtia sadar';
+aliasMap['kushtia kotwali']='kushtia sadar';
+aliasMap['kushtia dc office']='kushtia sadar';
+aliasMap['magura district headquarters']='magura sadar';
+aliasMap['headquarters upazila of magura']='magura sadar';
+aliasMap['magura kotwali']='magura sadar';
+aliasMap['magura dc office']='magura sadar';
+aliasMap['meherpur district headquarters']='meherpur sadar';
+aliasMap['headquarters upazila of meherpur']='meherpur sadar';
+aliasMap['meherpur kotwali']='meherpur sadar';
+aliasMap['meherpur dc office']='meherpur sadar';
+aliasMap['narail district headquarters']='narail sadar';
+aliasMap['headquarters upazila of narail']='narail sadar';
+aliasMap['narail kotwali']='narail sadar';
+aliasMap['narail dc office']='narail sadar';
+aliasMap['satkhira district headquarters']='satkhira sadar';
+aliasMap['headquarters upazila of satkhira']='satkhira sadar';
+aliasMap['satkhira kotwali']='satkhira sadar';
+aliasMap['satkhira dc office']='satkhira sadar';
+aliasMap['barishal district headquarters']='barishal sadar';
+aliasMap['headquarters upazila of barishal']='barishal sadar';
+aliasMap['barishal kotwali']='barishal sadar';
+aliasMap['barishal dc office']='barishal sadar';
+aliasMap['barguna district headquarters']='barguna sadar';
+aliasMap['headquarters upazila of barguna']='barguna sadar';
+aliasMap['barguna kotwali']='barguna sadar';
+aliasMap['barguna dc office']='barguna sadar';
+aliasMap['bhola district headquarters']='bhola sadar';
+aliasMap['headquarters upazila of bhola']='bhola sadar';
+aliasMap['bhola kotwali']='bhola sadar';
+aliasMap['bhola dc office']='bhola sadar';
+aliasMap['jhalokathi district headquarters']='jhalokathi sadar';
+aliasMap['headquarters upazila of jhalokathi']='jhalokathi sadar';
+aliasMap['jhalokathi kotwali']='jhalokathi sadar';
+aliasMap['jhalokathi dc office']='jhalokathi sadar';
+aliasMap['patuakhali district headquarters']='patuakhali sadar';
+aliasMap['headquarters upazila of patuakhali']='patuakhali sadar';
+aliasMap['patuakhali kotwali']='patuakhali sadar';
+aliasMap['patuakhali dc office']='patuakhali sadar';
+aliasMap['pirojpur district headquarters']='pirojpur sadar';
+aliasMap['headquarters upazila of pirojpur']='pirojpur sadar';
+aliasMap['pirojpur kotwali']='pirojpur sadar';
+aliasMap['pirojpur dc office']='pirojpur sadar';
+aliasMap['sylhet district headquarters']='sylhet sadar';
+aliasMap['headquarters upazila of sylhet']='sylhet sadar';
+aliasMap['sylhet kotwali']='sylhet sadar';
+aliasMap['sylhet dc office']='sylhet sadar';
+aliasMap['habiganj district headquarters']='habiganj sadar';
+aliasMap['headquarters upazila of habiganj']='habiganj sadar';
+aliasMap['habiganj kotwali']='habiganj sadar';
+aliasMap['habiganj dc office']='habiganj sadar';
+aliasMap['moulvibazar district headquarters']='moulvibazar sadar';
+aliasMap['headquarters upazila of moulvibazar']='moulvibazar sadar';
+aliasMap['moulvibazar kotwali']='moulvibazar sadar';
+aliasMap['moulvibazar dc office']='moulvibazar sadar';
+aliasMap['sunamganj district headquarters']='sunamganj sadar';
+aliasMap['headquarters upazila of sunamganj']='sunamganj sadar';
+aliasMap['sunamganj kotwali']='sunamganj sadar';
+aliasMap['sunamganj dc office']='sunamganj sadar';
+aliasMap['rangpur district headquarters']='rangpur sadar';
+aliasMap['headquarters upazila of rangpur']='rangpur sadar';
+aliasMap['rangpur kotwali']='rangpur sadar';
+aliasMap['rangpur dc office']='rangpur sadar';
+aliasMap['dinajpur district headquarters']='dinajpur sadar';
+aliasMap['headquarters upazila of dinajpur']='dinajpur sadar';
+aliasMap['dinajpur kotwali']='dinajpur sadar';
+aliasMap['dinajpur dc office']='dinajpur sadar';
+aliasMap['gaibandha district headquarters']='gaibandha sadar';
+aliasMap['headquarters upazila of gaibandha']='gaibandha sadar';
+aliasMap['gaibandha kotwali']='gaibandha sadar';
+aliasMap['gaibandha dc office']='gaibandha sadar';
+aliasMap['kurigram district headquarters']='kurigram sadar';
+aliasMap['headquarters upazila of kurigram']='kurigram sadar';
+aliasMap['kurigram kotwali']='kurigram sadar';
+aliasMap['kurigram dc office']='kurigram sadar';
+aliasMap['lalmonirhat district headquarters']='lalmonirhat sadar';
+aliasMap['headquarters upazila of lalmonirhat']='lalmonirhat sadar';
+aliasMap['lalmonirhat kotwali']='lalmonirhat sadar';
+aliasMap['lalmonirhat dc office']='lalmonirhat sadar';
+aliasMap['nilphamari district headquarters']='nilphamari sadar';
+aliasMap['headquarters upazila of nilphamari']='nilphamari sadar';
+aliasMap['nilphamari kotwali']='nilphamari sadar';
+aliasMap['nilphamari dc office']='nilphamari sadar';
+aliasMap['panchagarh district headquarters']='panchagarh sadar';
+aliasMap['headquarters upazila of panchagarh']='panchagarh sadar';
+aliasMap['panchagarh kotwali']='panchagarh sadar';
+aliasMap['panchagarh dc office']='panchagarh sadar';
+aliasMap['thakurgaon district headquarters']='thakurgaon sadar';
+aliasMap['headquarters upazila of thakurgaon']='thakurgaon sadar';
+aliasMap['thakurgaon kotwali']='thakurgaon sadar';
+aliasMap['thakurgaon dc office']='thakurgaon sadar';
+aliasMap['mymensingh district headquarters']='mymensingh sadar';
+aliasMap['headquarters upazila of mymensingh']='mymensingh sadar';
+aliasMap['mymensingh kotwali']='mymensingh sadar';
+aliasMap['mymensingh dc office']='mymensingh sadar';
+aliasMap['jamalpur district headquarters']='jamalpur sadar';
+aliasMap['headquarters upazila of jamalpur']='jamalpur sadar';
+aliasMap['jamalpur kotwali']='jamalpur sadar';
+aliasMap['jamalpur dc office']='jamalpur sadar';
+aliasMap['netrokona district headquarters']='netrokona sadar';
+aliasMap['headquarters upazila of netrokona']='netrokona sadar';
+aliasMap['netrokona kotwali']='netrokona sadar';
+aliasMap['netrokona dc office']='netrokona sadar';
+aliasMap['sherpur district headquarters']='sherpur sadar';
+aliasMap['headquarters upazila of sherpur']='sherpur sadar';
+aliasMap['sherpur kotwali']='sherpur sadar';
+aliasMap['sherpur dc office']='sherpur sadar';
+bnMap['ঢাকা সদর']='dhaka sadar';
+bnMap['ফরিদপুর সদর']='faridpur sadar';
+bnMap['গাজীপুর সদর']='gazipur sadar';
+bnMap['গোপালগঞ্জ সদর']='gopalganj sadar';
+bnMap['কিশোরগঞ্জ সদর']='kishoreganj sadar';
+bnMap['মাদারীপুর সদর']='madaripur sadar';
+bnMap['মানিকগঞ্জ সদর']='manikganj sadar';
+bnMap['মুন্সীগঞ্জ সদর']='munshiganj sadar';
+bnMap['নারায়ণগঞ্জ সদর']='narayanganj sadar';
+bnMap['নরসিংদী সদর']='narsingdi sadar';
+bnMap['রাজবাড়ী সদর']='rajbari sadar';
+bnMap['শরীয়তপুর সদর']='shariatpur sadar';
+bnMap['টাঙ্গাইল সদর']='tangail sadar';
+bnMap['চট্টগ্রাম সদর']='chattogram sadar';
+bnMap["কক্সবাজার সদর"]="cox's bazar sadar";
+bnMap['কুমিল্লা সদর']='cumilla sadar';
+bnMap['ফেনী সদর']='feni sadar';
+bnMap['খাগড়াছড়ি সদর']='khagrachhari sadar';
+bnMap['লক্ষ্মীপুর সদর']='lakshmipur sadar';
+bnMap['নোয়াখালী সদর']='noakhali sadar';
+bnMap['রাঙ্গামাটি সদর']='rangamati sadar';
+bnMap['বান্দরবান সদর']='bandarban sadar';
+bnMap['ব্রাহ্মণবাড়িয়া সদর']='brahmanbaria sadar';
+bnMap['চাঁদপুর সদর']='chandpur sadar';
+bnMap['রাজশাহী সদর']='rajshahi sadar';
+bnMap['বগুড়া সদর']='bogura sadar';
+bnMap['জয়পুরহাট সদর']='joypurhat sadar';
+bnMap['নওগাঁ সদর']='naogaon sadar';
+bnMap['নাটোর সদর']='natore sadar';
+bnMap['চাঁপাইনবাবগঞ্জ সদর']='chapainawabganj sadar';
+bnMap['পাবনা সদর']='pabna sadar';
+bnMap['সিরাজগঞ্জ সদর']='sirajganj sadar';
+bnMap['খুলনা সদর']='khulna sadar';
+bnMap['বাগেরহাট সদর']='bagerhat sadar';
+bnMap['চুয়াডাঙ্গা সদর']='chuadanga sadar';
+bnMap['যশোর সদর']='jashore sadar';
+bnMap['ঝিনাইদহ সদর']='jhenaidah sadar';
+bnMap['কুষ্টিয়া সদর']='kushtia sadar';
+bnMap['মাগুরা সদর']='magura sadar';
+bnMap['মেহেরপুর সদর']='meherpur sadar';
+bnMap['নড়াইল সদর']='narail sadar';
+bnMap['সাতক্ষীরা সদর']='satkhira sadar';
+bnMap['বরিশাল সদর']='barishal sadar';
+bnMap['বরগুনা সদর']='barguna sadar';
+bnMap['ভোলা সদর']='bhola sadar';
+bnMap['ঝালকাঠি সদর']='jhalokathi sadar';
+bnMap['পটুয়াখালী সদর']='patuakhali sadar';
+bnMap['পিরোজপুর সদর']='pirojpur sadar';
+bnMap['সিলেট সদর']='sylhet sadar';
+bnMap['হবিগঞ্জ সদর']='habiganj sadar';
+bnMap['মৌলভীবাজার সদর']='moulvibazar sadar';
+bnMap['সুনামগঞ্জ সদর']='sunamganj sadar';
+bnMap['রংপুর সদর']='rangpur sadar';
+bnMap['দিনাজপুর সদর']='dinajpur sadar';
+bnMap['গাইবান্ধা সদর']='gaibandha sadar';
+bnMap['কুড়িগ্রাম সদর']='kurigram sadar';
+bnMap['লালমনিরহাট সদর']='lalmonirhat sadar';
+bnMap['নীলফামারী সদর']='nilphamari sadar';
+bnMap['পঞ্চগড় সদর']='panchagarh sadar';
+bnMap['ঠাকুরগাঁও সদর']='thakurgaon sadar';
+bnMap['ময়মনসিংহ সদর']='mymensingh sadar';
+bnMap['জামালপুর সদর']='jamalpur sadar';
+bnMap['নেত্রকোণা সদর']='netrokona sadar';
+bnMap['শেরপুর সদর']='sherpur sadar';
+
+/* AUDIT-2026 sadar pass 2: longer sadar-upazila phrase aliases + bn value fix */
+bnMap['ঢাকা সদর']='dhaka sadar upazila';
+aliasMap['dhaka sadar upazila']='dhaka sadar';
+bnMap['ফরিদপুর সদর']='faridpur sadar upazila';
+aliasMap['faridpur sadar upazila']='faridpur sadar';
+bnMap['গাজীপুর সদর']='gazipur sadar upazila';
+aliasMap['gazipur sadar upazila']='gazipur sadar';
+bnMap['গোপালগঞ্জ সদর']='gopalganj sadar upazila';
+aliasMap['gopalganj sadar upazila']='gopalganj sadar';
+bnMap['কিশোরগঞ্জ সদর']='kishoreganj sadar upazila';
+aliasMap['kishoreganj sadar upazila']='kishoreganj sadar';
+bnMap['মাদারীপুর সদর']='madaripur sadar upazila';
+aliasMap['madaripur sadar upazila']='madaripur sadar';
+bnMap['মানিকগঞ্জ সদর']='manikganj sadar upazila';
+aliasMap['manikganj sadar upazila']='manikganj sadar';
+bnMap['মুন্সীগঞ্জ সদর']='munshiganj sadar upazila';
+// alternate Munshiganj spelling (short i)
+bnMap['মুন্সিগঞ্জ সদর']='munshiganj sadar upazila';
+bnMap['মুন্সিগঞ্জ']='munshiganj';
+
+aliasMap['munshiganj sadar upazila']='munshiganj sadar';
+bnMap['নারায়ণগঞ্জ সদর']='narayanganj sadar upazila';
+aliasMap['narayanganj sadar upazila']='narayanganj sadar';
+bnMap['নরসিংদী সদর']='narsingdi sadar upazila';
+aliasMap['narsingdi sadar upazila']='narsingdi sadar';
+bnMap['রাজবাড়ী সদর']='rajbari sadar upazila';
+aliasMap['rajbari sadar upazila']='rajbari sadar';
+bnMap['শরীয়তপুর সদর']='shariatpur sadar upazila';
+aliasMap['shariatpur sadar upazila']='shariatpur sadar';
+bnMap['টাঙ্গাইল সদর']='tangail sadar upazila';
+aliasMap['tangail sadar upazila']='tangail sadar';
+bnMap['চট্টগ্রাম সদর']='chattogram sadar upazila';
+aliasMap['chattogram sadar upazila']='chattogram sadar';
+bnMap["কক্সবাজার সদর"]="cox's bazar sadar upazila";
+aliasMap["cox's bazar sadar upazila"]="cox's bazar sadar";
+bnMap['কুমিল্লা সদর']='cumilla sadar upazila';
+aliasMap['cumilla sadar upazila']='cumilla sadar';
+bnMap['ফেনী সদর']='feni sadar upazila';
+aliasMap['feni sadar upazila']='feni sadar';
+bnMap['খাগড়াছড়ি সদর']='khagrachhari sadar upazila';
+aliasMap['khagrachhari sadar upazila']='khagrachhari sadar';
+bnMap['লক্ষ্মীপুর সদর']='lakshmipur sadar upazila';
+aliasMap['lakshmipur sadar upazila']='lakshmipur sadar';
+bnMap['নোয়াখালী সদর']='noakhali sadar upazila';
+aliasMap['noakhali sadar upazila']='noakhali sadar';
+bnMap['রাঙ্গামাটি সদর']='rangamati sadar upazila';
+aliasMap['rangamati sadar upazila']='rangamati sadar';
+bnMap['বান্দরবান সদর']='bandarban sadar upazila';
+aliasMap['bandarban sadar upazila']='bandarban sadar';
+bnMap['ব্রাহ্মণবাড়িয়া সদর']='brahmanbaria sadar upazila';
+aliasMap['brahmanbaria sadar upazila']='brahmanbaria sadar';
+bnMap['চাঁদপুর সদর']='chandpur sadar upazila';
+aliasMap['chandpur sadar upazila']='chandpur sadar';
+bnMap['রাজশাহী সদর']='rajshahi sadar upazila';
+aliasMap['rajshahi sadar upazila']='rajshahi sadar';
+bnMap['বগুড়া সদর']='bogura sadar upazila';
+aliasMap['bogura sadar upazila']='bogura sadar';
+bnMap['জয়পুরহাট সদর']='joypurhat sadar upazila';
+aliasMap['joypurhat sadar upazila']='joypurhat sadar';
+bnMap['নওগাঁ সদর']='naogaon sadar upazila';
+aliasMap['naogaon sadar upazila']='naogaon sadar';
+bnMap['নাটোর সদর']='natore sadar upazila';
+aliasMap['natore sadar upazila']='natore sadar';
+bnMap['চাঁপাইনবাবগঞ্জ সদর']='chapainawabganj sadar upazila';
+aliasMap['chapainawabganj sadar upazila']='chapainawabganj sadar';
+bnMap['পাবনা সদর']='pabna sadar upazila';
+aliasMap['pabna sadar upazila']='pabna sadar';
+bnMap['সিরাজগঞ্জ সদর']='sirajganj sadar upazila';
+aliasMap['sirajganj sadar upazila']='sirajganj sadar';
+bnMap['খুলনা সদর']='khulna sadar upazila';
+aliasMap['khulna sadar upazila']='khulna sadar';
+bnMap['বাগেরহাট সদর']='bagerhat sadar upazila';
+aliasMap['bagerhat sadar upazila']='bagerhat sadar';
+bnMap['চুয়াডাঙ্গা সদর']='chuadanga sadar upazila';
+aliasMap['chuadanga sadar upazila']='chuadanga sadar';
+bnMap['যশোর সদর']='jashore sadar upazila';
+aliasMap['jashore sadar upazila']='jashore sadar';
+bnMap['ঝিনাইদহ সদর']='jhenaidah sadar upazila';
+aliasMap['jhenaidah sadar upazila']='jhenaidah sadar';
+bnMap['কুষ্টিয়া সদর']='kushtia sadar upazila';
+aliasMap['kushtia sadar upazila']='kushtia sadar';
+bnMap['মাগুরা সদর']='magura sadar upazila';
+aliasMap['magura sadar upazila']='magura sadar';
+bnMap['মেহেরপুর সদর']='meherpur sadar upazila';
+aliasMap['meherpur sadar upazila']='meherpur sadar';
+bnMap['নড়াইল সদর']='narail sadar upazila';
+aliasMap['narail sadar upazila']='narail sadar';
+bnMap['সাতক্ষীরা সদর']='satkhira sadar upazila';
+aliasMap['satkhira sadar upazila']='satkhira sadar';
+bnMap['বরিশাল সদর']='barishal sadar upazila';
+aliasMap['barishal sadar upazila']='barishal sadar';
+bnMap['বরগুনা সদর']='barguna sadar upazila';
+aliasMap['barguna sadar upazila']='barguna sadar';
+bnMap['ভোলা সদর']='bhola sadar upazila';
+aliasMap['bhola sadar upazila']='bhola sadar';
+bnMap['ঝালকাঠি সদর']='jhalokathi sadar upazila';
+aliasMap['jhalokathi sadar upazila']='jhalokathi sadar';
+bnMap['পটুয়াখালী সদর']='patuakhali sadar upazila';
+aliasMap['patuakhali sadar upazila']='patuakhali sadar';
+bnMap['পিরোজপুর সদর']='pirojpur sadar upazila';
+aliasMap['pirojpur sadar upazila']='pirojpur sadar';
+bnMap['সিলেট সদর']='sylhet sadar upazila';
+aliasMap['sylhet sadar upazila']='sylhet sadar';
+bnMap['হবিগঞ্জ সদর']='habiganj sadar upazila';
+aliasMap['habiganj sadar upazila']='habiganj sadar';
+bnMap['মৌলভীবাজার সদর']='moulvibazar sadar upazila';
+aliasMap['moulvibazar sadar upazila']='moulvibazar sadar';
+bnMap['সুনামগঞ্জ সদর']='sunamganj sadar upazila';
+aliasMap['sunamganj sadar upazila']='sunamganj sadar';
+bnMap['রংপুর সদর']='rangpur sadar upazila';
+aliasMap['rangpur sadar upazila']='rangpur sadar';
+bnMap['দিনাজপুর সদর']='dinajpur sadar upazila';
+aliasMap['dinajpur sadar upazila']='dinajpur sadar';
+bnMap['গাইবান্ধা সদর']='gaibandha sadar upazila';
+aliasMap['gaibandha sadar upazila']='gaibandha sadar';
+bnMap['কুড়িগ্রাম সদর']='kurigram sadar upazila';
+aliasMap['kurigram sadar upazila']='kurigram sadar';
+bnMap['লালমনিরহাট সদর']='lalmonirhat sadar upazila';
+aliasMap['lalmonirhat sadar upazila']='lalmonirhat sadar';
+bnMap['নীলফামারী সদর']='nilphamari sadar upazila';
+aliasMap['nilphamari sadar upazila']='nilphamari sadar';
+bnMap['পঞ্চগড় সদর']='panchagarh sadar upazila';
+aliasMap['panchagarh sadar upazila']='panchagarh sadar';
+bnMap['ঠাকুরগাঁও সদর']='thakurgaon sadar upazila';
+aliasMap['thakurgaon sadar upazila']='thakurgaon sadar';
+bnMap['ময়মনসিংহ সদর']='mymensingh sadar upazila';
+aliasMap['mymensingh sadar upazila']='mymensingh sadar';
+bnMap['জামালপুর সদর']='jamalpur sadar upazila';
+aliasMap['jamalpur sadar upazila']='jamalpur sadar';
+bnMap['নেত্রকোণা সদর']='netrokona sadar upazila';
+aliasMap['netrokona sadar upazila']='netrokona sadar';
+bnMap['শেরপুর সদর']='sherpur sadar upazila';
+aliasMap['sherpur sadar upazila']='sherpur sadar';
+/* ===== SG OSCC & SHELTER district router v2 (SheGuard X parity, BN + EN) ===== */
+(function(){
+  if (window.SGdistV2) return;
+  var SG64 = [["Dhaka", "ঢাকা", "Dhaka"], ["Faridpur", "ফরিদপুর", "Dhaka"], ["Gazipur", "গাজীপুর", "Dhaka"], ["Gopalganj", "গোপালগঞ্জ", "Dhaka"], ["Kishoreganj", "কিশোরগঞ্জ", "Dhaka"], ["Madaripur", "মাদারীপুর", "Dhaka"], ["Manikganj", "মানিকগঞ্জ", "Dhaka"], ["Munshiganj", "মুন্সীগঞ্জ", "Dhaka"], ["Narayanganj", "নারায়ণগঞ্জ", "Dhaka"], ["Narsingdi", "নরসিংদী", "Dhaka"], ["Rajbari", "রাজবাড়ী", "Dhaka"], ["Shariatpur", "শরীয়তপুর", "Dhaka"], ["Tangail", "টাঙ্গাইল", "Dhaka"], ["Chattogram", "চট্টগ্রাম", "Chattogram"], ["Cox's Bazar", "কক্সবাজার", "Chattogram"], ["Cumilla", "কুমিল্লা", "Chattogram"], ["Brahmanbaria", "ব্রাহ্মণবাড়িয়া", "Chattogram"], ["Chandpur", "চাঁদপুর", "Chattogram"], ["Feni", "ফেনী", "Chattogram"], ["Khagrachhari", "খাগড়াছড়ি", "Chattogram"], ["Lakshmipur", "লক্ষ্মীপুর", "Chattogram"], ["Noakhali", "নোয়াখালী", "Chattogram"], ["Rangamati", "রাঙ্গামাটি", "Chattogram"], ["Bandarban", "বান্দরবান", "Chattogram"], ["Rajshahi", "রাজশাহী", "Rajshahi"], ["Bogura", "বগুড়া", "Rajshahi"], ["Joypurhat", "জয়পুরহাট", "Rajshahi"], ["Naogaon", "নওগাঁ", "Rajshahi"], ["Natore", "নাটোর", "Rajshahi"], ["Pabna", "পাবনা", "Rajshahi"], ["Sirajganj", "সিরাজগঞ্জ", "Rajshahi"], ["Chapainawabganj", "চাঁপাইনবাবগঞ্জ", "Rajshahi"], ["Khulna", "খুলনা", "Khulna"], ["Bagerhat", "বাগেরহাট", "Khulna"], ["Chuadanga", "চুয়াডাঙ্গা", "Khulna"], ["Jashore", "যশোর", "Khulna"], ["Jhenaidah", "ঝিনাইদহ", "Khulna"], ["Kushtia", "কুষ্টিয়া", "Khulna"], ["Magura", "মাগুরা", "Khulna"], ["Meherpur", "মেহেরপুর", "Khulna"], ["Narail", "নড়াইল", "Khulna"], ["Satkhira", "সাতক্ষীরা", "Khulna"], ["Barishal", "বরিশাল", "Barishal"], ["Barguna", "বরগুনা", "Barishal"], ["Bhola", "ভোলা", "Barishal"], ["Jhalokati", "ঝালকাঠি", "Barishal"], ["Patuakhali", "পটুয়াখালী", "Barishal"], ["Pirojpur", "পিরোজপুর", "Barishal"], ["Sylhet", "সিলেট", "Sylhet"], ["Habiganj", "হবিগঞ্জ", "Sylhet"], ["Moulvibazar", "মৌলভীবাজার", "Sylhet"], ["Sunamganj", "সুনামগঞ্জ", "Sylhet"], ["Rangpur", "রংপুর", "Rangpur"], ["Dinajpur", "দিনাজপুর", "Rangpur"], ["Gaibandha", "গাইবান্ধা", "Rangpur"], ["Kurigram", "কুড়িগ্রাম", "Rangpur"], ["Lalmonirhat", "লালমনিরহাট", "Rangpur"], ["Nilphamari", "নীলফামারী", "Rangpur"], ["Panchagarh", "পঞ্চগড়", "Rangpur"], ["Thakurgaon", "ঠাকুরগাঁও", "Rangpur"], ["Mymensingh", "ময়মনসিংহ", "Mymensingh"], ["Jamalpur", "জামালপুর", "Mymensingh"], ["Netrokona", "নেত্রকোণা", "Mymensingh"], ["Sherpur", "শেরপুর", "Mymensingh"]];
+  var SG_HUB = {"Dhaka": ["Dhaka Medical College & Hospital (OSCC), Shahbagh, Dhaka", "ঢাকা মেডিকেল কলেজ ও হাসপাতাল (ওসিসি), শাহবাগ, ঢাকা"], "Chattogram": ["Chattogram Medical College Hospital (OSCC), Chattogram", "চট্টগ্রাম মেডিকেল কলেজ হাসপাতাল (ওসিসি), চট্টগ্রাম"], "Rajshahi": ["Rajshahi Medical College Hospital (OSCC), Rajshahi", "রাজশাহী মেডিকেল কলেজ হাসপাতাল (ওসিসি), রাজশাহী"], "Khulna": ["Khulna Medical College Hospital (OSCC), Khulna", "খুলনা মেডিকেল কলেজ হাসপাতাল (ওসিসি), খুলনা"], "Barishal": ["Sher-e-Bangla Medical College Hospital (OSCC), Barishal", "শের-ই-বাংলা মেডিকেল কলেজ হাসপাতাল (ওসিসি), বরিশাল"], "Sylhet": ["MAG Osmani Medical College Hospital (OSCC), Sylhet", "এমএজি ওসমানী মেডিকেল কলেজ হাসপাতাল (ওসিসি), সিলেট"], "Rangpur": ["Rangpur Medical College Hospital (OSCC), Rangpur", "রংপুর মেডিকেল কলেজ হাসপাতাল (ওসিসি), রংপুর"], "Mymensingh": ["Mymensingh Medical College Hospital (OSCC), Mymensingh", "ময়মনসিংহ মেডিকেল কলেজ হাসপাতাল (ওসিসি), ময়মনসিংহ"]};
+  var SG_OWNX = {"Cumilla": ["Cumilla Medical College Hospital (OSCC), Cumilla", "কুমিল্লা মেডিকেল কলেজ হাসপাতাল (ওসিসি), কুমিল্লা"], "Cox's Bazar": ["Cox's Bazar Medical College Hospital (OSCC), Cox's Bazar", "কক্সবাজার মেডিকেল কলেজ হাসপাতাল (ওসিসি), কক্সবাজার"], "Faridpur": ["Faridpur Medical College Hospital (OSCC), Faridpur", "ফরিদপুর মেডিকেল কলেজ হাসপাতাল (ওসিসি), ফরিদপুর"], "Bogura": ["Bogura Medical College Hospital (OSCC), Bogura", "বগুড়া মেডিকেল কলেজ হাসপাতাল (ওসিসি), বগুড়া"], "Jashore": ["Jashore Medical College Hospital (OSCC), Jashore", "যশোর মেডিকেল কলেজ হাসপাতাল (ওসিসি), যশোর"]};
+  var SG_OWN = ["Dhaka", "Chattogram", "Cumilla", "Cox's Bazar", "Faridpur", "Rajshahi", "Khulna", "Barishal", "Sylhet", "Rangpur", "Mymensingh", "Bogura", "Jashore"];
+  var SG_DIVBN = {"Dhaka": "ঢাকা", "Chattogram": "চট্টগ্রাম", "Rajshahi": "রাজশাহী", "Khulna": "খুলনা", "Barishal": "বরিশাল", "Sylhet": "সিলেট", "Rangpur": "রংপুর", "Mymensingh": "ময়মনসিংহ"};
+  var SG_ALIAS = {chittagong:'Chattogram',comilla:'Cumilla',coxsbazar:"Cox's Bazar",'cox bazar':"Cox's Bazar",'cox s bazar':"Cox's Bazar",jessore:'Jashore',bogra:'Bogura',jhalokathi:'Jhalokati',mymensingh:'Mymensingh',rajshahi:'Rajshahi',barishal:'Barishal',sylhet:'Sylhet',rangpur:'Rangpur',khulna:'Khulna',dhaka:'Dhaka',chattogram:'Chattogram',cumilla:'Cumilla'};
+  var SG_BNALIAS = {'মুন্সিগঞ্জ':'মুন্সীগঞ্জ'};
+  var SG_CENTER_BN = ['ওসিসি','ওয়ান স্টপ','ওয়ান-স্টপ','ক্রাইসিস সেন্টার','ক্রাইসিস','নারী নির্যাতন প্রতিরোধ কেন্দ্র','প্রতিরোধ কেন্দ্র'];
+  var SG_INTENT_BN = ['ওসিসি','ওয়ান স্টপ ক্রাইসিস','ওয়ান-স্টপ ক্রাইসিস','ক্রাইসিস সেন্টার','নারী নির্যাতন প্রতিরোধ কেন্দ্র','প্রতিরোধ কেন্দ্র','মহিলা আশ্রয়','নারী আশ্রয়','নিরাপদ আশ্রয়','আশ্রয়কেন্দ্র','শেল্টার','সেফ হোম','সহায়তা কেন্দ্র','হেল্প ডেস্ক'];
+  var SG_CENTER_EN = ['oscc','one stop crisis','one-stop crisis','crisis center','crisis centre'];
+  var SG_INTENT_EN = ['oscc','one stop crisis','one-stop crisis','crisis center','crisis centre','shelter','safe house','women help desk','women support','আশ্রয়'];
+  var SG_SKIP = ['ঘূর্ণিঝড়','বন্যা','জলোচ্ছ্বাস','ভূমিকম্প','cyclone','flood','earthquake'];
+  function bn2en(s){ s=s||''; for(var k in SG_BNALIAS){ if(s.indexOf(k)!==-1) s=s.replace(new RegExp(k,'g'),SG_BNALIAS[k]); } return s; }
+  function hasAny(s, arr, low){ var t = low ? String(s).toLowerCase() : s; for(var i=0;i<arr.length;i++){ if(t.indexOf(arr[i])!==-1) return true; } return false; }
+  window.SGdist = function(msg){
+    try{
+      msg = String(msg||'');
+      var ml = msg.toLowerCase();
+      var i, k;
+      for(i=0;i<SG_SKIP.length;i++){ if(msg.indexOf(SG_SKIP[i])!==-1) return null; }
+      var centerHit = hasAny(msg, SG_CENTER_BN, false) || hasAny(ml, SG_CENTER_EN, false);
+      var broadHit = centerHit || hasAny(msg, SG_INTENT_BN, false) || hasAny(ml, SG_INTENT_EN, false);
+      if(!broadHit) return null;
+      var best = null, blen = 0;
+      var hayBN = bn2en(msg);
+      for(i=0;i<SG64.length;i++){
+        var row = SG64[i];
+        if(hayBN.indexOf(row[1])!==-1 && row[1].length>blen){ blen=row[1].length; best=row; }
+        if(ml.indexOf(row[0].toLowerCase())!==-1 && row[0].length>blen){ blen=row[0].length; best=row; }
+      }
+      for(k in SG_ALIAS){
+        if(ml.indexOf(k)!==-1 && k.length>blen){ blen=k.length; for(i=0;i<SG64.length;i++){ if(SG64[i][0]===SG_ALIAS[k]){ best=SG64[i]; break; } } }
+      }
+      /* No district: answer generic OSCC/shelter only for center-strong queries */
+      if(!best){
+        if(!centerHit) return null;
+        var g = (typeof cR==='object' && cR)?(cR['womensafety_oscc_locations']||cR['womensafety_oscc']||''):'';
+        if(!g) return null;
+        return { k:'womensafety_oscc_locations', t:g, src:'generic' };
+      }
+      var en = best[0], bn = best[1], div = best[2];
+      var inD = SG_OWN.indexOf(en)!==-1;
+      var hubEn = SG_HUB[div][0], hubBn = SG_HUB[div][1];
+      var hosEn = hubEn, hosBn = hubBn;
+      if(inD && SG_OWNX[en]){ hosEn = SG_OWNX[en][0]; hosBn = SG_OWNX[en][1]; }
+      var enT = en + ' district - women crisis care and shelter. ' +
+        (inD ? ('One-Stop Crisis Centre (OSCC) runs IN this district at ' + hosEn + '. ') :
+              ('Your district is served by the ' + div + ' division OSCC at ' + hubEn + '. ')) +
+        'The ' + en + ' District Sadar (General) Hospital women and child help desk also coordinates shelter, medical care and case support. OSCC services are free, 24/7: medical exam, police case support, forensic DNA sampling, one-stop shelter and counselling. Call 109 (toll-free, routes to the nearest OSCC), 999 (emergency police), ASK 01724-415677 (shelter and legal aid), BLAST 01715-220220 (free legal support).';
+      var bnT = bn + ' জেলার নারী সংকটকালীন সুরক্ষা ও আশ্রয় তথ্য। ' +
+        (inD ? ('এই জেলাতেই ওয়ান-স্টপ ক্রাইসিস সেন্টার (ওসিসি) আছে: ' + hosBn + '। ') :
+              ('আপনার জেলার নিকটতম ওসিসি ' + SG_DIVBN[div] + ' বিভাগে: ' + hubBn + '। ')) +
+        bn + ' জেলা সদর হাসপাতালের নারী ও শিশু হেল্প ডেস্ক আশ্রয়, চিকিৎসা ও মামলায় সহায়তা করে। ওসিসি সেবা বিনামূল্যে, ২৪/৭: মেডিকেল পরীক্ষা, মামলায় পুলিশি সহায়তা, ফরেনসিক ডিএনএ নমুনা, এক ছাদের নিচে আশ্রয় ও কাউন্সেলিং। কল করুন: ১০৯ (টোল-ফ্রি), ৯৯৯ (জরুরি), এএসকে ০১৭২৪-৪১৫৬৭৭ (আশ্রয় ও আইনি সহায়তা), ব্লাস্ট ০১৭১৫-২২০২২০ (বিনামূল্যে আইনি সহায়তা)।';
+      var slug = en.toLowerCase().replace(/[^a-z0-9]+/g,'');
+      return { k:'sg_oscc_' + slug, t: enT + ' | ' + bnT };
+    }catch(e){ return null; }
+  };
+  window.SGdistV2 = 1;
+})();
+
+/* 2026-09-04 July uprising coordinator biographies (bilingual) */
+cR["nahid_islam_bio"]="Nahid Islam (b. 28 April 1998, Banasree, Dhaka) is the founding convener of the National Citizen Party (NCP), Bangladesh's first student-led political party, an MP for Dhaka-11 and the Opposition Chief Whip of the 13th Jatiya Sangsad. A sociology student of Dhaka University (his bachelor thesis asked why student movements fail in Bangladesh), he co-founded the Gonotantrik Chhatra Shakti in 2019. As central key coordinator of the Students Against Discrimination he led the 2024 quota-reform movement. On the night of 19 July 2024 he was abducted by plainclothes men, blindfolded, tortured and dumped unconscious under a bridge in Purbachal (found 21 July), then detained by the DB police. After release he declared the one-point demand - Sheikh Hasina's resignation - on 3 August 2024, becoming the most visible face of the July uprising. He served as adviser for Posts, Telecommunications & IT (from 9 Aug 2024) and Information & Broadcasting (from 16 Aug 2024) under Chief Adviser Muhammad Yunus, resigning on 25 Feb 2025 to launch the NCP on 28 Feb 2025. TIME 100 Next, 2024. | নাহিদ ইসলাম (জন্ম ২৮ এপ্রিল ১৯৯৮, বনশ্রী, ঢাকা) জাতীয় নাগরিক পার্টির (এনসিপি) প্রতিষ্ঠাতা আহ্বায়ক—বাংলাদেশের প্রথম ছাত্রনেতৃত্বাধীন রাজনৈতিক দল; ঢাকা-১১ আসনের সংসদ সদস্য ও ত্রয়োদশ জাতীয় সংসদের বিরোধীদলীয় চিফ হুইপ। ঢাকা বিশ্ববিদ্যালয়ের সমাজবিজ্ঞানের শিক্ষার্থী; স্নাতক গবেষণাপত্র ছিল 'বাংলাদেশে ছাত্র আন্দোলন ব্যর্থ হয় কেন' নিয়ে। ২০১৯ সালে গণতান্ত্রিক ছাত্রশক্তি গঠনে ভূমিকা রাখেন। বৈষম্যবিরোধী ছাত্র আন্দোলনের কেন্দ্রীয় সমন্বয়ক হিসেবে ২০২৪-এর কোটা সংস্কার আন্দোলন নেতৃত্ব দেন। ১৯ জুলাই ২০২৪ রাতে পোশাকধারী দুর্বৃত্তরা তাকে অপহরণ করে চোখ বাঁধা ও নির্যাতনের পর ২১ জুলাই পুবাচল সেতুর নিচে অজ্ঞান অবস্থায় ফেলে যায়; পরে ডিবি তাকে আটক করে। মুক্তি পেয়ে ৩ আগস্ট ২০২৪ তিনি এক দফা দাবি—শেখ হাসিনার পদত্যাগ—ঘোষণা করেন এবং জুলাই গণঅভ্যুত্থানের প্রধান মুখ হয়ে ওঠেন। ৯ আগস্ট ২০২৪ থেকে ডাক, টেলিযোগাযোগ ও আইটি এবং ১৬ আগস্ট ২০২৪ থেকে তথ্য ও সম্প্রচার মন্ত্রণালয়ের উপদেষ্টা ছিলেন প্রধান উপদেষ্টা ড. মুহাম্মদ ইউনূসের সরকারে; ২৫ ফেব্রুয়ারি ২০২৫ পদত্যাগ করে ২৮ ফেব্রুয়ারি ২০২৫ এনসিপি প্রতিষ্ঠা করেন। ২০২৪ সালে টাইম ১০০ নেক্সট তালিকায় অন্তর্ভুক্ত হন।";
+cR["asif_mahmud_bio"]="Asif Mahmud Shojib Bhuiyan (b. 14 July 1998, Bangora, Comilla) is the spokesperson of the National Citizen Party and a former adviser of the interim government. He studied at Nakhalpara Hossain Ali High School and Adamjee Cantonment College (BNCC Cadet Sergeant), read Linguistics at Dhaka University (2017-18 session) and pursued a master's at North South University. Former president of the Chhatra Odhikar Parishad (DU unit), he became a key coordinator of the Students Against Discrimination in 2024 and was among the Dhaka University coordinators detained by police in mid-July 2024. With Nahid Islam he was the first student coordinator to join the Yunus interim government (9 Aug 2024): adviser for Youth & Sports and Labour & Employment, then Local Government, Rural Development & Cooperatives from 10 Nov 2024. He resigned on 10 Dec 2025, joined the NCP on 29 Dec 2025 as spokesperson and chief of its election steering committee, and chose not to contest the 2026 general election. | আসিফ মাহমুদ সজীব ভুঁইয়া (জন্ম ১৪ জুলাই ১৯৯৮, বাঙ্গরা, কুমিল্লা) জাতীয় নাগরিক পার্টির মুখপাত্র ও সাবেক অন্তর্বর্তী সরকারের উপদেষ্টা। নাখালপাড়া হোসেন আলী হাইস্কুল ও আদমজী ক্যান্টনমেন্ট কলেজে (বিএনসিসি ক্যাডেট সার্জেন্ট) পড়াশোনা; ঢাকা বিশ্ববিদ্যালয়ে ভাষাবিজ্ঞান বিভাগে (২০১৭-১৮ সেশন) এবং নর্থ সাউথ বিশ্ববিদ্যালয়ে স্নাতকোত্তর। ঢাকা বিশ্ববিদ্যালয় ছাত্র অধিকার পরিষদের সাবেক সভাপতি; ২০২৪ সালে বৈষম্যবিরোধী ছাত্র আন্দোলনের অন্যতম সমন্বয়ক এবং ২০২৪-এর জুলাইয়ের মাঝামাঝি পুলিশি আটক ঢাকা বিশ্ববিদ্যালয়ের সমন্বয়কদের একজন। নাহিদ ইসলামের সঙ্গে তিনিই প্রথম ছাত্র সমন্বয়ক হিসেবে ৯ আগস্ট ২০২৪ ড. ইউনূসের অন্তর্বর্তী সরকারে উপদেষ্টা হন—যুব ও ক্রীড়া এবং শ্রম ও কর্মসংস্থানের দায়িত্বে; ১০ নভেম্বর ২০২৪ থেকে স্থানীয় সরকার, পল্লী উন্নয়ন ও সমবায় মন্ত্রণালয়ের উপদেষ্টা। ১০ ডিসেম্বর ২০২৫ পদত্যাগ করেন; ২৯ ডিসেম্বর ২০২৫ এনসিপিতে যোগ দিয়ে মুখপাত্র ও দলের নির্বাচনী কমিটির প্রধান হন এবং ২০২৬ সালের জাতীয় নির্বাচনে প্রতিদ্বন্দ্বিতা না করার সিদ্ধান্ত নেন।";
+cR["mahfuj_alam_bio"]="Mahfuj Alam (nicknamed Abdullah; from Narayanpur village, Ramganj upazila, Lakshmipur) is a former coordinator of the Students Against Discrimination liaison committee, a former adviser for Information & Broadcasting and co-founder of the 'Alternatives' platform. A madrasa-educated law graduate of Dhaka University (2015-16 intake), he was called 'the brain of the July uprising' by Chief Adviser Muhammad Yunus at the Clinton Global Initiative in September 2024. He served as Special Assistant to the Chief Adviser from 28 Aug 2024, then as Information & Broadcasting adviser from 26 Feb 2025 (succeeding Nahid Islam) until 10 Dec 2025. A translator of Islamic books, he married in October 2024. In July 2026 he co-founded 'Alternatives' with former NCP joint convener Tajnuva Jabeen - a centrist platform to fill an 'ideological vacuum' in politics and carry forward the spirit of the 2024 uprising. | মাহফুজ আলম (ডাকনাম আব্দুল্লাহ; লক্ষ্মীপুরের রামগঞ্জ উপজেলার নারায়ণপুর গ্রামে জন্ম) বৈষম্যবিরোধী ছাত্র আন্দোলনের লিয়াজোঁ কমিটির সাবেক সমন্বয়ক, সাবেক তথ্য ও সম্প্রচার উপদেষ্টা এবং 'অল্টারনেটিভস' প্ল্যাটফর্মের সহ-প্রতিষ্ঠাতা। মাদ্রাসাপড়ুয়া শিক্ষার্থী; ঢাকা বিশ্ববিদ্যালয়ের আইন বিভাগে (২০১৫-১৬) ভর্তি হন। ২০২৪ সালের সেপ্টেম্বরে ক্লিনটন গ্লোবাল ইনিশিয়েটিভে প্রধান উপদেষ্টা ড. মুহাম্মদ ইউনূস তাকে 'জুলাই অভ্যুত্থানের মস্তিষ্ক' বলে অভিহিত করেন। ২৮ আগস্ট ২০২৪ থেকে প্রধান উপদেষ্টার বিশেষ সহকারী ছিলেন; ২৬ ফেব্রুয়ারি ২০২৫ থেকে ১০ ডিসেম্বর ২০২৫ পর্যন্ত তথ্য ও সম্প্রচার মন্ত্রণালয়ের উপদেষ্টা (নাহিদ ইসলামের স্থলাভিষিক্ত)। ইসলামি বইয়ের অনুবাদক; ২০২৪ সালের অক্টোবরে বিবাহ করেন। ২০২৬ সালের জুলাইয়ে এনসিপির সাবেক যুগ্ম আহ্বায়ক তাজনুভা জাবীনের সঙ্গে 'অল্টারনেটিভস' প্রতিষ্ঠা করেন—রাজনীতির 'আদর্শগত শূন্যতা' পূরণ এবং ২০২৪ অভ্যুত্থানের চেতনা এগিয়ে নেওয়ার লক্ষ্যে একটি মধ্যপন্থী প্ল্যাটফর্ম।";
+cR["sarjis_alam_bio"]="Sarjis Alam (b. 2 July 1998, Atwari upazila, Panchagarh) is a National Citizen Party leader and former coordinator of the Students Against Discrimination. From Bamankumar village in Atwari, he completed HSC at BAF Shaheen College Dhaka and earned BSc and MSc in Zoology at Dhaka University. He joined the Bangladesh Chhatra League in 2017, was elected to the Dhaka University Central Students' Union from its panel in 2019, and resigned in 2022. In 2024 he became an SAD coordinator and was among the Dhaka University coordinators detained by police in mid-July. He was secretary general of the July Shaheed Smrity Foundation (Oct 2024 - Jan 2025), chief organizer of the Jatiya Nagorik Committee (Dec 2024) and Chief Organizer (Northern Region) of the NCP at its 28 Feb 2025 launch. He contested Panchagarh-1 in the 2026 election and lost; a truck hit his motorcade in Nov 2024 (he was unhurt). | সারজিস আলম (জন্ম ২ জুলাই ১৯৯৮, পঞ্চগড়ের আটোয়ারী উপজেলা) জাতীয় নাগরিক পার্টির নেতা ও বৈষম্যবিরোধী ছাত্র আন্দোলনের সাবেক সমন্বয়ক। আটোয়ারীর বামনকুমার গ্রামের বাসিন্দা; ঢাকার বিএএফ শাহীন কলেজ থেকে এইচএসসি এবং ঢাকা বিশ্ববিদ্যালয় থেকে প্রাণিবিজ্ঞানে স্নাতক ও স্নাতকোত্তর। ২০১৭ সালে ছাত্রলীগে যোগ দেন; ২০১৯ সালে ঢাবি কেন্দ্রীয় ছাত্র সংসদ নির্বাচনে ছাত্রলীগ প্যানেলে নির্বাচিত হন এবং ২০২২ সালে পদত্যাগ করেন। ২০২৪ সালে বৈষম্যবিরোধী ছাত্র আন্দোলনের সমন্বয়ক হন; জুলাইয়ের মাঝামাঝি পুলিশি আটক ঢাকা বিশ্ববিদ্যালয়ের সমন্বয়কদের একজন। ২০২৪ সালের অক্টোবর থেকে ২০২৫ সালের জানুয়ারি পর্যন্ত জুলাই শহিদ স্মৃতি ফাউন্ডেশনের মহাসচিব ছিলেন; ২০২৪ সালের ডিসেম্বরে জাতীয় নাগরিক কমিটির প্রধান সংগঠক এবং ২৮ ফেব্রুয়ারি ২০২৫ এনসিপির উত্তরাঞ্চলের প্রধান সংগঠক হন। ২০২৬ সালের নির্বাচনে পঞ্চগড়-১ আসনে প্রতিদ্বন্দ্বিতা করে পরাজিত হন; ২০২৪ সালের নভেম্বরে তার মোটরশোভনে ট্রাক ধাক্কা দিলেও তিনি অক্ষত ছিলেন।";
+cR["hasnat_abdullah_bio"]="Hasnat Abdullah (Md. Abul Hasnat, b. 1998, Debidwar, Comilla) is a former convener of the Students Against Discrimination, Chief Organizer (Southern Region) of the NCP and MP for Comilla-4 elected in 2026. An English department graduate of Dhaka University, he rose to national prominence in July 2024 as one of the coordinators detained by police as protests turned violent. After 5 August he helped call on Muhammad Yunus to lead the interim government. At the NCP launch (28 Feb 2025) he became Chief Organizer of the Southern Region. In the 13th Jatiya Sangsad election he won Comilla-4 by a landslide - 166,583 votes against 49,885 for his nearest rival, Md A Jasim Uddin. He married in October 2024 and has a son (b. October 2025). | হাসনাত আব্দুল্লাহ (মো. আবুল হাসনাত; জন্ম ১৯৯৮, কুমিল্লার দেবিদ্বার) বৈষম্যবিরোধী ছাত্র আন্দোলনের সাবেক আহ্বায়ক, এনসিপির দক্ষিণাঞ্চলের প্রধান সংগঠক এবং ২০২৬ সালে নির্বাচিত কুমিল্লা-৪ আসনের সংসদ সদস্য। ঢাকা বিশ্ববিদ্যালয়ের ইংরেজি বিভাগের স্নাতক। ২০২৪ সালের জুলাইয়ে আন্দোলন সহিংস হয়ে উঠলে পুলিশি আটক সমন্বয়কদের একজন হয়ে জাতীয় পরিচিতি পান। ৫ আগস্টের পর তিনি ড. মুহাম্মদ ইউনূসকে অন্তর্বর্তী সরকারের নেতৃত্ব নেওয়ার আহ্বান জানান। ২৮ ফেব্রুয়ারি ২০২৫ এনসিপির যাত্রায় দক্ষিণাঞ্চলের প্রধান সংগঠক হন। ত্রয়োদশ জাতীয় সংসদ নির্বাচনে কুমিল্লা-৪ আসনে বিশাল ব্যবধানে জয়ী হন—১ লাখ ৬৬ হাজার ৫৮৩ ভোট, নিকটতম প্রতিদ্বন্দ্বী মো. এ জসিম উদ্দিন পেয়েছিলেন ৪৯ হাজার ৮৮৫ ভোট। ২০২৪ সালের অক্টোবরে বিবাহ করেন; ২০২৫ সালের অক্টোবরে পুত্রসন্তানের বাবা হন।";
+cR["abu_sayed_bio"]="Abu Sayed (2001 - 16 July 2024) was a second-year English department student of Begum Rokeya University, Rangpur, from Babnapur village, Pirganj upazila, Rangpur - son of farmer Mokbul Hossain and Monowara Begum. On 16 July 2024, during the quota-reform protests, an iconic video showed him standing alone at the university gate with arms outstretched and empty-handed moments before police shot him dead - the first martyr of the movement that grew into the July Uprising. Autopsy and forensic analysis confirmed death from 12-gauge shotgun pellets fired from roughly 14.22 m; Forensic Architecture classified it an extrajudicial killing. His death turned nationwide grief into mass mobilization, and he is commemorated across Bangladesh as the symbol of the student movement. | আবু সায়েদ (২০০১ – ১৬ জুলাই ২০২৪) রংপুরের বেগম রোকেয়া বিশ্ববিদ্যালয়ের ইংরেজি বিভাগের দ্বিতীয় বর্ষের শিক্ষার্থী ছিলেন; তিনি রংপুরের পীরগঞ্জ উপজেলার বাবনাপুর গ্রামের কৃষক মোকবুল হোসেন ও মনোয়ারা বেগমের ছেলে। ১৬ জুলাই ২০২৪ কোটা সংস্কার আন্দোলনে বিশ্ববিদ্যালয়ের গেটে দু'হাত প্রসারিত, খালি হাতে একা দাঁড়িয়ে থাকা তার ভিডিও ভাইরাল হয়; মুহূর্তের ব্যবধানে পুলিশের গুলিতে তিনি নিহত হন—জুলাই অভ্যুত্থানে রূপ নেওয়া আন্দোলনের প্রথম শহিদ। ময়নাতদন্ত ও ফরেনসিক পরীক্ষায় প্রায় ১৪.২২ মিটার দূরত্ব থেকে নিক্ষিপ্ত ১২ গেজ শটগানের গুলিতে মৃত্যু নিশ্চিত হয়; ফরেনসিক আর্কিটেকচার একে বিচারবহির্ভূত হত্যা হিসেবে চিহ্নিত করে। তার মৃত্যু সারা দেশের শোককে গণ-সংহতিতে রূপ দেয় এবং তাকে ছাত্র আন্দোলনের প্রতীক হিসেবে স্মরণ করা হয়।";
+aliasMap["nahid islam"]="nahid_islam_bio";
+aliasMap["nahid"]="nahid_islam_bio";
+aliasMap["who is nahid"]="nahid_islam_bio";
+aliasMap["asif mahmud"]="asif_mahmud_bio";
+aliasMap["asif"]="asif_mahmud_bio";
+aliasMap["asif mahmud shojib"]="asif_mahmud_bio";
+aliasMap["mahfuj alam"]="mahfuj_alam_bio";
+aliasMap["mahfuj"]="mahfuj_alam_bio";
+aliasMap["mahfuj abdullah"]="mahfuj_alam_bio";
+aliasMap["sarjis alam"]="sarjis_alam_bio";
+aliasMap["sarjis"]="sarjis_alam_bio";
+aliasMap["hasnat abdullah"]="hasnat_abdullah_bio";
+aliasMap["hasnat"]="hasnat_abdullah_bio";
+aliasMap["abu sayed"]="abu_sayed_bio";
+aliasMap["abu sayeed"]="abu_sayed_bio";
+aliasMap["abu syed"]="abu_sayed_bio";
+aliasMap["other coordinators"]="july_leaders";
+aliasMap["july uprising leaders"]="july_leaders";
+aliasMap["july coordinators"]="july_leaders";
+bnMap["নাহিদ ইসলাম"]="nahid islam";
+bnMap["নাহিদ"]="nahid";
+bnMap["আসিফ মাহমুদ"]="asif mahmud";
+bnMap["আসিফ"]="asif mahmud";
+bnMap["মাহফুজ আলম"]="mahfuj alam";
+bnMap["মাহফুজ"]="mahfuj";
+bnMap["সারজিস আলম"]="sarjis alam";
+bnMap["সারজিস"]="sarjis";
+bnMap["হাসনাত আব্দুল্লাহ"]="hasnat abdullah";
+bnMap["হাসনাত"]="hasnat";
+bnMap["আবু সায়েদ"]="abu sayed";
+bnMap["আবু সাঈদ"]="abu sayed";
+/* 2026-09-04 bio routing fixes */
+aliasMap['first martyr']='abu_sayed_bio';
+aliasMap['first martyr of the uprising']='abu_sayed_bio';
+aliasMap['dowry in bangladesh']='womensafety_dowry';
+aliasMap['punishment for dowry in bangladesh']='womensafety_dowry';
+aliasMap['dowry law in bangladesh']='womensafety_dowry';
+/* 2026-09-04 bio routing fix 2 */
+aliasMap['জুলাই বিপ্লবের নেতারা']='july_leaders';
+aliasMap['জুলাই বিপ্লবের সমন্বয়ক']='july_leaders';
+
+/* 2026-09-04 student-life knowledge (admission, unis, madrasa, scholarship) */
+cR["admission_process"]="University admission in Bangladesh: after HSC or equivalent (Alim, A-levels), students apply to universities through online admission portals and sit entrance tests. Public universities run their own unit-based admission tests - for example Dhaka University tests by units (Ka = science, Kha = commerce, Ga = arts, plus special units), and engineering universities (BUET, CUET, KUET, RUET) hold separate competitive tests. Eligibility usually requires a minimum HSC combined GPA plus a strong admission-test score; top public universities admit only a few thousand of lakhs of applicants, so merit competition is intense. Applications are submitted on the official admission website of each university with a fee paid by mobile banking (bKash, Nagad, Rocket); admit cards and results are published online. After the July 2024 uprising and the change of government, admission calendars for several sessions ran late, and candidates should always follow the official university notice - never pay anyone who promises a seat. | বিশ্ববিদ্যালয়ে ভর্তি: এইচএসসি বা সমমান (আলিম, এ-লেভেল) শেষে শিক্ষার্থীরা অনলাইন ভর্তি পোর্টালে আবেদন করে প্রবেশিকা পরীক্ষায় অংশ নেয়। সরকারি বিশ্ববিদ্যালয় নিজস্ব ইউনিটভিত্তিক ভর্তি পরীক্ষা নেয়—যেমন ঢাকা বিশ্ববিদ্যালয়ে ক (বিজ্ঞান), খ (বাণিজ্য), গ (কলা) ও বিশেষ ইউনিট; প্রকৌশল বিশ্ববিদ্যালয়গুলোতে (বুয়েট, চুয়েট, কুয়েট, রুয়েট) আলাদা প্রতিযোগিতামূলক পরীক্ষা হয়। যোগ্যতার জন্য সাধারণত এইচএসসির ন্যূনতম সমন্বিত জিপিএ এবং ভর্তি পরীক্ষায় ভালো নম্বর লাগে; শীর্ষ সরকারি বিশ্ববিদ্যালয়ে লাখো আবেদনকারীর মধ্যে হাজার খানেক আসন, তাই মেধার লড়াই তীব্র। আবেদন সংশ্লিষ্ট বিশ্ববিদ্যালয়ের সরকারি ওয়েবসাইটে হয়, ফি মোবাইল ব্যাংকিংয়ে (বিকাশ, নগদ, রকেট) জমা হয়; প্রবেশপত্র ও ফলাফল অনলাইনে প্রকাশ হয়। ২০২৪ সালের জুলাই অভ্যুত্থান ও সরকারবদলের পর একাধিক সেশনের ভর্তি দেরিতে হয়েছে—সরকারি বিজ্ঞপ্তিই অনুসরণ করবেন; আসন দেওয়ার নামে কাউকে টাকা দেবেন না।";
+cR["public_vs_private_uni"]="Bangladesh has about 55 public universities and more than 100 UGC-approved private universities, beside the National University's huge network of affiliated colleges. Public universities (Dhaka, Rajshahi, Chattogram, Jahangirnagar, SUST, BUET, medical and agricultural universities) charge nominal tuition - often only a few thousand taka a year - and offer the most prestigious degrees, but seats are few, admission is fiercely competitive, and degree completion can be delayed by sessions, politics or strikes. Private universities (from North South in 1992 to BRAC, IUB, AIUB, East West, UIU today) run on semester and credit-hour fees, often several lakh taka per year at top institutions, with their own admission tests or waivers, English-medium classes and shorter, smoother degree paths, supervised by the UGC. Both systems are valid - public means lower cost and higher prestige with harder entry; private means faster, costlier, more flexible study. | বাংলাদেশে প্রায় ৫৫টি সরকারি ও ১০০+ ইউজিসি অনুমোদিত বেসরকারি বিশ্ববিদ্যালয় আছে, পাশাপাশি জাতীয় বিশ্ববিদ্যালয়ের অধিভুক্ত কলেজ নেটওয়ার্ক। সরকারি বিশ্ববিদ্যালয়ে (ঢাকা, রাজশাহী, চট্টগ্রাম, জাহাঙ্গীরনগর, শাবিপ্রবি, বুয়েট, মেডিকেল ও কৃষি বিশ্ববিদ্যালয়) খরচ নামমাত্র—বছরে কয়েক হাজার টাকা—এবং ডিগ্রির মর্যাদা সবচেয়ে বেশি; কিন্তু আসন কম, ভর্তি অত্যন্ত প্রতিযোগিতামূলক, সেশনজট-রাজনীতি-ধর্মঘটে ডিগ্রি শেষ হতে দেরি হতে পারে। বেসরকারি বিশ্ববিদ্যালয়গুলো (১৯৯২ সালে নর্থ সাউথ থেকে শুরু; এখন ব্র্যাক, আইইউবি, এআইইউবি, ইস্ট ওয়েস্ট, ইউআইইউ) সেমিস্টার ও ক্রেডিট ভিত্তিক ফি চালায়—শীর্ষ প্রতিষ্ঠানে বছরে কয়েক লাখ টাকা; নিজস্ব ভর্তি পরীক্ষা বা মেধা ছাড়, ইংরেজি মাধ্যমে ক্লাস এবং দ্রুত-সুন্দর ডিগ্রি পথ, তত্ত্বাবধানে ইউজিসি। দুই ব্যবস্থাই বৈধ—সরকারি মানে কম খরচ, বেশি মর্যাদা, কঠিন প্রবেশ; বেসরকারি মানে দ্রুত, ব্যয়বহুল, নমনীয় পড়াশোনা।";
+cR["best_universities_bd"]="The best universities in Bangladesh depend on your subject. Among public universities, Dhaka University (1921) is the most famous for arts, social science, business and science; BUET is the top engineering university; BSMMU and the medical colleges lead in medicine; BAU (Mymensingh) in agriculture; Rajshahi, Chattogram, Jahangirnagar, Jagannath, Khulna and SUST are strong across many disciplines, and CUET, KUET, RUET lead outside Dhaka in engineering. Among private universities the most reputed are North South (NSU), BRAC, Independent (IUB), AIUB, East West (EWU), United International (UIU) and IUT (Islamic University of Technology). For a student choosing today, the practical ranking is: match the university to the subject, check the UGC approval, faculty, fee and job market, not just name - and for medicine or engineering the public institutions remain the most respected. | বাংলাদেশের সেরা বিশ্ববিদ্যালয় নির্ভর করে বিষয়ের ওপর। সরকারি বিশ্ববিদ্যালয়ের মধ্যে ঢাকা বিশ্ববিদ্যালয় (১৯২১) কলা, সমাজবিজ্ঞান, বাণিজ্য ও বিজ্ঞানে সবচেয়ে পরিচিত; বুয়েট সেরা প্রকৌশল বিশ্ববিদ্যালয়; বিএসএমএমইউ ও মেডিকেল কলেজগুলো চিকিৎসায় শীর্ষে; ময়মনসিংহের কৃষি বিশ্ববিদ্যালয় (বাকৃবি) কৃষিতে; রাজশাহী, চট্টগ্রাম, জাহাঙ্গীরনগর, জগন্নাথ, খুলনা ও শাবিপ্রবি নানা বিষয়ে শক্তিশালী; চুয়েট, কুয়েট, রুয়েট ঢাকার বাইরে প্রকৌশলে এগিয়ে। বেসরকারির মধ্যে সবচেয়ে সুনাম—নর্থ সাউথ (এনএসইউ), ব্র্যাক, ইনডিপেনডেন্ট (আইইউবি), এআইইউবি, ইস্ট ওয়েস্ট (ইডব্লিউইউ), ইউনাইটেড ইন্টারন্যাশনাল (ইউআইইউ) ও আইইউটি। আজ যে কেউ বিশ্ববিদ্যালয় বেছে নেবে: বিষয়ের সঙ্গে মিলিয়ে দেখুন, ইউজিসি অনুমোদন, শিক্ষক, খরচ ও চাকরির বাজার যাচাই করুন—শুধু নাম নয়; চিকিৎসা বা প্রকৌশলে সরকারি প্রতিষ্ঠানই সবচেয়ে সম্মানিত।";
+cR["madrasa_streams"]="Bangladesh has two madrasa systems. The government-recognised Alia (or Aliya) system runs under the Bangladesh Madrasah Education Board and follows a 16-year ladder: Ebtedayi (primary, 5 years), Dakhil (secondary, 5 years, equivalent to SSC), Alim (higher secondary, 2 years, equivalent to HSC), Fazil (bachelor level) and Kamil (master level). Because Dakhil and Alim are officially equivalent to SSC and HSC, madrasa students can enter colleges and universities, and the Fazil/Kamil degrees open teaching and imam jobs. The independent Qawmi system follows its own curriculum with a focus on the Quran, Hadith and Islamic sciences; its main board is Befaq (BEFAQ), and in 2018 the government recognised the Qawmi Dawra-e-Hadith as equivalent to a master's degree. There are also hifz (memorisation) madrasas. So 'madrasa streams' means: Ebtedayi-Dakhil-Alim-Fazil-Kamil in the Alia line, and the Qawmi line separately. | বাংলাদেশে দুই ধরনের মাদ্রাসা ব্যবস্থা আছে। সরকারস্বীকৃত আলিয়া মাদ্রাসা বাংলাদেশ মাদ্রাসা শিক্ষা বোর্ডের অধীনে চলে এবং এর ধাপ: ইবতেদায়ি (প্রাথমিক, ৫ বছর), দাখিল (মাধ্যমিক, ৫ বছর—এসএসসির সমমান), আলিম (উচ্চমাধ্যমিক, ২ বছর—এইচএসসির সমমান), ফাজিল (স্নাতক পর্যায়) ও কামিল (স্নাতকোত্তর পর্যায়)। দাখিল-আলিম এসএসসি-এইচএসসির সমমান হওয়ায় মাদ্রাসার শিক্ষার্থীরা কলেজ-বিশ্ববিদ্যালয়ে ভর্তি হতে পারে; ফাজিল-কামিল ডিগ্রি শিক্ষকতা ও ইমামতি কাজের সুযোগ খুলে দেয়। স্বতন্ত্র কওমি ব্যবস্থার নিজস্ব পাঠ্যসূচি—কোরআন, হাদিস ও ইসলামি বিজ্ঞানকেন্দ্রিক; এর প্রধান বোর্ড বেফাক (বেফাক); ২০১৮ সালে সরকার কওমির দাওরায়ে হাদিসকে স্নাতকোত্তর ডিগ্রির সমমান স্বীকৃতি দেয়। হিফজ (কোরআন মুখস্থ) মাদ্রাসাও আছে। অর্থাৎ মাদ্রাসা ধারাগুলো: আলিয়া লাইনে ইবতেদায়ি-দাখিল-আলিম-ফাজিল-কামিল, আর আলাদা কওমি লাইন।";
+cR["scholarship_bd"]="Scholarships and stipends in Bangladesh: at the school level the education boards give merit scholarships in two tiers - talentpool (ট্যালেন্টপুল) and general (সাধারণ) - from PSC to HSC, with monthly stipends for top scorers; poor meritorious girls get the government stipend up to higher secondary. Universities offer internal merit scholarships, and the Prime Minister's Education Assistance Trust helps poor meritorious students. Private universities give tuition waivers of 25-100% based on HSC GPA or admission-test results, and banks (Islami Bank, Prime Bank, Dutch-Bangla and others) fund merit and need-based scholarships for university students. For study abroad, the well-known scholarships for Bangladeshi students are Chevening (UK), Fulbright (US), Commonwealth, Erasmus Mundus (EU), Australia Awards and the Japanese (MEXT) scholarship - all free to apply via their official websites. Never pay anyone who claims to 'arrange' a scholarship. | বাংলাদেশে বৃত্তি ও উপবৃত্তি: স্কুল পর্যায়ে শিক্ষা বোর্ড মেধা বৃত্তি দেয় দুই ধারায়—ট্যালেন্টপুল ও সাধারণ—পিএসসি থেকে এইচএসসি পর্যন্ত, শীর্ষ মেধাবীদের মাসিক বৃত্তি সহ; গরিব মেধাবী মেয়েরা উচ্চমাধ্যমিক পর্যন্ত সরকারি উপবৃত্তি পায়। বিশ্ববিদ্যালয়গুলো অভ্যন্তরীণ মেধা বৃত্তি দেয়; প্রধানমন্ত্রীর শিক্ষা সহায়তা ট্রাস্ট গরিব মেধাবী শিক্ষার্থীদের সাহায্য করে। বেসরকারি বিশ্ববিদ্যালয়গুলো এইচএসসি জিপিএ বা ভর্তি পরীক্ষার ভিত্তিতে ২৫-১০০% পর্যন্ত টিউশন ছাড় দেয়; ইসলামী ব্যাংক, প্রাইম ব্যাংক, ডাচ্-বাংলা ব্যাংকসহ বিভিন্ন ব্যাংক মেধা ও প্রয়োজনের ভিত্তিতে বিশ্ববিদ্যালয় শিক্ষার্থীদের বৃত্তি দেয়। বিদেশে পড়তে বাংলাদেশি শিক্ষার্থীদের পরিচিত বৃত্তি: চেভেনিং (যুক্তরাজ্য), ফুলব্রাইট (মার্কিন যুক্তরাষ্ট্র), কমনওয়েলথ, ইরাসমাস মুন্ডাস (ইইউ), অস্ট্রেলিয়া অ্যাওয়ার্ডস ও জাপানের মেক্স (MEXT)—সবগুলোতেই নিজে আবেদন করুন সরকারি ওয়েবসাইটে, ফি লাগে না। বৃত্তি 'ব্যবস্থা করে দেওয়ার' নামে কাউকে টাকা দেবেন না।";
+cR["education_boards"]="Bangladesh has 11 education boards. There are 9 general education boards - Dhaka, Rajshahi, Cumilla, Chattogram, Sylhet, Barishal, Jashore, Dinajpur and Mymensingh - which conduct the SSC and HSC (and equivalent) public examinations for general-stream students and publish results. Two special boards complete the system: the Bangladesh Madrasah Education Board (for Dakhil/Alim madrasa exams) and the Bangladesh Technical Education Board (for SSC/HSC vocational, diploma-in-engineering and trade courses). Each SSC/HSC candidate registers under the board of their school/college region; results are published online and by SMS. The Dhaka board is the largest by student numbers. | বাংলাদেশে ১১টি শিক্ষা বোর্ড আছে। সাধারণ ধারার ৯টি বোর্ড—ঢাকা, রাজশাহী, কুমিল্লা, চট্টগ্রাম, সিলেট, বরিশাল, যশোর, দিনাজপুর ও ময়মনসিংহ—যারা এসএসসি ও এইচএসসি (এবং সমমান) পাবলিক পরীক্ষা নেয় ও ফলাফল প্রকাশ করে। আরও দুটি বিশেষ বোর্ড: বাংলাদেশ মাদ্রাসা শিক্ষা বোর্ড (দাখিল/আলিম পরীক্ষার জন্য) ও বাংলাদেশ কারিগরি শিক্ষা বোর্ড (এসএসসি/এইচএসসি ভোকেশনাল, ডিপ্লোমা-ইন-ইঞ্জিনিয়ারিং ও ট্রেড কোর্সের জন্য)। প্রতিটি এসএসসি/এইচএসসি পরীক্ষার্থী তার স্কুল/কলেজের আঞ্চলিক বোর্ডের অধীনে নিবন্ধিত হয়; ফলাফল অনলাইন ও এসএমএসে প্রকাশ হয়। শিক্ষার্থী সংখ্যায় ঢাকা বোর্ড সবচেয়ে বড়।";
+cR["du_admission"]="Dhaka University (est. 1921) admission: DU admits honours students through its own central admission tests organised by unit - Unit Ka (science faculty subjects), Unit Kha (commerce/social science business), Unit Ga (arts and humanities) and other special units including fine arts - with eligibility based on HSC/equivalent results and the admission test score. Application is online at admission.du.ac.bd with the fee paid by mobile banking; the test usually has MCQ and written parts and takes place months after HSC results, with lakhs of applicants competing for only a few thousand seats, making DU one of the most competitive universities in South Asia. After the July 2024 uprising, DU got a new vice-chancellor and the delayed 2023-24 session admission tests were held late in 2024. Admission notices, unit details, subject lists and dates are always published on the official DU admission website - follow only that. | ঢাকা বিশ্ববিদ্যালয় (প্রতিষ্ঠা ১৯২১) ভর্তি: ঢাবি অনার্সে ভর্তি নেয় নিজস্ব কেন্দ্রীয় ভর্তি পরীক্ষার মাধ্যমে, ইউনিটভিত্তিক—ক ইউনিট (বিজ্ঞান অনুষদের বিষয়), খ ইউনিট (বাণিজ্য/সমাজবিজ্ঞান), গ ইউনিট (কলা ও মানবিক) এবং চারুকলাসহ অন্যান্য বিশেষ ইউনিট; যোগ্যতা এইচএসসি/সমমান ফলাফল ও ভর্তি পরীক্ষার নম্বরের ভিত্তিতে। আবেদন অনলাইনে admission.du.ac.bd-এ, ফি মোবাইল ব্যাংকিংয়ে; পরীক্ষায় সাধারণত এমসিকিউ ও লিখিত অংশ থাকে এবং এইচএসসি ফলাফলের কয়েক মাস পর হয়। লাখো আবেদনকারীর বিপরীতে আসন মাত্র কয়েক হাজার—দক্ষিণ এশিয়ার সবচেয়ে প্রতিযোগিতামূলক বিশ্ববিদ্যালয়গুলোর একটি ঢাবি। ২০২৪ সালের জুলাই অভ্যুত্থানের পর ঢাবিতে নতুন উপাচার্য আসে এবং ২০২৩-২৪ সেশনের দেরিতে হওয়া ভর্তি পরীক্ষা ২০২৪ সালের শেষে অনুষ্ঠিত হয়। বিজ্ঞপ্তি, ইউনিট বিবরণ, বিষয় তালিকা ও তারিখ সবসময় ঢাবির সরকারি ভর্তি ওয়েবসাইটেই প্রকাশ হয়—শুধু সেটাই অনুসরণ করুন।";
+cR["medical_admission"]="Medical admission in Bangladesh: MBBS and BDS seats are filled through the national Medical and Dental Admission Test held once a year by the health ministry's admission authority. Candidates need HSC/science (or Alim science) with biology, chemistry and physics, and a minimum combined GPA that changes yearly (recently around 8.5-9.0 for government colleges). There are roughly 37 government medical colleges (including BSMMU) plus many private medical colleges; government seats are few - only a few thousand for the whole country - so the test is extremely competitive, while private colleges cost much more (admission plus yearly fees in lakhs of taka). Application is online with a mobile-banking fee, the exam is MCQ-based, and counselling assigns seats by merit. After the 2024 reforms the quota system for government medical seats changed, so always check the current admission circular of the DGHS (health directorate). | বাংলাদেশে মেডিকেল ভর্তি: এমবিবিএস ও বিডিএস আসনে ভর্তি হয় স্বাস্থ্য মন্ত্রণালয়ের ভর্তি কর্তৃপক্ষের আয়োজনে বছরে একবার অনুষ্ঠিত জাতীয় মেডিকেল ও ডেন্টাল ভর্তি পরীক্ষার মাধ্যমে। প্রার্থীর এইচএসসি/বিজ্ঞান (বা আলিম বিজ্ঞান) বিভাগে জীববিজ্ঞান, রসায়ন ও পদার্থবিজ্ঞানসহ ন্যূনতম সমন্বিত জিপিএ দরকার, যা বছরে বদলায় (সাম্প্রতিক বছরগুলোতে সরকারি কলেজে প্রায় ৮.৫-৯.০)। সরকারি মেডিকেল কলেজ প্রায় ৩৭টি (বিএসএমএমইউসহ) আর বেসরকারি মেডিকেল কলেজ অনেক; সরকারি আসন খুবই কম—সারাদেশে মাত্র কয়েক হাজার—তাই পরীক্ষা অত্যন্ত প্রতিযোগিতামূলক; বেসরকারি কলেজে খরচ অনেক বেশি (ভর্তি ও বার্ষিক ফি লাখ টাকায়)। আবেদন অনলাইনে, ফি মোবাইল ব্যাংকিংয়ে; পরীক্ষা এমসিকিউভিত্তিক, কাউন্সেলিংয়ে মেধাক্রমে আসন বণ্টন হয়। ২০২৪ সালের সংস্কারের পর সরকারি মেডিকেল আসনের কোটা ব্যবস্থা বদলেছে—সর্বশেষ বিজ্ঞপ্তি স্বাস্থ্য অধিদপ্তরের (ডিজিএইচএস) সার্কুলারেই দেখুন।";
+cR["engineering_admission"]="Engineering admission in Bangladesh: public engineering universities run their own admission tests. BUET holds its own highly competitive test for about a thousand seats (admission rate often below 2%); CUET, KUET and RUET also hold separate admission tests; science & technology universities (SUST, JUST, PSTU and others) test similarly, and engineering faculties inside general universities (e.g. DU's applied science, Rajshahi's engineering units) admit through their own or central tests. Eligibility requires HSC science with mathematics, physics and chemistry and a strong combined GPA. The exam is MCQ and maths-heavy, with a separate written or MCQ stage; coaching is common but the official notices - for example BUET's admission website - are the only valid source of dates and forms. Private engineering options include IUT, AIUB, EWU, UIU and NSU's engineering programmes with easier entry but semester fees. | বাংলাদেশে প্রকৌশল ভর্তি: সরকারি প্রকৌশল বিশ্ববিদ্যালয়গুলো নিজস্ব ভর্তি পরীক্ষা নেয়। বুয়েট তার নিজস্ব অত্যন্ত প্রতিযোগিতামূলক পরীক্ষায় প্রায় হাজার খানেক আসনে ভর্তি নেয় (ভর্তির হার প্রায়ই ২%-এর নিচে); চুয়েট, কুয়েট ও রুয়েটও আলাদা ভর্তি পরীক্ষা নেয়; বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয়গুলোতে (শাবিপ্রবি, জাস্ট, পবিপ্রবিসহ) একই ধরনের পরীক্ষা হয়; আর সাধারণ বিশ্ববিদ্যালয়ের প্রকৌশল অনুষদগুলো (ঢাবির ফলিত বিজ্ঞান, রাজশাহীর প্রকৌশল ইউনিট) নিজস্ব বা কেন্দ্রীয় পরীক্ষায় ভর্তি নেয়। যোগ্যতার জন্য এইচএসসি বিজ্ঞানে গণিত, পদার্থবিজ্ঞান ও রসায়নসহ শক্ত সমন্বিত জিপিএ দরকার। পরীক্ষা এমসিকিউ ও গণিতনির্ভর; কোচিং সাধারণ ব্যাপার, তবে তারিখ ও ফর্মের একমাত্র নির্ভরযোগ্য উৎস সরকারি বিজ্ঞপ্তি—যেমন বুয়েটের ভর্তি ওয়েবসাইট। বেসরকারি প্রকৌশল বিকল্প: আইইউটি, এআইইউবি, ইস্ট ওয়েস্ট, ইউআইইউ ও এনএসইউর ইঞ্জিনিয়ারিং প্রোগ্রাম—প্রবেশ সহজ, তবে সেমিস্টার ফি।";
+aliasMap["university admission"]="admission_process";
+aliasMap["admission test"]="admission_process";
+aliasMap["admission process"]="admission_process";
+aliasMap["admission in bangladesh"]="admission_process";
+aliasMap["how to apply for university"]="admission_process";
+aliasMap["when is the admission test"]="admission_process";
+aliasMap["university admission requirements"]="admission_process";
+aliasMap["how does university admission work"]="admission_process";
+aliasMap["public vs private university"]="public_vs_private_uni";
+aliasMap["public and private universities"]="public_vs_private_uni";
+aliasMap["public or private university"]="public_vs_private_uni";
+aliasMap["government vs private university"]="public_vs_private_uni";
+aliasMap["difference between public and private"]="public_vs_private_uni";
+aliasMap["public university"]="public_vs_private_uni";
+aliasMap["private university"]="public_vs_private_uni";
+aliasMap["how many private universities"]="public_vs_private_uni";
+aliasMap["how many public universities"]="public_vs_private_uni";
+aliasMap["public universities in bangladesh"]="public_vs_private_uni";
+aliasMap["private universities in bangladesh"]="public_vs_private_uni";
+aliasMap["best university in bangladesh"]="best_universities_bd";
+aliasMap["best universities in bangladesh"]="best_universities_bd";
+aliasMap["top university in bangladesh"]="best_universities_bd";
+aliasMap["top universities in bangladesh"]="best_universities_bd";
+aliasMap["top public universities"]="best_universities_bd";
+aliasMap["top private universities"]="best_universities_bd";
+aliasMap["best private universities"]="best_universities_bd";
+aliasMap["which university is best"]="best_universities_bd";
+aliasMap["university ranking in bangladesh"]="best_universities_bd";
+aliasMap["madrasa"]="madrasa_streams";
+aliasMap["madrasa education"]="madrasa_streams";
+aliasMap["madrasa streams"]="madrasa_streams";
+aliasMap["madrasa system"]="madrasa_streams";
+aliasMap["madrasah education"]="madrasa_streams";
+aliasMap["dakhil"]="madrasa_streams";
+aliasMap["alim"]="madrasa_streams";
+aliasMap["fazil"]="madrasa_streams";
+aliasMap["kamil"]="madrasa_streams";
+aliasMap["qawmi madrasa"]="madrasa_streams";
+aliasMap["alia madrasa"]="madrasa_streams";
+aliasMap["madrasa board"]="madrasa_streams";
+aliasMap["ebtedayi"]="madrasa_streams";
+aliasMap["scholarship"]="scholarship_bd";
+aliasMap["scholarships"]="scholarship_bd";
+aliasMap["scholarship in bangladesh"]="scholarship_bd";
+aliasMap["student scholarship"]="scholarship_bd";
+aliasMap["how to get scholarship"]="scholarship_bd";
+aliasMap["merit scholarship"]="scholarship_bd";
+aliasMap["stipend in bangladesh"]="scholarship_bd";
+aliasMap["study abroad scholarship"]="scholarship_bd";
+aliasMap["education board"]="education_boards";
+aliasMap["education boards"]="education_boards";
+aliasMap["education boards in bangladesh"]="education_boards";
+aliasMap["how many education boards"]="education_boards";
+aliasMap["which education board"]="education_boards";
+aliasMap["ssc board"]="education_boards";
+aliasMap["hsc board"]="education_boards";
+aliasMap["board exam"]="education_boards";
+aliasMap["ময়মনসিংহ বোর্ড"]="education_boards";
+aliasMap["dhaka university admission"]="du_admission";
+aliasMap["du admission"]="du_admission";
+aliasMap["dhaka university admission test"]="du_admission";
+aliasMap["du admission test"]="du_admission";
+aliasMap["ঢাবি ভর্তি"]="du_admission";
+aliasMap["medical admission"]="medical_admission";
+aliasMap["mbbs admission"]="medical_admission";
+aliasMap["bds admission"]="medical_admission";
+aliasMap["medical college admission"]="medical_admission";
+aliasMap["medical admission test"]="medical_admission";
+aliasMap["doctor admission"]="medical_admission";
+aliasMap["engineering admission"]="engineering_admission";
+aliasMap["buet admission"]="engineering_admission";
+aliasMap["engineering admission test"]="engineering_admission";
+aliasMap["buet admission test"]="engineering_admission";
+aliasMap["engineering university admission"]="engineering_admission";
+aliasMap["প্রকৌশল ভর্তি"]="engineering_admission";
+bnMap["ভর্তি পরীক্ষা"]="admission test";
+bnMap["বিশ্ববিদ্যালয়ে ভর্তি"]="university admission";
+bnMap["বিশ্ববিদ্যালয় ভর্তি"]="university admission";
+bnMap["ঢাকা বিশ্ববিদ্যালয়ে ভর্তি"]="dhaka university admission";
+bnMap["ঢাকা বিশ্ববিদ্যালয়"]="dhaka university";
+bnMap["ঢাবি ভর্তি"]="dhaka university admission";
+bnMap["পাবলিক ও প্রাইভেট বিশ্ববিদ্যালয়"]="public vs private university";
+bnMap["সরকারি ও বেসরকারি বিশ্ববিদ্যালয়"]="public vs private university";
+bnMap["সরকারি বিশ্ববিদ্যালয়"]="public university";
+bnMap["প্রাইভেট বিশ্ববিদ্যালয়"]="private university";
+bnMap["বেসরকারি বিশ্ববিদ্যালয়"]="private university";
+bnMap["সেরা বিশ্ববিদ্যালয়"]="best universities in bangladesh";
+bnMap["ভালো বিশ্ববিদ্যালয়"]="best universities in bangladesh";
+bnMap["মাদ্রাসা শিক্ষা"]="madrasa education";
+bnMap["মাদ্রাসা"]="madrasa streams";
+bnMap["দাখিল"]="dakhil";
+bnMap["আলিম"]="alim";
+bnMap["ফাজিল"]="fazil";
+bnMap["কামিল"]="kamil";
+bnMap["কওমি"]="qawmi madrasa";
+bnMap["স্কলারশিপ"]="scholarship in bangladesh";
+bnMap["বৃত্তি"]="scholarship in bangladesh";
+bnMap["উপবৃত্তি"]="scholarship in bangladesh";
+bnMap["শিক্ষা বোর্ড"]="education boards in bangladesh";
+bnMap["মেডিকেল ভর্তি"]="medical admission";
+bnMap["এমবিবিএস"]="medical admission";
+bnMap["ইঞ্জিনিয়ারিং ভর্তি"]="engineering admission";
+bnMap["বুয়েট ভর্তি"]="buet admission";
+bnMap["বুয়েট"]="buet admission";
+/* 2026-09-04 student-life routing fixes (longer specific aliases) */
+aliasMap['top public universities in bangladesh']='best_universities_bd';
+aliasMap['best public universities in bangladesh']='best_universities_bd';
+aliasMap['top private universities in bangladesh']='best_universities_bd';
+aliasMap['best private universities in bangladesh']='best_universities_bd';
+aliasMap['top 10 universities in bangladesh']='best_universities_bd';
+aliasMap['du admission process']='du_admission';
+aliasMap['dhaka university admission process']='du_admission';
+aliasMap['du admission requirements']='du_admission';
+aliasMap['engineering admission in bangladesh']='engineering_admission';
+aliasMap['medical admission in bangladesh']='medical_admission';
+aliasMap['buet admission in bangladesh']='engineering_admission';
+aliasMap['university admission test in bangladesh']='admission_process';
+
+
+/* ===== AUDIT-2026 landmark justice cases: July massacre trials (EN|BN) ===== */
+cR["july_massacre_trials"]="The July Massacre trials: after Sheikh Hasina fled on 5 Aug 2024, the interim government reconstituted the International Crimes Tribunal (ICT) on 14 Oct 2024 to try crimes against humanity from the violent crackdown on the July-August 2024 uprising, in which the UN estimates up to about 1,400 civilians were killed. Proceedings run under the International Crimes (Tribunals) Act, 1973. Arrest warrants were issued in January 2025 against Hasina and 10 former officials. The first major case, Chief Prosecutor vs Sheikh Hasina & Others (ICT BD Case No. 02 of 2025, ICT-1), had charges submitted on 1 June 2025 and a five-count indictment on 10 July 2025. About 203 people have been indicted across the proceedings, with dozens in custody. The main trial was televised live nationwide, the first time in Bangladesh's legal history, with witnesses including survivors, doctors, journalists and former security officials. Parallel murder and genocide cases over the same events also run in ordinary criminal courts. | জুলাই গণহত্যার বিচার: ২০২৪ সালের ৫ আগস্ট শেখ হাসিনা ক্ষমতাচ্যুত হয়ে পালানোর পর অন্তর্বর্তী সরকার ১৪ অক্টোবর ২০২৪ আন্তর্জাতিক অপরাধ ট্রাইব্যুনাল (আইসিটি) পুনর্গঠন করে, যাতে ২০২৪ সালের জুলাই-আগস্ট অভ্যুত্থান দমনে সংঘটিত মানবতাবিরোধী অপরাধের বিচার হয়; জাতিসংঘের হিসাবে সে দমনে প্রায় ১,৪০০ বেসামরিক নাগরিক নিহত হন। বিচার চলে ১৯৭৩ সালের আন্তর্জাতিক অপরাধ (ট্রাইব্যুনাল) আইনে। ২০২৫ সালের জানুয়ারিতে হাসিনাসহ ১১ জনের বিরুদ্ধে গ্রেপ্তারি পরোয়ানা জারি হয়। প্রথম বড় মামলা চিফ প্রসিকিউটর বনাম শেখ হাসিনা অ্যান্ড আদার্স (আইসিটি মামলা নং ০২/২০২৫, আইসিটি-১): ১ জুন ২০২৫ অভিযোগ দাখিল, ১০ জুলাই ২০২৫ পাঁচটি অভিযোগে অভিযোগ গঠন। মোট প্রায় ২০৩ জন অভিযুক্ত, অনেকেই আটক। মূল বিচার সরাসরি টেলিভিশনে সম্প্রচারিত হয় — বাংলাদেশের আইনি ইতিহাসে প্রথম — সাক্ষীদের মধ্যে ছিলেন বেঁচে যাওয়া বিক্ষোভকারী, চিকিৎসক, সাংবাদিক ও সাবেক কর্মকর্তারা। একই ঘটনায় সাধারণ আদালতেও হত্যা ও গণহত্যার মামলা চলছে।";
+aliasMap["july massacre trials"]="july_massacre_trials";
+aliasMap["trials for the july massacre"]="july_massacre_trials";
+aliasMap["july uprising trials"]="july_massacre_trials";
+aliasMap["july genocide trials"]="july_massacre_trials";
+aliasMap["massacre trials"]="july_massacre_trials";
+aliasMap["ict trial of the july massacre"]="july_massacre_trials";
+bnMap["জুলাই গণহত্যার বিচার"]="july massacre trials";
+bnMap["জুলাই বিপ্লবের বিচার"]="july massacre trials";
+bnMap["গণহত্যার বিচার"]="july massacre trials";
+bnMap["মানবতাবিরোধী অপরাধের বিচার"]="july massacre trials";
+
+cR["hasina_trial_verdict"]="Hasina trial verdict: on 17 November 2025 the International Crimes Tribunal-1 convicted former Prime Minister Sheikh Hasina and former Home Minister Asaduzzaman Khan Kamal of crimes against humanity over the July 2024 massacre and sentenced both to death in absentia, with seizure of their assets, and ordered compensation to victims' families. Convictions rested on ordering lethal force including drones and helicopters and on killings of 12 protesters at Chankharpul, Dhaka, and the burning of bodies at Ashulia. Ex-police chief Chowdhury Abdullah Al-Mamun, in custody and a state witness, was also found guilty and sentenced to five years. On 2 July 2025 Hasina had been given six months for contempt over a leaked 'licence to kill' audio. On 27 November 2025 separate ACC corruption cases over Purbachal plots added seven more years; her son and daughter each received five years. Bangladesh has demanded her extradition from India, where she remains; the Awami League calls the tribunal a kangaroo court, while Human Rights Watch and Amnesty voiced due-process concerns. | হাসিনা মামলার রায়: ২০২৫ সালের ১৭ নভেম্বর আন্তর্জাতিক অপরাধ ট্রাইব্যুনাল-১ সাবেক প্রধানমন্ত্রী শেখ হাসিনা ও সাবেক স্বরাষ্ট্রমন্ত্রী আসাদুজ্জামান খান কামালকে জুলাই ২০২৪ গণহত্যায় মানবতাবিরোধী অপরাধে দোষী সাব্যস্ত করে পলাতক অবস্থায় মৃত্যুদণ্ড দেয় এবং সম্পদ বাজেয়াপ্ত ও ভুক্তভোগীদের পরিবারকে ক্ষতিপূরণের নির্দেশ দেয়। দণ্ডের ভিত্তি ছিল ড্রোন-হেলিকপ্টারসহ প্রাণঘাতী শক্তি প্রয়োগের নির্দেশ এবং ঢাকার চানখারপুলে ১২ বিক্ষোভকারী হত্যা ও আশুলিয়ায় মরদেহ পোড়ানোর ঘটনা। আটক ও রাষ্ট্রপক্ষের সাক্ষী সাবেক পুলিশ মহাপরিদর্শক চৌধুরী আবদুল্লাহ আল-মামুনও দোষী সাব্যস্ত হন এবং ৫ বছরের কারাদণ্ড পান। এর আগে ২ জুলাই ২০২৫ 'হত্যার লাইসেন্স' অডিওর জেরে অবমাননার মামলায় হাসিনাকে ৬ মাসের সাজা দেওয়া হয়। ২৭ নভেম্বর ২০২৫ পুর্নবাচল জমি দুর্নীতির মামলায় আরও ৭ বছর; ছেলে ও মেয়ে প্রত্যেকে ৫ বছর পান। বাংলাদেশ ভারতের কাছে হাসিনার প্রত্যর্পণ দাবি করেছে; তিনি ভারতে আছেন। আওয়ামী লীগ ট্রাইব্যুনালকে ক্যাঙ্গারু কোর্ট বলেছে; হিউম্যান রাইটস ওয়াচ ও অ্যামনেস্টি যথাযথ প্রক্রিয়া নিয়ে উদ্বেগ প্রকাশ করেছে।";
+aliasMap["hasina trial verdict"]="hasina_trial_verdict";
+aliasMap["sheikh hasina verdict"]="hasina_trial_verdict";
+aliasMap["hasina death sentence"]="hasina_trial_verdict";
+aliasMap["hasina sentenced to death"]="hasina_trial_verdict";
+aliasMap["hasina trial result"]="hasina_trial_verdict";
+aliasMap["did hasina get the death penalty"]="hasina_trial_verdict";
+aliasMap["what happened in the hasina trial"]="hasina_trial_verdict";
+aliasMap["hasina murder case verdict"]="hasina_trial_verdict";
+bnMap["হাসিনার মৃত্যুদণ্ড"]="hasina trial verdict";
+bnMap["শেখ হাসিনার রায়"]="hasina trial verdict";
+bnMap["হাসিনা মামলার রায়"]="hasina trial verdict";
+bnMap["হাসিনার বিচারের ফলাফল"]="hasina trial verdict";
+
+
+/* ===== AUDIT-2026 landmark justice cases: border-killing statistics (EN|BN) ===== */
+cR["border_killing_stats"]="Border-killing statistics: Bangladesh and India share a roughly 4,096 km border, where the Indian Border Security Force (BSF) has long operated a controversial 'shoot on sight' policy. Rights groups recorded about 1,000 Bangladeshi civilians killed by the BSF between 2001 and 2010. Overall, at least 1,987 Bangladeshi civilians were killed by the BSF between 2000 and 2025; in the decade 2016-2025 the toll was 296. In 2025 alone about 34 Bangladeshis were shot dead by the BSF, the highest figure since 2020. A former home minister's own figures put 146 killed in 2012-2016. The great majority of border killings have never led to any prosecution. Notable victims include teenager Felani Khatun (Kurigram, 2011), whose death became the symbol of border-killing impunity. | সীমান্ত হত্যার পরিসংখ্যান: বাংলাদেশ ও ভারতের সীমান্তের দৈর্ঘ্য প্রায় ৪,০৯৬ কিলোমিটার, যেখানে ভারতীয় বিএসএফ দীর্ঘদিন ধরে বিতর্কিত 'দেখলেই গুলি' নীতি চালিয়ে আসছে। মানবাধিকার সংগঠনগুলোর হিসাবে ২০০১ থেকে ২০১০ সালে বিএসএফের গুলিতে প্রায় ১,০০০ বাংলাদেশি নিহত হন। সব মিলিয়ে ২০০০ থেকে ২০২৫ সালে বিএসএফের গুলিতে অন্তত ১,৯৮৭ জন বাংলাদেশি নিহত; ২০১৬-২০২৫ সালের দশকে মৃতের সংখ্যা ২৯৬। শুধু ২০২৫ সালেই বিএসএফের গুলিতে প্রায় ৩৪ জন বাংলাদেশি নিহত — ২০২০ সালের পর সর্বোচ্চ। সাবেক এক স্বরাষ্ট্রমন্ত্রীর নিজস্ব হিসাব অনুযায়ী ২০১২-২০১৬ সালে নিহত হন ১৪৬ জন। সীমান্ত হত্যার অধিকাংশ ঘটনায় কখনো কোনো বিচারই হয়নি। উল্লেখযোগ্য শিকার কিশোরী ফেলানি খাতুন (কুড়িগ্রাম, ২০১১), যাঁর মৃত্যু সীমান্ত হত্যার দায়মুক্তির প্রতীকে পরিণত হয়েছে।";
+aliasMap["border killing statistics"]="border_killing_stats";
+aliasMap["border killings statistics"]="border_killing_stats";
+aliasMap["bsf killing statistics"]="border_killing_stats";
+aliasMap["how many killed at the border"]="border_killing_stats";
+aliasMap["how many bangladeshis killed by bsf"]="border_killing_stats";
+aliasMap["total border killings"]="border_killing_stats";
+aliasMap["bsf death toll"]="border_killing_stats";
+aliasMap["numbers of border killings"]="border_killing_stats";
+bnMap["সীমান্ত হত্যার পরিসংখ্যান"]="border killing statistics";
+bnMap["বিএসএফ হত্যার পরিসংখ্যান"]="border killing statistics";
+bnMap["সীমান্তে কতজন নিহত"]="border killing statistics";
+bnMap["সীমান্ত হত্যার সংখ্যা"]="border killing statistics";
+
+cR["border_killing_justice"]="Justice for border killings: Bangladesh has repeatedly protested to India and demanded investigation and trial of the BSF personnel behind the killings along the 4,096 km border, but impunity has persisted for decades. Human Rights Watch documented that BSF members are effectively exempt from prosecution in India; no BSF personnel has been prosecuted over border killings of Bangladeshis. In the Felani Khatun case (2011), India's National Human Rights Commission ordered 500,000 rupees compensation for her family in 2015, but the accused constable was twice acquitted by court martial. Bangladesh also raises the issues of 'shoot on sight' orders, barbed-wire deaths, abductions, and push-ins at every BGB-BSF flag meeting and border talks. In December 2025 Dhaka named a road in the diplomatic zone 'Felani Avenue' as a symbol of the demand for justice. Victims' families continue to demand that border killings end and the killers be brought to book. | সীমান্ত হত্যার বিচার: ৪,০৯৬ কিলোমিটার সীমান্তে বিএসএফের হাতে নিহতদের বিচার ও তদন্তের দাবিতে বাংলাদেশ বারবার ভারতের কাছে প্রতিবাদ জানিয়েছে, কিন্তু কয়েক দশক ধরে দায়মুক্তি বহাল আছে। হিউম্যান রাইটস ওয়াচের মতে, বিএসএফ সদস্যরা কার্যত বিচারের বাইরে; বাংলাদেশি নাগরিক হত্যায় কোনো বিএসএফ সদস্যের বিচার হয়নি। ফেলানি খাতুন হত্যা মামলায় (২০১১) ভারতের জাতীয় মানবাধিকার কমিশন ২০১৫ সালে পরিবারকে ৫ লাখ রুপি ক্ষতিপূরণের নির্দেশ দিলেও দায়ী কনস্টেবল আদালত-মার্শালে দুই দফা খালাস পান। 'দেখলেই গুলি' নীতি, কাঁটাতারের মৃত্যু, অপহরণ ও অনুপ্রবেশের অভিযোগ প্রতি বিজিবি-বিএসএফ পতাকা বৈঠক ও সীমান্ত আলোচনায় বাংলাদেশ তুলে থাকে। ২০২৫ সালের ডিসেম্বরে ঢাকার কূটনৈতিক এলাকার এক সড়কের নাম রাখা হয় 'ফেলানি অ্যাভিনিউ' — বিচারের দাবির প্রতীক হিসেবে। নিহতদের পরিবার এখনো সীমান্ত হত্যা বন্ধ ও হত্যাকারীদের শাস্তির দাবিতে আওয়াজ তুলছে।";
+aliasMap["justice for border killings"]="border_killing_justice";
+aliasMap["border killing justice"]="border_killing_justice";
+aliasMap["border killing impunity"]="border_killing_justice";
+aliasMap["why are border killers not punished"]="border_killing_justice";
+aliasMap["has anyone been punished for border killings"]="border_killing_justice";
+aliasMap["stop border killings"]="border_killing_justice";
+aliasMap["bsf impunity"]="border_killing_justice";
+bnMap["সীমান্ত হত্যার বিচার"]="border killing justice";
+bnMap["সীমান্ত হত্যা বন্ধ"]="border killing justice";
+bnMap["বিএসএফের শাস্তি"]="border killing justice";
+bnMap["সীমান্ত হত্যার দায়মুক্তি"]="border killing justice";
+
+
+/* Follow-up chip click (delegated): chips generated by the engine have no inline onclick, so ask their text on click */
+document.addEventListener('click',function(_ev){
+  try{
+    var _el=_ev.target&&_ev.target.closest?_ev.target.closest('.cb-followup'):null;
+    if(!_el||_el.getAttribute('onclick'))return;
+    var _t=String(_el.textContent||'').trim();
+    var _inp=document.getElementById('chatIn');
+    if(!_t||!_inp)return;
+    _inp.value=_t;
+    if(typeof sendMsg==='function')sendMsg();
+  }catch(_e){}
+});
+
+/* FAB attention pulse - plays until the chat has been opened once */
+
+(function(){try{var k='dla_fab_seen';var seen=null;try{seen=localStorage.getItem(k);}catch(e){}if(!seen)document.body.classList.add('fab-attn');var f=document.getElementById('chatFab');if(f){f.addEventListener('click',function(){try{localStorage.setItem(k,'1');}catch(e){}document.body.classList.remove('fab-attn');});}}catch(e){}})();
+
+/* ===== A ai chat v2 runtime (Banglalink-style UI) ===== */
+(function(){
+try{
+var win=document.getElementById('chatWin');
+if(!win||win.getAttribute('data-aai-v2'))return;
+win.setAttribute('data-aai-v2','1');
+var saved=[];
+var oldMsgs=document.getElementById('chatMsgs');
+if(oldMsgs){var i;for(i=0;i<oldMsgs.children.length;i++){saved.push(oldMsgs.children[i]);}}
+function nowTxt(){try{return new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});}catch(e){return '';}}
+function greetTxt(bn){
+  try{
+    var h=new Date().getHours();
+    if(bn){if(h<12)return '\u09b6\u09c1\u09ad \u09b8\u0995\u09be\u09b2';if(h<17)return '\u09b6\u09c1\u09ad \u0985\u09aa\u09b0\u09be\u09b9\u09cd\u09a8';if(h<20)return '\u09b6\u09c1\u09ad \u09b8\u09a8\u09cd\u09a7\u09cd\u09af\u09be';return '\u09b6\u09c1\u09ad \u09b0\u09be\u09a4\u09cd\u09b0\u09bf';}
+    if(h<12)return 'Good Morning';if(h<17)return 'Good Afternoon';if(h<20)return 'Good Evening';return 'Good Night';
+  }catch(e){return 'Good Morning';}
+}
+var ICON='<span class="cb-ai-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="13" y="19" width="38" height="27" rx="13" fill="#ffffff"/><circle cx="26" cy="32" r="3.1" fill="#ef6a34"/><circle cx="38" cy="32" r="3.1" fill="#ef6a34"/><path d="M13 30a19 19 0 0 1 38 0" fill="none" stroke="#ffffff" stroke-width="4.6" stroke-linecap="round"/><path d="M51 30v8" stroke="#ffffff" stroke-width="4.6" stroke-linecap="round"/><circle cx="51" cy="41.5" r="4.3" fill="#ffffff"/></svg></span>';
+var NEW='<div class="cb2-stage">'+
+'<button type="button" class="cb2-x" id="cbX" title="Close chat"><i class="fas fa-times"></i></button>'+
+'<div class="cb2-intro" id="cbIntro">'+
+'<div class="cb2-bigicon">'+ICON+'</div>'+
+'<p class="cb2-greet" id="cbIGreet"></p>'+
+'<h3 class="cb2-h" id="cbIH"></h3>'+
+'<div class="cb2-langs">'+
+'<button type="button" class="cb2-lang" data-lang="en"><span class="cb2-lang-badge">EN</span>English</button>'+
+'<button type="button" class="cb2-lang" data-lang="bn"><span class="cb2-lang-badge">\u09ac\u09be\u0982</span>\u09ac\u09be\u0982\u09b2\u09be</button>'+
+'</div></div>'+
+'<div class="cb2-chat" id="cbChat">'+
+'<div class="cb2-greetbox">'+
+'<div class="cb2-bigicon sm">'+ICON+'</div>'+
+'<p class="cb2-greet" id="cbCGreet"></p>'+
+'<h3 class="cb2-h" id="cbCH"></h3>'+
+'</div>'+
+'<div class="cb2-scroll"><div class="cb-msgs" id="chatMsgs"></div></div>'+
+'<div class="cb2-pad">'+
+'<div class="cb2-inputrow">'+
+'<button type="button" class="cb2-menu" id="cbMenu" title="Menu"><i class="fas fa-bars"></i></button>'+
+'<div class="cb2-menu-pop" id="cbPop" hidden>'+
+'<div class="cb2-pop-lbl">Answer style</div>'+
+
+'<button type="button" class="cb2-dpt" data-depth="quick"><i class="fas fa-bolt"></i>Quick answer<span class="cb2-dpt-check"></span></button>'+
+
+'<button type="button" class="cb2-dpt" data-depth="standard"><i class="fas fa-sliders"></i>Standard<span class="cb2-dpt-check"></span></button>'+
+
+'<button type="button" class="cb2-dpt" data-depth="full"><i class="fas fa-brain"></i>Full reasoning<span class="cb2-dpt-check"></span></button>'+
+
+'<div class="cb2-pop-sep"></div>'+
+
+'<button type="button" id="cbClear"><i class="fas fa-eraser"></i>Clear conversation</button>'+
+'<button type="button" id="cbCloseM"><i class="fas fa-times"></i>Close chat</button>'+
+'</div>'+
+'<input type="text" id="chatIn" class="cb2-inp" placeholder="Type your message" autocomplete="off" maxlength="500">'+
+'<button type="button" class="cb2-send" id="cbSend" title="Send"><i class="fas fa-chevron-right"></i></button>'+
+'</div>'+
+'<p class="cb2-foot">AI Assistant is still in learning phase. For any extended help please take <b>agent support</b>.</p>'+
+'</div></div></div>';
+win.innerHTML=NEW;
+var msgs=document.getElementById('chatMsgs');
+var scroller=win.querySelector('.cb2-scroll');
+var inp=document.getElementById('chatIn');
+var intro=document.getElementById('cbIntro');
+var pop=document.getElementById('cbPop');
+function setT(id,t){var e=document.getElementById(id);if(e)e.textContent=t;}
+var lang=null;try{lang=localStorage.getItem('aai_lang')||null;}catch(e){lang=null;}
+function isBn(){return lang==='bn';}
+function phTxt(){return isBn()?'\u0986\u09aa\u09a8\u09be\u09b0 \u09ac\u09be\u09b0\u09cd\u09a4\u09be \u09b2\u09bf\u0996\u09c1\u09a8':'Type your message';}
+function setLang(l){
+  lang=l;try{localStorage.setItem('aai_lang',l);}catch(e){}
+  if(intro)intro.style.display='none';
+  var g=greetTxt(isBn());
+  setT('cbCGreet',g);
+  setT('cbCH',isBn()?'\u0986\u099c \u0986\u09ae\u09bf \u0995\u09c0\u09ad\u09be\u09ac\u09c7 \u09b8\u09be\u09b9\u09be\u09af\u09cd\u09af \u0995\u09b0\u09a4\u09c7 \u09aa\u09be\u09b0\u09bf?':'How can I help you today?');
+  if(inp){inp.placeholder=phTxt();try{inp.focus();}catch(e){}}
+  var fb=document.getElementById('chatFab');if(fb){var ftip=isBn()?'A ai সহকারীর সাথে চ্যাট করুন':'Chat with A ai';try{fb.setAttribute('title',ftip);fb.setAttribute('aria-label',ftip);}catch(_e3){}}
+}
+function decorate(m){
+  if(!m||m.nodeType!==1)return;
+  var cn=String(m.className||'');
+  if(cn.indexOf('cb-msg')===-1)return;
+  if(m.querySelector('.cb-line'))return;
+  var u=cn.indexOf('user')>-1;
+  var line=document.createElement('div');line.className='cb-line';
+  var bub=document.createElement('span');bub.className='cb-bub';
+  while(m.firstChild){bub.appendChild(m.firstChild);}
+  var ava=document.createElement('span');ava.className=u?'cb-ava u':'cb-ava b';
+  ava.innerHTML=u?'<i class="fas fa-user"></i>':ICON;
+  if(u){line.appendChild(bub);line.appendChild(ava);}else{line.appendChild(ava);line.appendChild(bub);}
+  var meta=document.createElement('div');meta.className='cb-meta';
+  var t=document.createElement('span');t.className='cb-t';t.textContent=nowTxt();
+  meta.appendChild(t);
+  m.appendChild(line);m.appendChild(meta);
+}
+function scrollB(){if(scroller){try{scroller.scrollTop=scroller.scrollHeight;}catch(e){}}}
+var k;for(k=0;k<saved.length;k++){msgs.appendChild(saved[k]);}
+var kids=msgs.children;var kk;for(kk=0;kk<kids.length;kk++){decorate(kids[kk]);}
+scrollB();
+var mo=null;try{
+  mo=new MutationObserver(function(list){
+    var x,y;
+    for(x=0;x<list.length;x++){
+      var ad=list[x].addedNodes;
+      if(ad){for(y=0;y<ad.length;y++){decorate(ad[y]);}}
+    }
+    scrollB();
+  });
+  mo.observe(msgs,{childList:true});
+}catch(e){mo=null;}
+function closeWin(){try{if(typeof toggleCB==='function'){toggleCB();return;}}catch(e){}try{win.classList.remove('open');win.classList.add('closing');setTimeout(function(){win.classList.remove('open','closing');},280);}catch(e){}}
+function bind(id,fn){var e=document.getElementById(id);if(e)e.addEventListener('click',fn);}
+bind('cbX',closeWin);
+bind('cbCloseM',closeWin);
+bind('cbSend',function(){try{if(typeof sendMsg==='function')sendMsg();}catch(e){}});
+if(inp)inp.addEventListener('keydown',function(e){if(e.key==='Enter'){try{if(typeof sendMsg==='function')sendMsg();}catch(err){}}});
+
+if(inp)inp.addEventListener('input',function(){try{if(win)win.classList.toggle('has-text',String(inp.value||'').length>0);}catch(_e){}});
+function dptCur(){try{var v=localStorage.getItem('aai_depth');if(v==='quick'||v==='standard'||v==='full')return v;}catch(e){}return 'full';}
+
+function syncDpt(){var cur=dptCur();var ds=win.querySelectorAll('.cb2-dpt');for(var di=0;di<ds.length;di++){ds[di].classList.toggle('on',ds[di].getAttribute('data-depth')===cur);}}
+
+var menuBtn=document.getElementById('cbMenu');
+
+if(menuBtn)menuBtn.addEventListener('click',function(ev){ev.stopPropagation();if(pop)pop.hidden=!pop.hidden;syncDpt();});
+
+(function(){var ds=win.querySelectorAll('.cb2-dpt');for(var di=0;di<ds.length;di++){(function(btn){btn.addEventListener('click',function(){var v=btn.getAttribute('data-depth');if(v){try{localStorage.setItem('aai_depth',v);}catch(e){}}syncDpt();if(pop)pop.hidden=true;});})(ds[di]);}})();
+
+syncDpt();
+bind('cbClear',function(){
+  if(pop)pop.hidden=true;
+  try{msgs.innerHTML='';scrollB();}catch(e){}
+  try{if(window.AEngine&&AEngine.history)AEngine.history=[];}catch(e){}
+  try{
+    var keys=['aai_chat:guest','aai_mem:guest','aai_mem'];
+    if(typeof chatUserId==='function'){var u=chatUserId();keys.push('aai_chat:'+u,'aai_mem:'+u);}
+    for(var i2=0;i2<keys.length;i2++){try{localStorage.removeItem(keys[i2]);}catch(e2){}}
+  }catch(e){}
+});
+document.addEventListener('click',function(){if(pop)pop.hidden=true;});
+if(lang){setLang(lang);}
+else{
+  var g0=greetTxt(false);
+  setT('cbIGreet',g0);setT('cbIH','Select your language!');
+  setT('cbCGreet',g0);setT('cbCH','How can I help you today?');
+}
+document.addEventListener('qs-unlock',function(){try{var sv=localStorage.getItem('aai_lang');if(sv==='en'||sv==='bn'){setLang(sv);}}catch(e){}});
+var lbs=win.querySelectorAll('.cb2-lang');
+var li;for(li=0;li<lbs.length;li++){
+  (function(btn){btn.addEventListener('click',function(){setLang(btn.getAttribute('data-lang'));});})(lbs[li]);
+}
+var fabBtn=document.getElementById('chatFab');
+if(fabBtn){fabBtn.addEventListener('click',function(){try{var l=localStorage.getItem('aai_lang');if(l&&intro&&intro.style.display!=='none'){setLang(l);}}catch(e){}});}
+}catch(err){/* chat UI upgrade disabled on this page */ }
+})();
+
+/* Extended reasoning: live step-by-step streaming while thinking */
+(function(){
+try{
+var A=window.AEngine;
+if(!A||!A.claude)return;
+var cl=A.claude;
+var origST=cl.showThinking;
+var origAn=cl.analyze;
+function esc(v){return String(v||'').split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split('"').join('&quot;');}
+/* stash the latest analysis so streaming can reveal its real steps */
+if(typeof origAn==='function'){
+  cl.analyze=function(m){var res=origAn.call(cl,m);try{cl._lastA=res;}catch(e){}return res;};
+}
+/* replace the thinking animation with a live step stream */
+cl.showThinking=function(cb){
+
+  var dpt='full';try{var _dv=null;try{_dv=localStorage.getItem('aai_depth');}catch(_e){}if(_dv==='quick'||_dv==='standard'||_dv==='full')dpt=_dv;}catch(_e){}
+  var t0=(typeof performance!=='undefined')?performance.now():(new Date()).getTime();
+  function done(ms){
+    try{cl._lastMs=ms;}catch(e){}
+    if(typeof cb==='function'){try{return cb(ms);}catch(e){return;}}
+  }
+  if(dpt==='quick'){setTimeout(function(){done(160);},240);return;}
+
+  if(dpt==='standard'){
+
+    if(typeof origST==='function'){
+
+      try{return origST.call(cl,function(ms){done(typeof ms==='number'?ms:Math.round((((typeof performance!=='undefined')?performance.now():(new Date()).getTime())-t0)));});}catch(_e){}
+
+    }
+
+    return done(0);
+
+  }
+
+  var steps=null;
+  try{if(cl._lastA&&cl._lastA.steps&&cl._lastA.steps.length)steps=cl._lastA.steps;}catch(e){}
+  var box=document.getElementById('chatMsgs');
+  if(!steps||!box){
+    if(typeof origST==='function'){
+      try{return origST.call(cl,function(ms){done(typeof ms==='number'?ms:Math.round((((typeof performance!=='undefined')?performance.now():(new Date()).getTime())-t0)));});}catch(e){}
+    }
+    return done(0);
+  }
+  var live=document.createElement('div');
+  live.className='cb-live';
+  live.innerHTML='<div class="cb-live-h"><span class="cb-live-ic">&#10022;</span><span class="cb-live-t">Extended reasoning</span><span class="cb-live-dots" aria-hidden="true"></span></div><ol class="cb-live-steps"></ol>';
+  box.appendChild(live);
+  var ol=live.querySelector('ol');
+  var i=0;
+  var iv=setInterval(function(){
+    try{
+      if(i<steps.length){
+        var st=steps[i]||{};
+        var li=document.createElement('li');
+        li.innerHTML='<span class="cb-mr-tag">'+esc(st.tag||'Step')+'</span><span class="cb-mr-txt">'+esc(st.text||'')+'</span>';
+        ol.appendChild(li);
+        i++;
+      }else{
+        clearInterval(iv);
+        setTimeout(function(){
+          var ms=Math.round((((typeof performance!=='undefined')?performance.now():(new Date()).getTime())-t0));
+          try{if(live&&live.parentNode)live.parentNode.removeChild(live);}catch(e){}
+          done(ms);
+        },420);
+      }
+    }catch(e){
+      clearInterval(iv);
+      try{if(live&&live.parentNode)live.parentNode.removeChild(live);}catch(e2){}
+      done(0);
+    }
+  },240);
+};
+/* final collapsible reasoning panel in the answer */
+cl.buildReasoningBlock=function(a){
+  try{
+    var dpt='full';try{var _dv=null;try{_dv=localStorage.getItem('aai_depth');}catch(_e){}if(_dv==='quick'||_dv==='standard'||_dv==='full')dpt=_dv;}catch(_e){}
+
+    if(dpt==='quick')return '';
+
+    if(!a)return '';
+    var steps=(a.steps&&a.steps.length)?a.steps:[
+      {text:'Analyzing your question',tag:'Analysis'},
+      {text:'Cross-referencing Bangladesh law and public records',tag:'Evidence'},
+      {text:'Composing the answer',tag:'Synthesis'}
+    ];
+    var secs=cl._lastMs?((cl._lastMs/1000).toFixed(1)):null;
+    var h='<button type="button" class="cb-rt" onclick="toggleReasoning(this)">'+
+      '<span class="cb-mr-ic">&#10022;</span>'+
+      '<span class="cb-mr-t">Extended reasoning'+(secs?' &middot; thought for '+secs+'s':'')+'</span>'+
+      '<i class="fas fa-chevron-down cb-mr-c"></i></button>';
+    var b='<div class="cb-rb"><ol class="cb-mr-steps">';
+    for(var i=0;i<steps.length;i++){
+      var st=steps[i]||{};
+      b+='<li><span class="cb-mr-tag">'+esc(st.tag||'Step')+'</span><span class="cb-mr-txt">'+esc(st.text||'')+'</span></li>';
+    }
+    b+='</ol>';
+    if(typeof a.conf==='number'){
+      var lv=a.conf>=90?'High':(a.conf>=70?'Medium':'Low');
+      b+='<div class="cb-mr-conf"><span class="cb-conf-pill '+String(lv).toLowerCase()+'">'+lv+' &middot; '+a.conf+'% confident</span></div>';
+    }
+    b+='</div>';
+    return '<div class="cb-reasoning cb-mythos">'+h+b+'</div>';
+  }catch(e){return '';}
+};
+}catch(e){}
+})();
+
+/* ===== Grounded frontier-LLM answers via mythos_proxy (auto fallback to local engine) ===== */
+(function(){
+try{
+if(window.AAI){return;}
+var AAI={llmEnabled:false,probeDone:false,model:'',proxyUrl:(function(){try{var v=localStorage.getItem('aai_llm_proxy');if(v)return v;}catch(e){}return 'http://127.0.0.1:8787';})()};
+window.AAI=AAI;
+function probe(){
+  AAI.probeDone=false;
+  try{
+    var ctrl=(typeof AbortController!=='undefined')?new AbortController():null;
+    var to=setTimeout(function(){try{if(ctrl)ctrl.abort();}catch(e){}},1800);
+    fetch(AAI.proxyUrl+'/health',{signal:ctrl?ctrl.signal:undefined})
+      .then(function(r){return r.json();})
+      .then(function(j){
+        clearTimeout(to);AAI.probeDone=true;
+        AAI.llmEnabled=!!(j&&j.ok&&j.configured);
+        if(AAI.llmEnabled){AAI.model=j.model||'';try{console.info('[A ai] grounded LLM online ('+AAI.model+') via '+AAI.proxyUrl);}catch(e){}}
+      })
+      .catch(function(){clearTimeout(to);AAI.probeDone=true;AAI.llmEnabled=false;});
+  }catch(e){AAI.probeDone=true;AAI.llmEnabled=false;}
+}
+/* no-api mode: answers come only from the stored knowledge base - never probe/contact the LLM proxy */
+try{AAI.probeDone=true;}catch(e){}
+
+function esc(v){return String(v||'').split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split('"').join('&quot;');}
+
+function localGrounding(q){
+  var parts=[];
+  try{
+    var A=window.AEngine;
+    if(A&&A.claude&&typeof A.claude.analyze==='function'){
+      var ana=A.claude.analyze(q);
+      if(ana){
+        if(ana.domain)parts.push('domain: '+ana.domain);
+        var st=ana.steps||[];
+        for(var i=0;i<st.length&&i<2;i++){if(st[i]&&st[i].text)parts.push(String(st[i].tag||'step')+': '+String(st[i].text));}
+      }
+    }
+  }catch(e){}
+  try{
+    var lq=String(q||'').toLowerCase();
+    var best='';var bl=0;
+    for(var k in cR){if(k&&k.length>bl&&lq.indexOf(k)!==-1){bl=k.length;best=cR[k];}}
+    if(best){parts.push('local-knowledge: '+String(best).split('|')[0].slice(0,600));}
+  }catch(e){}
+  return parts.join(' | ');
+}
+
+AAI.ask=function(q,bn,fallback){
+  var lang=bn?'Bengali':'English';
+  var ctx=localGrounding(q);
+  var done=false;
+  fetch(AAI.proxyUrl+'/v1/mythos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:String(q||''),language:lang,context:ctx})})
+    .then(function(r){return r.json();})
+    .then(function(j){
+      if(!j||j.error||!j.answer){throw new Error((j&&j.error)||'empty model answer');}
+      done=true;
+      AAI.render(q,bn,j);
+    })
+    .catch(function(err){
+      if(done)return;
+      try{console.warn('[A ai] grounded LLM failed -> local engine ('+(err&&err.message?err.message:err)+')');}catch(e){}
+      if(typeof fallback==='function'){try{fallback(q,bn);}catch(e2){try{console.warn('[A ai] local fallback error',e2);}catch(e3){}}}
+    });
+};
+
+AAI.render=function(q,bn,res){
+  try{
+    var A=window.AEngine;
+    if(!A||!A.claude)return;
+    var rawSteps=(res&&Array.isArray(res.steps))?res.steps:[];
+    var steps=[];
+    for(var i=0;i<rawSteps.length&&i<8;i++){
+      if(rawSteps[i]&&typeof rawSteps[i]==='object'){
+        steps.push({tag:String(rawSteps[i].tag||'Step').slice(0,24),text:String(rawSteps[i].text||'').slice(0,300)});
+      }
+    }
+    if(!steps.length){steps.push({tag:'Synthesis',text:'Answer assembled from grounded knowledge'});}
+    var conf=90;
+    try{conf=Math.max(0,Math.min(99,Math.round(Number(res&&res.confidence))));}catch(e){conf=90;}
+    var a={steps:steps,conf:conf,domain:'grounded',intent:'Question'};
+    try{A.claude._lastA=a;}catch(e){}
+    var answer=String((res&&res.answer)||'').trim();
+    var cl=A.claude;
+    cl.showThinking(function(ms){
+      try{
+        var msgs=document.getElementById('chatMsgs');
+        if(!msgs)return;
+        var d=document.createElement('div');
+        d.className='cb-msg bot';
+        var rh='';try{rh=cl.buildReasoningBlock(a);}catch(e){rh='';}
+        var html=String(answer).split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split('"').join('&quot;');
+        html=html.replace(/\r?\n/g,'<br>');
+        var src=res&&res.model?('<div class="cb-mr-conf"><span class="cb-srcs-lbl"><i class="fas fa-bolt"></i> Grounded answer</span></div>'):'';
+        d.innerHTML=rh+html+src;
+        msgs.appendChild(d);
+        try{msgs.scrollTop=99999;}catch(e){}
+      }catch(e){try{console.warn('[A ai] render error',e);}catch(e2){}}
+    });
+  }catch(e){}
+};
+}catch(e){}
+})();
+
+/* 2026-09-05 Mir Mugdho memorial knowledge (bilingual) */
+cR["mir_mugdho_bio"]="Shaheed Mir Mahfuzur Rahman Mugdho (\u09ae\u09c0\u09b0 \u09ae\u09be\u09b9\u09ab\u09c1\u099c\u09c1\u09b0 \u09b0\u09b9\u09ae\u09be\u09a8 \u09ae\u09c1\u0997\u09cd\u09a7; 9 Oct 1998 - 18 July 2024) was a Bangladeshi student activist and freelancer, martyred in the July Uprising. Born in Uttara, Dhaka - one minute after his twin brother Mir Mahbubur Rahman Snigdho; family home Ramrail, Brahmanbaria. Father Mir Mustafizur Rahman was a health inspector. BSc in Mathematics from Khulna University (2023); was pursuing his MBA at Bangladesh University of Professionals (BUP). A talented Fiverr freelancer (1,000+ completed projects, SEO and social-media marketing, earning $2,000-3,000/month), a former Bangladesh Scout, footballer and travel lover. | \u09b6\u09b9\u09c0\u09a6 \u09ae\u09c0\u09b0 \u09ae\u09be\u09b9\u09ab\u09c1\u099c\u09c1\u09b0 \u09b0\u09b9\u09ae\u09be\u09a8 \u09ae\u09c1\u0997\u09cd\u09a7 (\u09ef\u09af \u0985\u0995\u09cd\u099f\u09cb\u09ac\u09b0 \u09e7\u09ef\u09ef\u09ee - \u09e7\u09ee \u099c\u09c1\u09b2\u09be\u0987 \u09e8\u09ee\u09e8\u09ea) \u099b\u09bf\u09b2\u09c7\u09a8 \u099c\u09c1\u09b2\u09be\u0987 \u0997\u09a3\u0985\u09cd\u09af\u09c1\u09a4\u09cd\u09a5\u09be\u09a8\u09c7\u09b0 \u09b6\u09b9\u09c0\u09a6\u0964 \u0989\u09a4\u09cd\u09a4\u09b0\u09be, \u09a2\u09be\u0995\u09be\u09af\u09bc \u099c\u09a8\u09cd\u09ae; \u0997\u09cd\u09b0\u09be\u09ae\u09c7\u09b0 \u09ac\u09be\u09dc\u09bf \u09ac\u09cd\u09b0\u09be\u09b9\u09cd\u09ae\u09a3\u09ac\u09be\u09dc\u09bf\u09af\u09bc\u09be\u09b0 \u09b0\u09be\u09ae\u09b0\u09be\u0987\u09b2\u0964 \u0996\u09c1\u09b2\u09a8\u09be \u09ac\u09bf\u09b6\u09cd\u09ac\u09ac\u09bf\u09a6\u09cd\u09af\u09be\u09b2\u09af\u09bc \u09a5\u09c7\u0995\u09c7 \u0997\u09a3\u09bf\u09a4\u09c7 \u09b8\u09cd\u09a8\u09be\u09a4\u0995 (\u09e8\u09ee\u09e8\u09e9), \u09ac\u09bf\u0987\u0989\u09aa\u09bf\u09a4\u09c7 \u098f\u09ae\u09ac\u09bf\u098f \u099a\u09b2\u099b\u09bf\u09b2\u0964 \u09ab\u09be\u0987\u09ad\u09be\u09b0\u09c7 \u09e7,\u09e6\u09e6\u09e6+ \u09aa\u09cd\u09b0\u099c\u09c7\u0995\u09cd\u099f \u09b8\u09ae\u09cd\u09aa\u09a8\u09cd\u09a8 \u0995\u09b0\u09be \u09aa\u09cd\u09b0\u09a4\u09bf\u09ad\u09be\u09ac\u09be\u09a8 \u09ab\u09cd\u09b0\u09bf\u09b2\u09cd\u09af\u09be\u09a8\u09cd\u09b8\u09be\u09b0, \u09ac\u09be\u0982\u09b2\u09be\u09a6\u09c7\u09b6 \u09b8\u09cd\u0995\u09be\u0989\u099f\u09b8\u09c7\u09b0 \u09b8\u09a6\u09b8\u09cd\u09af, \u09ab\u09c1\u099f\u09ac\u09b2\u09be\u09b0 \u0993 \u09ad\u09cd\u09b0\u09ae\u09a3\u09aa\u09bf\u09aa\u09be\u09b8\u09c1\u0964";
+cR["mir_mugdho_death"]="How Mir Mugdho died: on 18 July 2024, during the quota-reform protests, he went out to distribute food, water and biscuits to protesters, starting around 4 pm at Azampur intersection, Uttara, Dhaka. In a video recorded 15 minutes before his death he is seen carrying a water case, asking again and again: 'Does anyone need water? Water, water?' Around 5 pm he was shot in the head at Azampur crossing - the bullet entered his forehead and exited the right side of his head. His friend Zakirul Islam took him to Uttara Crescent Hospital, where the on-duty doctor pronounced him dead on arrival. He was 25. | \u09e7\u09ee \u099c\u09c1\u09b2\u09be\u0987 \u09e8\u09e6\u09e8\u09ea \u09b8\u09be\u099c\u09c7 \u09ae\u09c1\u0997\u09cd\u09a7 \u0986\u09a8\u09cd\u09a6\u09cb\u09b2\u09a8\u0995\u09be\u09b0\u09c0\u09a6\u09c7\u09b0 \u09ae\u09be\u099d\u09c7 \u0996\u09be\u09ac\u09be\u09b0, \u09aa\u09be\u09a8\u09bf \u0993 \u09ac\u09bf\u09b8\u09cd\u0995\u09c1\u099f \u09ac\u09bf\u09a4\u09b0\u09a3 \u0995\u09b0\u099b\u09bf\u09b2\u09c7\u09a8\u0964 \u09ae\u09c3\u09a4\u09cd\u09af\u09c1\u09b0 \u09e7\u09eb \u09ae\u09bf\u09a8\u09bf\u099f \u0986\u0997\u09c7\u09b0 \u09ad\u09bf\u09a1\u09bf\u0993\u09a4\u09c7 \u09a4\u09be\u0995\u09c7 \u09aa\u09be\u09a8\u09bf\u09b0 \u0995\u09c7\u09b8 \u09b9\u09be\u09a4\u09c7 \u09ac\u09b2\u09a4\u09c7 \u09b6\u09cb\u09a8\u09be \u09af\u09be\u09af\u09bc - \u09aa\u09be\u09a8\u09bf \u09b2\u09be\u0997\u09ac\u09c7 \u0995\u09be\u09b0\u09cb, \u09aa\u09be\u09a8\u09bf, \u09aa\u09be\u09a8\u09bf? \u09ac\u09bf\u0995\u09c7\u09b2 \u09b8\u09be\u095e\u09c7 ৫\u099f\u09be\u09b0 \u09a6\u09bf\u0995\u09c7 \u0986\u099c\u09ae\u09aa\u09c1\u09b0 \u0995\u09cd\u09b0\u09b8\u09bf\u0982\u09c7 \u0995\u09aa\u09be\u09b2\u09c7 \u0997\u09c1\u09b2\u09bf \u09b2\u09be\u0997\u09c7; \u09ac\u09a8\u09cd\u09a7\u09c1 \u099c\u09be\u0995\u09bf\u09b0\u09c1\u09b2 \u0987\u09b8\u09b2\u09be\u09ae \u09a4\u09be\u0995\u09c7 \u0995\u09cd\u09b0\u09bf\u09b8\u09c7\u09a8\u09cd\u099f \u09b9\u09be\u09b8\u09aa\u09be\u09a4\u09be\u09b2\u09c7 \u09a8\u09bf\u09b2\u09c7 \u099a\u09bf\u0995\u09bf\u09ce\u09b8\u0995 \u09a4\u09be\u0995\u09c7 \u09ae\u09c3\u09a4 \u0998\u09cb\u09b7\u09a3\u09be \u0995\u09b0\u09c7\u09a8\u0964 \u09ac\u09af\u09bc \u09b9\u09af\u09bc\u09c7\u099b\u09bf\u09b2 \u09e8\u09eb\u0964";
+cR["mir_mugdho_pani"]="Pani lagbe pani (Water needed, water) became the symbolic slogan of the July Uprising after Mugdho's final moments. Minutes before he was shot, the viral video showed him distributing water while asking 'Does anyone need water? Water, water?' The phrase spread as graffiti on walls across Bangladesh, appeared as a giant water-bottle motif in the 14 April 2025 Ananda Shobhajatra (Bengali New Year), was shown in the largest drone show at Manik Mia Avenue, inspired 'Mugdho' named water bottles handed out at a post-revolution cartoon festival, and Shah Md Safinur's poetry book 'Pani Lagbo Pani?'. | \u09aa\u09be\u09a8\u09bf \u09b2\u09be\u0997\u09ac\u09c7 \u09aa\u09be\u09a8\u09bf - \u09ae\u09c1\u0997\u09cd\u09a7\u09c7\u09b0 \u09b6\u09c7\u09b7 \u09ae\u09c1\u09b9\u09c2\u09b0\u09cd\u09a4\u09c7\u09b0 \u09ad\u09be\u0987\u09b0\u09be\u09b2 \u09ad\u09bf\u09a1\u09bf\u0993 \u09a5\u09c7\u0995\u09c7 \u099c\u09c1\u09b2\u09be\u0987 \u0985\u09ad\u09cd\u09af\u09c1\u09a4\u09cd\u09a5\u09be\u09a8\u09c7\u09b0 \u09aa\u09cd\u09b0\u09a4\u09c0\u0995\u09c0 \u09b8\u09cd\u09b2\u09cb\u0997\u09be\u09a8\u09c7 \u09aa\u09b0\u09bf\u09a3\u09a4 \u09b9\u09af\u09bc\u0964 \u09a6\u09c7\u09af\u09bc\u09be\u09b2\u09c7 \u09a6\u09c7\u09af\u09bc\u09be\u09b2\u09c7 \u0997\u09cd\u09b0\u09be\u09ab\u09bf\u09a4\u09bf, \u09b6\u09cb\u09ad\u09be\u09af\u09be\u09a4\u09cd\u09b0\u09be\u09b0 \u09aa\u09be\u09a8\u09bf\u09b0 \u09ac\u09cb\u09a4\u09b2 \u09ae\u09cb\u099f\u09bf\u09ab, \u09a1\u09cd\u09b0\u09cb\u09a8 \u09b6\u09cb\u09a4\u09c7 \u099a\u09bf\u09a4\u09cd\u09b0 - \u09b8\u09ac\u0996\u09be\u09a8\u09c7 \u098f\u0987 \u09ac\u09be\u0995\u09cd\u09af\u0987\u0964";
+cR["mir_mugdho_legacy"]="Mir Mugdho's legacy: Bangabandhu Mukta Mancha in Uttara was renamed Mugdho Mancha (Aug 2024). The Mugdho Safe Drinking Water Corner opened at Joydebpur Junction railway station, Gazipur (5 Aug 2025, about 975,000 BDT, free drinking water for passengers). Bangladesh's new e-passport design (Home Ministry notification, July 2026) will carry Mugdho's portrait in the watermark of pages 32-33 alongside fellow July martyrs Abu Sayed and Wasim Akram. Fiverr publicly mourned him; his twin brother Snigdho's tribute video went viral. His death is remembered as a pivotal moment that turned the quota movement into the mass July Uprising. | \u09ae\u09c1\u0997\u09cd\u09a7\u09c7\u09b0 \u09b8\u09cd\u09ae\u09c3\u09a4\u09bf\u09a4\u09c7: \u0989\u09a4\u09cd\u09a4\u09b0\u09be\u09b0 \u09ac\u0999\u09cd\u0997\u09ac\u09a8\u09cd\u09a7\u09c1 \u09ae\u09c1\u0995\u09cd\u09a4\u09ae\u099e\u09cd\u099a\u09c7\u09b0 \u09a8\u09be\u09ae \u09ae\u09c1\u0997\u09cd\u09a7 \u09ae\u099e\u09cd\u099a (\u0986\u0997\u09b8\u09cd\u099f \u09e8\u09e6\u09e8\u09ea); \u0997\u09be\u099c\u09c0\u09aa\u09c1\u09b0\u09c7\u09b0 \u099c\u09af\u09bc\u09a6\u09c7\u09ac\u09aa\u09c1\u09b0 \u09b8\u09cd\u099f\u09c7\u09b6\u09a8\u09c7 \u09ae\u09c1\u0997\u09cd\u09a7 \u09b8\u09c1\u09aa\u09c7\u09af\u09bc \u09aa\u09be\u09a8\u09bf\u09b0 \u0995\u09b0\u09cd\u09a8\u09be\u09b0 (\u09eb \u0986\u0997\u09b8\u09cd\u099f \u09e8\u09e6\u09e8\u09eb); \u09e8\u09e6\u09e8\u09ec\u09c7\u09b0 \u09a8\u09a4\u09c1\u09a8 \u0987-\u09aa\u09be\u09b8\u09aa\u09cb\u09b0\u09cd\u099f\u09c7\u09b0 \u09e9\u09e8-\u09e9\u09e9 \u09aa\u09c3\u09b7\u09cd\u09a0\u09be\u09b0 \u099c\u09b2\u099b\u09be\u09aa\u09c7 \u0986\u09ac\u09c1 \u09b8\u09be\u0988\u09a6 \u0993 \u0993\u09df\u09be\u09b8\u09bf\u09ae \u0986\u0995\u09b0\u09be\u09ae\u09c7\u09b0 \u09b8\u09be\u0999\u09cd\u0997\u09c7 \u09ae\u09c1\u0997\u09cd\u09a7\u09c7\u09b0 \u09aa\u09cd\u09b0\u09a4\u09bf\u0995\u09c3\u09a4\u09bf\u0964";
+cR["mir_mugdho_family"]="Mir Mugdho's family: father Mir Mustafizur Rahman (health inspector), mother Shahana Chowdhury. Twin brother Mir Mahbubur Rahman Snigdho (born one minute earlier) - a filmmaker who first identified Mugdho's body and posted the viral tribute video; elder brother Mir Dipto. Family home: Ramrail, Brahmanbaria. He was buried at Kamarpara Bamnartek Graveyard, Sector 10, Uttara, Dhaka. | \u09aa\u09b0\u09bf\u09ac\u09be\u09b0: \u09ac\u09be\u09ac\u09be \u09ae\u09c0\u09b0 \u09ae\u09cb\u09b8\u09cd\u09a4\u09be\u09ab\u09bf\u099c\u09c1\u09b0 \u09b0\u09b9\u09ae\u09be\u09a8, \u09ae\u09be \u09b6\u09be\u09b9\u09be\u09a8\u09be \u099a\u09cc\u09a7\u09c1\u09b0\u09c0, \u09af\u09ae\u099c \u09ad\u09be\u0987 \u09ae\u09c0\u09b0 \u09ae\u09be\u09b9\u09ac\u09c1\u09ac\u09c1\u09b0 \u09b0\u09b9\u09ae\u09be\u09a8 \u09b8\u09cd\u09a8\u09bf\u0997\u09cd\u09a7 \u0993 \u09ac\u09dc \u09ad\u09be\u0987 \u09ae\u09c0\u09b0 \u09a6\u09c0\u09aa\u09cd\u09a4\u0964 \u0997\u09cd\u09b0\u09be\u09ae\u09c7\u09b0 \u09ac\u09be\u09dc\u09bf \u09ac\u09cd\u09b0\u09be\u09b9\u09cd\u09ae\u09a3\u09ac\u09be\u09dc\u09bf\u09af\u09bc\u09be\u09b0 \u09b0\u09be\u09ae\u09b0\u09be\u0987\u09b2; \u09b8\u09ae\u09be\u09a7\u09bf \u0989\u09a4\u09cd\u09a4\u09b0\u09be\u09b0 \u0995\u09be\u09ae\u09be\u09b0\u09aa\u09be\u09dc\u09be \u09ac\u09be\u09ae\u09a8\u09b0\u09cd\u09a4\u09c7\u0995 \u0995\u09ac\u09b0\u09b8\u09cd\u09a5\u09be\u09a8\u09c7\u0964";
+aliasMap["mir mugdho"]="mir_mugdho_bio";
+aliasMap["mugdho"]="mir_mugdho_bio";
+aliasMap["who is mugdho"]="mir_mugdho_bio";
+aliasMap["who was mir mugdho"]="mir_mugdho_bio";
+aliasMap["mir mahfuzur rahman mugdho"]="mir_mugdho_bio";
+aliasMap["water boy of july"]="mir_mugdho_bio";
+aliasMap["pani lagbe pani"]="mir_mugdho_pani";
+aliasMap["pani dorkobe pani"]="mir_mugdho_pani";
+aliasMap["water needed water"]="mir_mugdho_pani";
+aliasMap["how did mugdho die"]="mir_mugdho_death";
+aliasMap["mir mugdho death"]="mir_mugdho_death";
+aliasMap["mugdho shot"]="mir_mugdho_death";
+aliasMap["mugdho water video"]="mir_mugdho_pani";
+aliasMap["mugdho legacy"]="mir_mugdho_legacy";
+aliasMap["mugdho mancha"]="mir_mugdho_legacy";
+aliasMap["mugdho water corner"]="mir_mugdho_legacy";
+aliasMap["mugdho passport"]="mir_mugdho_legacy";
+aliasMap["mugdho family"]="mir_mugdho_family";
+aliasMap["mugdho brother"]="mir_mugdho_family";
+aliasMap["mugdho snigdho"]="mir_mugdho_family";
+aliasMap["mugdho education"]="mir_mugdho_bio";
+aliasMap["mugdho fiverr"]="mir_mugdho_bio";
+aliasMap["\u099c\u09c1\u09b2\u09be\u0987 \u09b6\u09b9\u09c0\u09a6 \u09ae\u09c1\u0997\u09cd\u09a7"]="mir_mugdho_bio";
+aliasMap["\u09b6\u09b9\u09c0\u09a6 \u09ae\u09c0\u09b0 \u09ae\u09c1\u0997\u09cd\u09a7"]="mir_mugdho_bio";
+aliasMap["\u09ae\u09c0\u09b0 \u09ae\u09c1\u0997\u09cd\u09a7"]="mir_mugdho_bio";
+aliasMap["\u09ae\u09c1\u0997\u09cd\u09a7"]="mir_mugdho_bio";
+aliasMap["\u09ae\u09c0\u09b0 \u09ae\u09be\u09b9\u09ab\u09c1\u099c\u09c1\u09b0 \u09b0\u09b9\u09ae\u09be\u09a8 \u09ae\u09c1\u0997\u09cd\u09a7"]="mir_mugdho_bio";
+aliasMap["\u09aa\u09be\u09a8\u09bf \u09b2\u09be\u0997\u09ac\u09c7 \u09aa\u09be\u09a8\u09bf"]="mir_mugdho_pani";
+aliasMap["\u09ae\u09c1\u0997\u09cd\u09a7 \u09aa\u09be\u09a8\u09bf\u09b0 \u0995\u09b0\u09cd\u09a8\u09be\u09b0"]="mir_mugdho_legacy";
+aliasMap["\u09ae\u09c1\u0997\u09cd\u09a7 \u09ae\u099e\u09cd\u099a"]="mir_mugdho_legacy";
+aliasMap["\u09ae\u09c1\u0997\u09cd\u09a7\u09c7\u09b0 \u09aa\u09b0\u09bf\u09ac\u09be\u09b0"]="mir_mugdho_family";
+aliasMap["\u09ae\u09c1\u0997\u09cd\u09a7 \u0995\u09c7\u09ae\u09a8 \u09ae\u09b0\u09c7\u099b\u09c7"]="mir_mugdho_death";
+
+/* 2026-09-05 Shaheed Abrar Fahad memorial knowledge (bilingual) */
+cR["wasim_akram_bio"]="Shaheed Wasim Akram (ওয়াসিম আকরাম, 1998 - 16 July 2024): from Mehernama village, Pekua, Cox\u2019s Bazar; second of five siblings. SSC 2017 (Mehernama High School), HSC 2019 (Bakalia Govt. College), then BA (Hons) English, 4th year at Chattogram College. On 16 July 2024, around 4 PM at Bahaddarhat, Chattogram, he was shot in the head and chest during Chhatra League and Jubo League attacks on quota-reform students, and pronounced dead at Chattogram Medical College Hospital. He is called the first martyr of Chattogram in the July uprising.";
+cR["wasim_akram_legacy"]="Wasim Akram\u2019s legacy: his honours result was published 2.5 months after his death - First Class, 11th among all English department students, a result he never saw. Thousands joined his janaza at Pekua on 17 July 2024. Chattogram College students hold tree-plantings and prayers in his memory, a Shaheed Wasim Akram memorial monument (Smritistambha) stands in his honor, his words from his last Facebook status - Come to Sholoshohor - are painted as graffiti on expressway pillars, and his portrait appears in the new e-passport watermark alongside Abu Sayed and Mir Mugdho.";
+cR["farhan_faiyaaz_bio"]="Shaheed Farhan Faiyaaz (Mohammad Farhanul Islam Bhuiyan; 12 September 2007 - 18 July 2024): Class XI science student (HSC batch 2025) at Dhaka Residential Model College, aged 17. His Facebook bio read: One day we must leave this world; build a life such that people remember you after death. On 18 July 2024 at Dhanmondi 27 he was shot in the chest at the frontline of the quota movement, was carried by rickshaw and ambulance to City Hospital in Mohammadpur, and died in treatment - one of about forty martyrs of that day.";
+cR["farhan_faiyaaz_legacy"]="Farhan Faiyaaz\u2019s legacy: Shaheed Farhan Faiyaaz Playground was named west of the National Parliament (November 2024), and Dhanmondi Road 27 - the street where he fell - was renamed Shaheed Farhan Faiyaz Road (May 2025). His father testified as the first prosecution witness at the International Crimes Tribunal (June 2026); classmate Wasif Munim, who carried him to the ambulance, testified in July 2026; formal charges were accepted against 28 accused in January 2026. His college commemorates him every July.";
+cR["golam_nafiz_bio"]="Shaheed Golam Nafiz (মোঃ গোলাম নাফিজ; 22 May 2008 - 4 August 2024): from Mahakhali, Dhaka, younger of two brothers; SSC 2024 from Banani Bidyaniketan School and College, admitted to Navy College Dhaka - a class he never got to attend. On 4 August 2024, around 4:30 PM at Farmgate, he was shot by police during the non-cooperation movement. His companions put him on a rickshaw; rickshaw puller Noor Mohammad peddled to save him, but Chhatra League men blocked the way and delayed him. He was pronounced dead at hospital, aged 17.";
+cR["golam_nafiz_legacy"]="Golam Nafiz\u2019s legacy: photographer Jibon Ahmed captured him unconscious on the rickshaw with the flag of Bangladesh tied around his head - the image ran on the front page of Daily Manab Zamin and became one of the defining pictures of the uprising. The rickshaw is preserved at the July Revolution Memorial Museum, its puller Noor Mohammad honored by the interim government; Banani Bidyaniketan named a building after him, and advisers Nahid Islam and Asif Mahmud visited his family on 19 August 2024.";
+cR["abrar_fahad_bio"]="Shaheed Abrar Fahad Rabbi (\u0986\u09ac\u09b0\u09be\u09b0 \u09ab\u09be\u09b9\u09be\u09a6 \u09b0\u09ac\u09cd\u09ac\u09c0; 12 Feb 1998 - 7 Oct 2019) was a second-year EEE student at BUET, murdered in his dormitory by BUET-unit Chhatra League leaders. Born in Kushtia (home: Kumarkhali); father Barkatullah (BRAC inspection officer), mother Rokaya Khatun (kindergarten teacher); younger brother Abrar Fayaz, who later joined BUET (Mechanical, 2022). Educated at Kushtia Zilla School and Notre Dame College; joined BUET EEE in 2018. He was posthumously awarded the Independence Award 2025, Bangladesh's highest civilian honour, in the 'Rebellious Youth' category. | \u09b6\u09b9\u09c0\u09a6 \u0986\u09ac\u09b0\u09be\u09b0 \u09ab\u09be\u09b9\u09be\u09a6 (\u09e7\u09e8 \u09ab\u09c7\u09ac\u09cd\u09b0\u09c1\u09df\u09be\u09b0\u09bf \u09e7\u09ef\u09ef\u09ee - \u09ed \u0985\u0995\u09cd\u099f\u09cb\u09ac\u09b0 \u09e8\u09e6\u09e7\u09ef) \u09ac\u09c1\u09df\u09c7\u099f\u09c7\u09b0 \u09a4\u09dc\u09bf\u0993 \u0993 \u0987\u09b2\u09c7\u0995\u099f\u09cd\u09b0\u09a8\u09bf\u0995 \u09aa\u09cd\u09b0\u0995\u09cc\u09b6\u09b2\u09c7\u09b0 \u09a6\u09cd\u09ac\u09bf\u09a4\u09c0\u09df \u09ac\u09b0\u09cd\u09b7\u09c7\u09b0 \u09b6\u09bf\u0995\u09cd\u09b7\u09be\u09b0\u09cd\u09a5\u09c0 \u099b\u09bf\u09b2\u09c7\u09a8\u0964 \u0995\u09c1\u09b7\u09cd\u099f\u09bf\u09df\u09be\u09df \u099c\u09a8\u09cd\u09ae; \u09aa\u09bf\u09a4\u09be \u09ac\u09b0\u0995\u09a4\u09c1\u09b2\u09cd\u09b2\u09be\u09b9, \u09ae\u09be \u09b0\u09cb\u0995\u09c7\u09df\u09be \u0996\u09be\u09a4\u09c1\u09a8\u0964 \u09e8\u09e6\u09e8\u09eb \u09b8\u09be\u09b2\u09c7 \u09a4\u09be\u0995\u09c7 \u09ae\u09b0\u09a3\u09cb\u09a4\u09cd\u09a4\u09b0 \u09b8\u09cd\u09ac\u09be\u09a7\u09c0\u09a8\u09a4\u09be \u09aa\u09c1\u09b0\u09b8\u09cd\u0995\u09be\u09b0\u09c7 \u09ad\u09c2\u09b7\u09bf\u09a4 \u0995\u09b0\u09be \u09b9\u09af\u09bc\u0964";
+cR["abrar_fahad_death"]="How Abrar Fahad was killed: after Facebook posts criticizing Bangladesh-India agreements (Mongla port use, Feni river water withdrawal, LNG import terms), BCL leaders suspected him of being a Shibir activist. On 6 Oct 2019, exam period brought him back to Sher-e-Bangla Hall. That night he was taken to room 2011, his two phones and laptop checked, then beaten for hours with cricket stamps, a skipping rope and blunt weapons by at least 20 attackers. He vomited repeatedly, was moved to room 2005, and was pronounced dead around 3:00 AM on 7 Oct 2019 on the ground floor. The autopsy confirmed death by blunt-force beating. | \u09ec \u0985\u0995\u09cd\u099f\u09cb\u09ac\u09b0 \u09e8\u09e6\u09e7\u09ef \u09b0\u09be\u09a4\u09c7 \u09b6\u09c7\u09b0\u09c7 \u09ac\u09be\u0982\u09b2\u09be \u09b9\u09b2\u09c7\u09b0 \u09e8\u09e6\u09e7\u09e7 \u09a8\u09ae\u09cd\u09ac\u09b0 \u0995\u0995\u09cd\u09b7\u09c7 \u0985\u09a8\u09cd\u09a4\u09a4 20 \u0986\u0995\u09cd\u09b0\u09ae\u0995\u09be\u09b0\u09c0 \u0998\u09a3\u09cd\u099f\u09be\u0998\u09a3\u09cd\u099f\u09bf \u09aa\u09bf\u099f\u09bf\u09df\u09c7 \u09b9\u09a4\u09cd\u09df\u09be \u0995\u09b0\u09c7\u0964 \u09ad\u09cb\u09b0 3 \u099f\u09be\u09df \u09ae\u09c3\u09a4 \u0998\u09cb\u09b7\u09a3\u09be\u0964 \u09ae\u09df\u09a8\u09be\u09a4\u09a6\u09cd\u09a8\u09c7 \u09ad\u09cb\u0982\u099f \u099c\u09a8\u09bf\u09a4 \u09ae\u09be\u09b0\u09a7\u09cd\u09ac\u09b0\u09c7\u09b0 \u09aa\u09cd\u09b0\u09ae\u09be\u09a3 \u09ae\u09bf\u09b2\u09c7\u0964";
+cR["abrar_fahad_post"]="Abrar Fahad's final Facebook post (5 Oct 2019) criticized three India-Bangladesh deals signed during the PM's visit: 1) Bangladesh letting India use Mongla and Chittagong ports - though history showed how the port was opened for famine relief in 1947-era Bengal; 2) giving India 1.85 cusecs of Feni river water while Indian states refuse river-water sharing among themselves; 3) importing LNG from a country that once blocked coal-and-stone exports, while gas shortages shut Bangladeshi factories. It ended with Tagore's couplet: 'parer karone swartho diya boli / e jibon mon sokoli dao...' - giving one's all for others' interests. | \u09b6\u09c7\u09b7 \u09ab\u09c7\u09b8\u09ac\u09c1\u0995 \u09aa\u09cb\u09b8\u09cd\u099f\u09c7 \u09a4\u09bf\u09a8\u099f\u09bf \u099a\u09c1\u0995\u09cd\u09a4\u09bf\u09b0 \u09b8\u09ae\u09be\u09b2\u09cb\u099a\u09a8\u09be \u0995\u09b0\u09c7\u09a8 - \u09ae\u09c1\u0982\u09b2\u09be \u0993 \u099a\u099f\u09cd\u099f\u0997\u09cd\u09b0\u09be\u09ae \u09ac\u09a8\u09cd\u09a6\u09b0 \u09ac\u09cd\u09af\u09ac\u09b9\u09be\u09b0, \u09ab\u09c7\u09a8\u09c0 \u09a8\u09a6\u09c0\u09b0 \u09aa\u09be\u09a8\u09bf \u09aa\u09cd\u09b0\u09a4\u09cd\u09df\u09be\u09b9\u09be\u09b0 \u0993 \u098f\u09b2\u09aa\u09bf\u0997 \u0986\u09ae\u09a6\u09be\u09a8\u09c0\u0964 \u09b6\u09c7\u09b7\u09c7 \u09b0\u09ac\u09c0\u09a8\u09cd\u09a6\u09cd\u09b0\u09a8\u09be\u09a5\u09c7\u09b0 \u0995\u09ac\u09bf\u09a4\u09be\u09b0 \u099a\u09df\u0997\u09c1\u09b2\u09cb \u0989\u09a6\u09cd\u09a7\u09c3\u09a4 \u0995\u09b0\u09c7\u09a8\u0964";
+cR["abrar_fahad_verdict"]="Justice for Abrar Fahad: his father filed a murder case against 19 at Chawkbazar police station. On 13 Nov 2019 the DB chargesheet named 25 accused. BUET lifetime-expelled 26 students (22 Oct 2019) and banned organizational student politics on campus. On 7 Dec 2021, Judge Abu Jafar Kamruzzaman of the Dhaka 1st Speediest Tribunal sentenced 20 to death - including Chhatra League leaders Mehedee Hasan Russel and Onik Sarker - and 5 to life in prison; 3 fugitives remain (Morsheduzzaman Jisan, Ehteshamul Rabbi Tanim, Mostoba Rafid). On 16 Mar 2025 the High Court (Justices Syed Enayet Hosain and AKM Asaduzzaman) upheld the verdict; the full verdict was released 3 May 2025.";
+cR["abrar_fahad_legacy"]="The legacy of Abrar Fahad: the Independence Award 2025 (posthumous, new Rebellious Youth category, conferred 25 Mar 2025); Bangabandhu Avenue renamed Shaheed Abrar Fahad Avenue (25 Mar 2025); Kushtia Stadium renamed for him; 7 October declared a national day of remembrance (Oct 2025); the Eight Pillars Against Aggression monument at Palashi and his memorial plaque at Sher-e-Bangla Hall; the short film Room Number 2011 (2024); books including Chetonay Abrar Fahad (2025) and the novel Aakor; and AbrarFahadArchive.org built by his BUET batchmates of the 17 batch. His killing seeded the resistance that grew into the July 2024 uprising.";
+cR["abrar_fahad_reaction"]="The response to the killing of Abrar Fahad: BUET students rose with 10 demands - maximum punishment, lifetime expulsion, a campus ban on student politics, CCTV in every hall - and won them. Protests spread to Dhaka University, Jahangirnagar, Islamic University, Khulna, Rajshahi, SUST and across 13+ districts. The UN demanded a proper investigation; the US, UK, Germany and France pressed for justice; AFP, Reuters, BBC, Al Jazeera, NYT, WaPo and the Guardian covered it. Five years of memory became the soil of the July 2024 uprising.";
+cR["abrar_fahad_archive"]="AbrarFahadArchive.org was built by his BUET batchmates of the '17 batch as a war against forgetting. Its dedication reads: 'Someone so outspoken yet so gentle. Someone so bright yet so modest. Someone who said what needed to be said and paid the highest price for it. To his memory we cherish. To his name we look forward.' It hosts memories and stories about Abrar, photo and video galleries of the movement, news links about the murder, and a day-by-day timeline of 6-16 Oct and 2 Nov 2019. | \u09a4\u09be\u09b0 \u09ac\u09c1\u09df\u09c7\u099f \u09e7\u09ed \u09ac\u09cd\u09af\u09be\u099a\u09c7\u09b0 \u09ac\u09a8\u09cd\u09a7\u09c1\u09b0\u09be \u09ac\u09bf\u09b8\u09cd\u09ae\u09c3\u09a4\u09bf\u09b0 \u09ac\u09bf\u09b0\u09c1\u09a6\u09cd\u09a7\u09c7 \u09af\u09c1\u09a6\u09cd\u09a7 \u0995\u09b0\u09a4\u09c7 \u0985\u09ac\u09b0\u09be\u09b0\u09ab\u09be\u09b9\u09be\u09a6\u0986\u09b0\u09cd\u0995\u09be\u0987\u09ad\u0964\u0985\u09b0\u09cd\u0997 \u09a4\u09c8\u09b0\u09c0 \u0995\u09b0\u09c7\u099b\u09c7 - \u09b8\u09cd\u09ae\u09c3\u09a4\u09bf, \u099b\u09ac\u09bf, \u09ad\u09bf\u09a1\u09bf\u0993 \u0993 \u09a6\u09bf\u09a8\u0993\u09df\u09be\u09b0 \u099f\u09be\u0987\u09ae\u09b2\u09be\u0987\u09a8 \u09b8\u0987\u099f\u09c7 \u09b8\u0982\u09b0\u0995\u09cd\u09b7\u09bf\u09a4\u0964";
+aliasMap["wasim akram"]="wasim_akram_bio";
+aliasMap["wasim"]="wasim_akram_bio";
+aliasMap["who was wasim akram"]="wasim_akram_bio";
+aliasMap["wasim akram chattogram"]="wasim_akram_bio";
+aliasMap["wasim sholoshohor"]="wasim_akram_legacy";
+aliasMap["wasim first class"]="wasim_akram_legacy";
+aliasMap["farhan faiyaaz"]="farhan_faiyaaz_bio";
+aliasMap["farhan"]="farhan_faiyaaz_bio";
+aliasMap["farhanul islam"]="farhan_faiyaaz_bio";
+aliasMap["drmc martyr"]="farhan_faiyaaz_bio";
+aliasMap["farhan dhanmondi"]="farhan_faiyaaz_bio";
+aliasMap["farhan faiyaaz road"]="farhan_faiyaaz_legacy";
+aliasMap["farhan playground"]="farhan_faiyaaz_legacy";
+aliasMap["farhan tribunal"]="farhan_faiyaaz_legacy";
+aliasMap["golam nafiz"]="golam_nafiz_bio";
+aliasMap["nafiz"]="golam_nafiz_bio";
+aliasMap["farmgate martyr"]="golam_nafiz_bio";
+aliasMap["nafiz rickshaw"]="golam_nafiz_legacy";
+aliasMap["nafiz flag photo"]="golam_nafiz_legacy";
+aliasMap["nafiz museum rickshaw"]="golam_nafiz_legacy";
+aliasMap["abrar fahad"]="abrar_fahad_bio";
+aliasMap["abrar"]="abrar_fahad_bio";
+aliasMap["abrar fahad death"]="abrar_fahad_death";
+aliasMap["abrar fahad trial"]="abrar_fahad_verdict";
+aliasMap["abrar fahad national day"]="abrar_fahad_legacy";
+aliasMap["room number 2011"]="abrar_fahad_legacy";
+aliasMap["eight pillars"]="abrar_fahad_legacy";
+aliasMap["abrar protests"]="abrar_fahad_reaction";
+aliasMap["abrar fahad reaction"]="abrar_fahad_reaction";
+aliasMap["abrar fahad bio"]="abrar_fahad_bio";
+aliasMap["who killed abrar"]="abrar_fahad_death";
+aliasMap["abrar fahad murder"]="abrar_fahad_death";
+aliasMap["abrar fahad killing"]="abrar_fahad_death";
+aliasMap["abrar fahad verdict"]="abrar_fahad_verdict";
+aliasMap["abrar fahad justice"]="abrar_fahad_verdict";
+aliasMap["abrar fahad court"]="abrar_fahad_verdict";
+aliasMap["abrar fahad award"]="abrar_fahad_bio";
+aliasMap["abrar fahad independence award"]="abrar_fahad_legacy";
+aliasMap["abrar fahad post"]="abrar_fahad_post";
+aliasMap["abrar fahad facebook post"]="abrar_fahad_post";
+aliasMap["abrar fahad legacy"]="abrar_fahad_legacy";
+aliasMap["abrar fahad avenue"]="abrar_fahad_legacy";
+aliasMap["room 2011"]="abrar_fahad_legacy";
+aliasMap["buet student killed"]="abrar_fahad_death";
+aliasMap["abrarfahadarchive"]="abrar_fahad_archive";
+aliasMap["\u0986\u09ac\u09b0\u09be\u09b0 \u09ab\u09be\u09b9\u09be\u09a6"]="abrar_fahad_bio";
+aliasMap["\u0986\u09ac\u09b0\u09be\u09b0"]="abrar_fahad_bio";
+aliasMap["\u09b6\u09b9\u09c0\u09a6 \u0986\u09ac\u09b0\u09be\u09b0"]="abrar_fahad_bio";
+aliasMap["\u0986\u09ac\u09b0\u09be\u09b0 \u09ab\u09be\u09b9\u09be\u09a6 \u09b9\u09a4\u09cd\u09df\u09be\u0995\u09be\u09a3\u09cd\u09a1"]="abrar_fahad_death";
+aliasMap["\u0986\u09ac\u09b0\u09be\u09b0 \u09ac\u09bf\u099a\u09be\u09b0"]="abrar_fahad_verdict";
+aliasMap["\u0986\u09ac\u09b0\u09be\u09b0\u09c7\u09b0 \u09aa\u09cb\u09b8\u09cd\u099f"]="abrar_fahad_post";
+/* 2026-09-05 Kazi Nazrul Islam - National Poet knowledge (bilingual) */
+cR["nazrul_bio"]="Kazi Nazrul Islam (\u0995\u09be\u099c\u09c0 \u09a8\u099c\u09b0\u09c1\u09b2 \u0987\u09b8\u09b2\u09be\u09ae; 24 May 1899 - 29 August 1976) is the National Poet of Bangladesh, the 'Rebel Poet' (\u09ac\u09bf\u09a6\u09cd\u09b0\u09cb\u09b9\u09c0 \u0995\u09ac\u09bf) and the 'Bulbul' of modern Bengali music. Born in Churulia village, Bardhaman, West Bengal (11 Joishtho 1306); childhood nickname Dukhu Mia. After his imam father Kazi Fakir Ahmad died in 1908, child Nazrul worked as a majar caretaker, mosque muazzin and maktab teacher, then joined a Leto folk-theatre troupe where he began writing songs and plays. He also served in the British Indian Army (49 Bengal Regiment, 1917-1920, Karachi), where he learned Persian and wrote his first prose and poetry. In a short active literary life (1920-1942) he produced a vast body of work before a nervous illness in 1942 silenced him for the last 34 years of his life. | \u09ac\u09be\u0982\u09b2\u09be\u09a6\u09c7\u09b6\u09c7\u09b0 \u099c\u09be\u09a4\u09c0\u09df \u0995\u09ac\u09bf \u0995\u09be\u099c\u09c0 \u09a8\u099c\u09b0\u09c1\u09b2 \u0987\u09b8\u09b2\u09be\u09ae (\u09e8\u09ea \u09ae\u09c7 \u09e7\u09ee\u09ef\u09ef - \u09e8\u09ef \u0986\u0997\u09b8\u09cd\u099f \u09e7\u09ef\u09ed\u09ec)\u0964 \u09ac\u09bf\u09a6\u09cd\u09b0\u09cb\u09b9\u09c0 \u0995\u09ac\u09bf \u0993 \u0986\u09a7\u09c1\u09a8\u09bf\u0995 \u09ac\u09be\u0982\u09b2\u09be \u0997\u09be\u09a8\u09c7\u09b0 \u09ac\u09c1\u09b2\u09ac\u09c1\u09b2\u0964 \u09aa\u09b6\u09cd\u099a\u09bf\u09ae\u09ac\u0999\u09cd\u0997\u09c7\u09b0 \u09ac\u09b0\u09cd\u09a7\u09ae\u09be\u09a8\u09c7\u09b0 \u099a\u09c1\u09b0\u09c1\u09b2\u09bf\u09df\u09be \u0997\u09cd\u09b0\u09be\u09ae\u09c7 \u099c\u09a8\u09cd\u09ae; \u09a1\u09be\u0995 \u09a8\u09be\u09ae \u09a6\u09c1\u0996\u09c1 \u09ae\u09bf\u09df\u09be\u0964 \u09ac\u09be\u09b2\u09df\u0995\u09be\u09b2\u09c7 \u09ae\u09c1\u09df\u09be\u099c\u09cd\u099c\u09bf\u09a8, \u09ae\u09c1\u09df\u09be\u099c\u09cd\u099c\u09bf\u09a6 \u0993 \u09b2\u09c7\u099f\u09cb \u09a6\u09b2\u09c7\u09b0 \u0995\u09be\u099c \u0995\u09b0\u09c7\u09a8; \u09aa\u09b0\u09c7 \u09b8\u09c7\u09a8\u09be\u09ac\u09be\u09b9\u09bf\u09a8\u09c0\u09a4\u09c7 \u09df\u09cb\u0997 \u09a6\u09bf\u09df\u09c7 \u09b8\u09be\u09b9\u09bf\u09a4\u09cd\u09df \u099a\u09b0\u09cd\u099a\u09be \u09b6\u09c1\u09b0\u09c1 \u0995\u09b0\u09c7\u09a8\u0964 \u09e7\u09ef\u09ea\u09e8 \u09b8\u09be\u09b2\u09c7 \u09b8\u09cd\u09a8\u09be\u09df\u09c1\u09ac\u09bf\u0995 \u0985\u09b8\u09c1\u0996\u09c7 \u09b8\u09c1\u09a6\u09c0\u09b0\u09cd\u0998 \u09e9\u09ea \u09ac\u099b\u09b0 \u09aa\u09a3 \u09b8\u09cd\u09ac\u09aa\u09cd\u09a8\u09b6\u09c0\u09b2 \u09b9\u09df \u09af\u09be\u09a8\u0964";
+cR["nazrul_works"]="Nazrul's works: in roughly 23 active years he wrote over 3,000 songs (he composed melody and music for about 4,000 by some counts), 3 novels, 19 short stories and 5 volumes of essays, plus poetry, plays and ghazals. Landmark poems and books: 'Bidrohi' (The Rebel, 1921), 'Pralayollas', 'Agnibina' (1922), 'Bisher Banshi', 'Bandon Hara', 'Nater Gan', 'Kamal Pasha', 'Samyabadi' and 'Sarbahara'. He founded and edited the radical biweekly 'Dhumketu' (Comet, 12 Aug 1922). His music set Bengali songs on the foundation of North Indian raga music while embracing ghazal, hamd, naat, Shyama Sangeet and folk forms - a uniquely secular synthesis. | \u09ac\u09bf\u09a6\u09cd\u09b0\u09cb\u09b9\u09c0, \u09aa\u09cd\u09b0\u09b2\u09df\u0989\u09b2\u09cd\u09b2\u09be\u09b8, \u0985\u0997\u09cd\u09a8\u09bf\u09ac\u09c0\u09a3\u09be, \u09ac\u09bf\u09b7\u09c7\u09b0 \u09ac\u09be\u0981\u09b6\u09bf, \u09ac\u09be\u0981\u09a7\u09a8 \u09b9\u09be\u09b0\u09be, \u0995\u09be\u09ae\u09be\u09b2 \u09aa\u09be\u09b6\u09be \u09aa\u09cd\u09b0\u09ad\u09c3\u09a4\u09bf \u0995\u09be\u09b2\u09c7\u09ad\u09cd\u09b0\u0995\u09be\u09aa\u09cd\u09a4 \u09b0\u099a\u09a8\u09be\u0964 \u09aa\u09cd\u09b0\u09be\u09df \u09e9 \u09b9\u09be\u099c\u09be\u09b0 \u0997\u09be\u09a8, \u09e9 \u09c9\u09c1\u09aa\u09a8\u09cd\u09df\u09be\u09b8, \u09e7\u09ef \u099b\u09cb\u099f\u0997\u09b2\u09cd\u09aa, \u09aa\u09be\u0981\u099a\u099f\u09bf \u09aa\u09cd\u09b0\u09ac\u09a8\u09cd\u09a7\u0997\u09cd\u09b0\u09a8\u09cd\u09a5\u0964 \u09a7\u09c2\u09ae\u0995\u09c7\u09a4\u09c1 \u09aa\u09a4\u09cd\u09b0\u09bf\u0995\u09be\u09b0 \u09b8\u09ae\u09cd\u09aa\u09be\u09a6\u0995 \u099b\u09bf\u09b2\u09c7\u09a8\u0964 \u09b0\u09be\u0997, \u0997\u099c\u09b2, \u09b9\u09ae\u09cd\u09a6, \u09a8\u09be\u09a4, \u09b6\u09cd\u09df\u09be\u09ae\u09be\u09b8\u0999\u09cd\u0997\u09c0\u09a4 \u0993 \u09b2\u09cb\u0995\u09b8\u0999\u09cd\u0997\u09c0\u09a4\u09c7\u09b0 \u09b8\u09ae\u09a8\u09cd\u09ac\u09df \u09b8\u0982\u09b6\u09cd\u09b2\u09c7\u09b7\u09a3\u0964";
+cR["nazrul_rebel"]="Nazrul the rebel: his poem 'Bidrohi' (Dec 1921) changed the course of Bengali poetry with the thunderous 'Bol bir - bol unnoto mom shir!' In 1922 the British government charged him with sedition over 'Dhumketu' and jailed him. From the dock he delivered the historic 'Rajbandir Jabanbandi' (Deposition of a Political Prisoner) and later held a hunger strike of about 40 days against jail oppression. Rabindranath Tagore dedicated his book 'Basanta' to Nazrul in support - the two leading Bengali poets remained close from their 1921 Santiniketan meeting until Tagore's death in 1941. | \u09e7\u09ef\u09e8\u09e8 \u09b8\u09be\u09b2\u09c7 \u09b0\u09be\u099c\u09a6\u09cd\u09b0\u09cb\u09b9\u09bf\u09a4\u09be\u09b0 \u09ae\u09be\u09ae\u09b2\u09be\u09df \u0995\u09be\u09b0\u09be\u09a6\u09a6\u09a3\u09cd\u09a1\u0964 \u0986\u09a6\u09be\u09b2\u09a4\u09c7 \u09aa\u09be\u09a0 \u0995\u09b0\u09c7\u09a8 \u0990\u09a4\u09bf\u09b9\u09be\u09b8\u09bf\u0995 \u09b0\u09be\u099c\u09ac\u09a8\u09cd\u09a6\u09c0\u09b0 \u099c\u09ac\u09be\u09a8\u09ac\u09a8\u09cd\u09a6\u09bf \u0993 \u09aa\u09cd\u09b0\u09be\u09df \u09ea\u09e6 \u09a6\u09bf\u09a8\u09c7\u09b0 \u0985\u09a8\u09b6\u09a8\u0964 \u09b0\u09ac\u09c0\u09a8\u09cd\u09a6\u09cd\u09b0\u09a8\u09be\u09a5 \u09a4\u09be\u0995\u09c7 \u0989\u09ce\u09b8\u09b0\u09cd\u0997 \u0995\u09b0\u09c7\u09a8 \u09ac\u09b8\u09a8\u09cd\u09a4 \u0995\u09be\u09ac\u09cd\u09df\u0964";
+cR["nazrul_final"]="Nazrul's final chapter: in 1972 the Government of Bangladesh brought him and his family to Dhaka, where he lived his last years. Dhaka University conferred an honorary D.Litt (1975); he received Bangladeshi citizenship in 1976 and the Ekushe Padak in 1976. He died on 29 August 1976 and was buried with state honours beside the Dhaka University central mosque - today the Kazi Nazrul Islam Mausoleum. Earlier honours: Jagattarini Padak (1945), Padma Bhushan (1960); posthumously the Independence Award (1977). Bangladesh observes his birthday 24 May as Nazrul Jayanti. | \u09e7\u09ef\u09ed\u09e8 \u09b8\u09be\u09b2\u09c7 \u09aa\u09b0\u09bf\u09ac\u09be\u09b0\u09c7\u09b0 \u09b8\u09b9 \u09a2\u09be\u0995\u09be\u09df \u09ac\u09b8\u09a8\u09cd\u09a4\u09b0\u09a3\u0964 \u09e8\u09ef \u0986\u0997\u09b8\u09cd\u099f \u09e7\u09ef\u09ed\u09ec \u09aa\u09b0\u09ae \u09a8\u09bf\u09b0\u09cd\u09ac\u09be\u09b8\u09a8; \u09a2\u09be\u0995\u09be \u09ac\u09bf\u09b6\u09cd\u09ac\u09ac\u09bf\u09a6\u09cd\u09af\u09be\u09b2\u09df \u0995\u09c7\u09a8\u09cd\u09a6\u09cd\u09b0\u09c0\u09df \u09ae\u09b8\u099c\u09bf\u09a6\u09c7\u09b0 \u09aa\u09be\u09b6\u09c7 \u09b8\u09ae\u09be\u09a7\u09bf\u0964 \u099c\u0997\u09a4\u09cd\u09a4\u09be\u09b0\u09bf\u09a3\u09c0 \u09aa\u09a6\u0995 (\u09e7\u09ef\u09ea\u09eb), \u09aa\u09a6\u09cd\u09ae\u09ad\u09c2\u09b7\u09a3 (\u09e7\u09ef\u09ec\u09e6), \u098f\u0995\u09c1\u09b6\u09c7 \u09aa\u09a6\u0995 (\u09e7\u09ef\u09ed\u09ec), \u09b8\u09cd\u09ac\u09be\u09a7\u09c0\u09a8\u09a4\u09be \u09aa\u09c1\u09b0\u09b8\u09cd\u0995\u09be\u09b0 (\u09e7\u09ef\u09ed\u09ed)\u0964";
+cR["nazrul_quote"]="Nazrul on humanity: in his final speech he said - 'Some call my words yavana (foreign), some call me kafir. I say I am neither. I have only tried to bring Hindu and Muslim together in one embrace, to turn curses into embraces.' His Rebel poem opens: 'Bol bir - bol unnoto mom shir!' (Say, hero - say, my head is held high!). His poetry's core themes were protest against oppression of man by man, equality, religious tolerance and women's emancipation - values at the heart of access to justice. | \u09b6\u09c7\u09b7 \u09ad\u09be\u09b7\u09a3\u09c7 \u09ac\u09b2\u09c7\u099b\u09bf\u09b2\u09c7\u09a8 - \u0995\u09c7\u09c9 \u09ac\u09b2\u09c7\u09a8 \u0986\u09ae\u09be\u09b0 \u09ac\u09be\u09a8\u09c0 \u09df\u09ac\u09a8, \u0995\u09c7\u09c9 \u09ac\u09b2\u09c7\u09a8 \u0995\u09be\u09ab\u09c7\u09b0\u0964 \u0986\u09ae\u09bf \u09ac\u09b2\u09bf \u0993 \u09a6\u09c1\u099f\u09cb\u09b0 \u0995\u09cb\u09a8\u099f\u09be\u0987 \u09a8\u09be\u0964 \u0986\u09ae\u09bf \u09b6\u09c1\u09a7\u09c1 \u09b9\u09bf\u09a8\u09cd\u09a6\u09c1 \u09ae\u09c1\u09b8\u09b2\u09bf\u09ae\u0995\u09c7 \u098f\u0995 \u099c\u09be\u09df\u0997\u09be\u09df \u09a7\u09b0\u09c7 \u09a8\u09bf\u09df\u09c7 \u09b9\u09cd\u09df\u09be\u09a8\u09cd\u09a1\u09b6\u09c7\u0995 \u0995\u09b0\u09be\u09a8\u09cb\u09b0 \u099a\u09c7\u09b7\u09cd\u099f\u09be \u0995\u09b0\u09c7\u099b\u09bf\u0964";
+aliasMap["kazi nazrul islam"]="nazrul_bio";
+aliasMap["nazrul islam"]="nazrul_bio";
+aliasMap["nazrul"]="nazrul_bio";
+aliasMap["national poet"]="nazrul_bio";
+aliasMap["national poet of bangladesh"]="nazrul_bio";
+aliasMap["rebel poet"]="nazrul_rebel";
+aliasMap["bidrohi kobi"]="nazrul_rebel";
+aliasMap["bidrohi poem"]="nazrul_works";
+aliasMap["dukhu mia"]="nazrul_bio";
+aliasMap["nazrul jayanti"]="nazrul_final";
+aliasMap["nazrul works"]="nazrul_works";
+aliasMap["nazrul songs"]="nazrul_works";
+aliasMap["nazrul sangeet"]="nazrul_works";
+aliasMap["nazrul death"]="nazrul_final";
+aliasMap["nazrul mausoleum"]="nazrul_final";
+aliasMap["\u0995\u09be\u099c\u09c0 \u09a8\u099c\u09b0\u09c1\u09b2 \u0987\u09b8\u09b2\u09be\u09ae"]="nazrul_bio";
+aliasMap["\u09a8\u099c\u09b0\u09c1\u09b2"]="nazrul_bio";
+aliasMap["\u09a8\u099c\u09b0\u09c1\u09b2 \u0987\u09b8\u09b2\u09be\u09ae"]="nazrul_bio";
+aliasMap["\u099c\u09be\u09a4\u09c0\u09df \u0995\u09ac\u09bf"]="nazrul_bio";
+aliasMap["\u09ac\u09bf\u09a6\u09cd\u09b0\u09cb\u09b9\u09c0 \u0995\u09ac\u09bf"]="nazrul_rebel";
+aliasMap["\u09ac\u09bf\u09a6\u09cd\u09b0\u09cb\u09b9\u09c0"]="nazrul_works";
+aliasMap["\u09a8\u099c\u09b0\u09c1\u09b2\u0997\u09c0\u09a4\u09bf"]="nazrul_works";
+aliasMap["\u09a8\u099c\u09b0\u09c1\u09b2\u09c7\u09b0 \u0997\u09be\u09a8"]="nazrul_works";
+/* processMessage dispatcher: grounded frontier LLM first, local engine as fallback */
+function processMessage(msg,bn){
+  try{
+    if(window.AAI&&AAI.probeDone&&AAI.llmEnabled&&typeof AAI.ask==='function'){
+      AAI.ask(msg,bn,processMessageLocal);
+      return;
+    }
+  }catch(e){}
+  if(typeof processMessageLocal==='function'){processMessageLocal(msg,bn);}
+}

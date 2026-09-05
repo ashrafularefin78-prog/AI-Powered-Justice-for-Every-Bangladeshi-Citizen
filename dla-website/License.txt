@@ -1,0 +1,107 @@
+# European Union Public Licence v. 1.2
+
+## Project: A ai — Next-Gen Digital Legal Aid Bangladesh
+
+EUPL © the European Community 2007
+This European Union Public Licence (the "EUPL") applies to the Work or Software
+(as defined below) which is provided in conjunction with this Licence. Any use
+of the Work in any form (the "Use") is deemed to constitute acceptance of this
+Licence.
+
+---
+
+## Preamble
+
+The European Community has decided to create a common public licence regime for
+open-source software, enabling the widest possible reuse and interoperability
+of software developed and distributed under it, including software developed
+by public administrations and funded by European institutions.
+
+The purpose of the EUPL is to ensure that:
+
+- software developed with public funds is distributed under conditions that
+  guarantee its reuse, modification, and further distribution without restriction;
+- derivative works remain governed by compatible licences, preventing enclosure;
+- legal certainty is provided across all EU Member States through a licence
+  with identical legal value in all official EU languages.
+
+## Article 1: Definition of Work
+
+The "Work" means the software, documentation, and all associated materials
+provided under this Licence, including source code, object code, and any
+configurations.
+
+## Article 2: Scope of Rights Granted
+
+The Licensor grants You a worldwide, royalty-free, non-exclusive, perpetual,
+irrevocable licence to:
+
+- use, reproduce, modify, and distribute the Work;
+- create derivative works;
+- sublicense the Work to third parties.
+
+## Article 3: Conditions of Use
+
+You must:
+
+- retain all copyright notices, patent notices, and disclaimers;
+- when distributing the Work or derivatives, provide access to the source code
+  under this Licence;
+- indicate any modifications made to the Work.
+
+## Article 4: Copyleft Obligations
+
+Any distribution of the Work or derivative works must be under the EUPL or a
+compatible licence (as listed in the Appendix). Derivative works cannot be
+redistributed under a more restrictive licence.
+
+## Article 5: Compatible Licences
+
+Per the EUPL Appendix, the following are compatible with the EUPL:
+
+- GNU General Public License (GPL) v2 and v3
+- GNU Affero General Public License (AGPL) v3
+- Open Software License (OSL) v2.1 and v3.0
+- Eclipse Public License (EPL) v1.0
+- Mozilla Public License (MPL) v2.0
+- Creative Commons Attribution-ShareAlike v3.0
+
+## Article 6: Patent Grant
+
+The Licensor grants a worldwide, royalty-free, non-exclusive patent licence to
+the extent necessary for the exercise of rights granted in Article 2.
+
+## Article 7: Warranty and Liability
+
+The Work is provided "as is" without warranty of any kind, express or implied.
+The Licensor shall not be liable for any damages arising from the use of the
+Work, except where statutory liability applies.
+
+## Article 8: Termination
+
+This Licence terminates automatically if You breach any of its conditions.
+
+## Article 9: Governing Law
+
+This Licence shall be governed by the law of the European Union Member State
+where the Licensor has its registered office.
+
+---
+
+## Appendix: Compatibility Notice
+
+For A ai specifically, the following third-party components must be
+acknowledged:
+
+| Component | Licence | Source |
+|-----------|---------|--------|
+| Font Awesome | CC BY 4.0 / SIL OFL | cdnjs |
+| Google Fonts (Inter, Space Grotesk, Noto Serif Bengali) | SIL OFL 1.1 | fonts.googleapis.com |
+| All code (HTML, CSS, JS) | EUPL v1.2 | This repository |
+
+---
+
+## How to Apply This License
+
+1. **Add `LICENSE` file** to the project root using the text above.
+2. **Add `NOTICE` file** (for Apache 2.0-compatible projects):
