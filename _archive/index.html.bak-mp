@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A ai - Digital Legal Aid Bangladesh</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<link rel="stylesheet" href="assets/styles.css?v=css11">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' data:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<script src="assets/security.js?v=sec53"></script>
+</head>
+<body>
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="hotline-ticker"><div class="ticker-content"><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:999">Emergency: 999</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:109">Women Helpline: 109</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:16430">Legal Aid: 16430</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:106">Anti-Corruption: 106</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:1098">Child Helpline: 1098</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:102">Fire Service: 102</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:333">Cyber Crime: 333</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:16699">Health: 16699</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:16445">Passport: 16445</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:16106">NID: 16106</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:16122">Land: 16122</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:16107">BRTA: 16107</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:16430">Free Legal Aid: 16430</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:999">Police: 999</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:103">Traffic: 103</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:16999">Electricity: 16999</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:16131">Pension: 16131</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:999">Ambulance: 999</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:109">Domestic Violence: 109</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:16430">A ai Legal Help: 16430</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:999">Emergency: 999</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:109">Women Helpline: 109</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:16430">Legal Aid: 16430</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:106">Anti-Corruption: 106</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:1098">Child Helpline: 1098</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:102">Fire Service: 102</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:333">Cyber Crime: 333</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:16699">Health: 16699</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:16445">Passport: 16445</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:16106">NID: 16106</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:16122">Land: 16122</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:16107">BRTA: 16107</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:16430">Free Legal Aid: 16430</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:999">Police: 999</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:103">Traffic: 103</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:16999">Electricity: 16999</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:16131">Pension: 16131</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:999">Ambulance: 999</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:109">Domestic Violence: 109</a></span><span class="ticker-item"><span class="ticker-dot"></span><a href="tel:16430">A ai Legal Help: 16430</a></span></div></div>
+<nav class="nav" id="nav"><ul class="nav-links"><li><a href="index.html" class="active" >Home</a></li><li><a href="justice.html" >Justice Map</a></li><li><a href="government.html" >Government</a></li><li><a href="sheguard.html" style="color:#fb7185;font-weight:700">SheGuard X</a></li><li><a href="july.html" >July 2024</a></li><li><a href="blueprints.html" >Blueprints</a></li><li><a href="contact.html" >Contact</a></li></ul><a href="#" class="nav-cta" id="loginBtn" style="background:transparent;border:1px solid rgba(14,165,233,.5);margin-right:.5rem" onclick="showAuthModal()"><i class="fas fa-user"></i> Login</a>
+<div style="position:relative;display:inline-flex;align-items:center" id="profileWrap">
+<div class="user-profile-bar" id="userProfileBar" onclick="toggleUserDropdown(event)">
+<div class="up-avatar" id="upAvatar">U</div>
+<span class="up-name" id="upName">User</span>
+<i class="fas fa-chevron-down" style="font-size:.6rem;color:var(--muted)"></i>
+<div class="user-dropdown" id="userDropdown">
+<div class="ud-item"><i class="fas fa-id-card"></i> My Profile</div>
+<div class="ud-item"><i class="fas fa-file-alt"></i> My Cases</div>
+<div class="ud-item"><i class="fas fa-calendar"></i> Appointments</div>
+<div class="ud-item"><i class="fas fa-bell"></i> Notifications</div>
+<div class="ud-item"><i class="fas fa-cog"></i> Settings</div>
+<div class="ud-divider"></div>
+<div class="ud-item logout" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Sign Out</div>
+</div></div></div><a href="contact.html" class="nav-cta">Get Involved</a><button class="hamburger" id="hamburger" aria-label="Menu" style=""><span></span><span></span><span></span></button><button class="theme-toggle" id="soundToggle" aria-label="Toggle success sound" aria-pressed="true" title="Success sound on - click to mute"><i class="fas fa-volume-up"></i></button><button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode"><i class="fas fa-sun"></i></button></nav><div class="drawer-overlay" id="drawerOverlay" style=""></div>
+<div class="mobile-drawer" id="mobileDrawer" style="">
+  <div class="drawer-header"><button class="drawer-close" id="drawerClose"><i class="fas fa-times"></i></button></div>
+  <ul class="drawer-links"><li><a href="index.html" class="active" >Home</a></li><li><a href="justice.html" >Justice Map</a></li><li><a href="government.html" >Government</a></li><li><a href="sheguard.html" style="color:#fb7185;font-weight:700">SheGuard X</a></li><li><a href="july.html" >July 2024</a></li><li><a href="blueprints.html" >Blueprints</a></li><li><a href="contact.html" >Contact</a></li></ul>
+  <div class="drawer-footer"><a href="contact.html" class="btn-p" style="width:100%;justify-content:center">Get Involved</a></div>
+</div>
+
+<section class="hero" id="hero"><div class="hero-bg"></div><div class="particles" id="particles"></div><div class="hero-content">
+<div class="hero-badge"><span class="dot"></span>EU-Funded | UNDP Technical Partner | 2025-2030</div>
+<h1 class="typing-headline"><span class="typing-line" id="typingLine1"></span><br><span class="typing-line gt" id="typingLine2"></span><span class="typing-cursor">|</span></h1>
+<p>A ai is a next-generation, privacy-preserving legal aid platform bringing autonomous AI dispute resolution, voice-first Bengali intake, and zero-knowledge cryptography to 682,500+ vulnerable citizens across all 64 districts of Bangladesh.</p>
+<div class="hero-buttons"><a href="#solution" class="btn-p"><i class="fas fa-rocket"></i> Explore Platform</a><a href="#features" class="btn-s"><i class="fas fa-play-circle"></i> How It Works</a></div>
+<div class="hero-stats"><div class="hero-stat"><div class="num">682,500+</div><div class="label">Target Beneficiaries</div></div><div class="hero-stat"><div class="num">300</div><div class="label">Pilot Unions</div></div><div class="hero-stat"><div class="num">$3.24M</div><div class="label">EU Funding</div></div><div class="hero-stat"><div class="num">64</div><div class="label">Districts Nationwide</div></div></div>
+</div></section>
+
+<section id="problem"><div class="container"><div class="section-header"><div class="section-tag">The Crisis</div><h2>7.5 Million Cases. Millions Left Behind.</h2><p>Bangladesh's judicial system faces unprecedented strain across all 64 districts, with vulnerable populations bearing the heaviest burden.</p></div><div class="pgrid">
+<div class="pcard reveal"><div class="picon" style="background:rgba(239,68,68,.15);color:#ef4444"><i class="fas fa-gavel"></i></div><h3>Judicial Backlog</h3><p>Over 7.5M cases clog the judicial pipeline.</p><span class="shl" style="background:rgba(239,68,68,.15);color:#ef4444">7.5M+ pending</span></div>
+<div class="pcard reveal rd1"><div class="picon" style="background:rgba(245,158,11,.15);color:#f59e0b"><i class="fas fa-user-slash"></i></div><h3>Literacy Barriers</h3><p>Complex forms exclude millions of illiterate citizens.</p><span class="shl" style="background:rgba(245,158,11,.15);color:#f59e0b">Low digital access</span></div>
+<div class="pcard reveal rd2"><div class="picon" style="background:rgba(236,72,153,.15);color:#ec4899"><i class="fas fa-shield-alt"></i></div><h3>GBV Vulnerability</h3><p>Victims fear public exposure, lacking safe channels.</p><span class="shl" style="background:rgba(236,72,153,.15);color:#ec4899">Critical safety gap</span></div>
+<div class="pcard reveal rd3"><div class="picon" style="background:rgba(99,102,241,.15);color:#6366f1"><i class="fas fa-file-alt"></i></div><h3>Paper Bureaucracy</h3><p>Fragmented manual systems create massive inefficiencies.</p><span class="shl" style="background:rgba(99,102,241,.15);color:#6366f1">Months of delays</span></div>
+<div class="pcard reveal rd4"><div class="picon" style="background:rgba(14,165,233,.15);color:#0ea5e9"><i class="fas fa-map-marker-alt"></i></div><h3>Geographic Isolation</h3><p>Multi-day connectivity blackouts during monsoons.</p><span class="shl" style="background:rgba(14,165,233,.15);color:#0ea5e9">Connectivity collapses</span></div>
+<div class="pcard reveal rd5"><div class="picon" style="background:rgba(168,85,247,.15);color:#a855f7"><i class="fas fa-coins"></i></div><h3>Payment Delays</h3><p>Panel lawyers wait months for invoicing.</p><span class="shl" style="background:rgba(168,85,247,.15);color:#a855f7">Months of waiting</span></div>
+</div></div></section>
+
+<section id="solution" style="background:rgba(2,6,23,.5)"><div class="container"><div class="section-header"><div class="section-tag">The Solution</div><h2>A ai: Next-Gen Legal Aid</h2><p>An AI-augmented, privacy-preserving platform serving vulnerable citizens across all 64 districts.</p></div><div class="sol-show"><div class="sol-vis reveal">
+<div class="alayer"><i class="fas fa-mobile-alt"></i><span>Multimodal Ingestion | Voice, USSD, Vision AI</span></div>
+<div class="aarrow"><i class="fas fa-arrow-down"></i></div>
+<div class="alayer"><i class="fas fa-brain"></i><span>Cognitive AI | Legal-SLM &amp; RAG Engine</span></div>
+<div class="aarrow"><i class="fas fa-arrow-down"></i></div>
+<div class="alayer"><i class="fas fa-shield-alt"></i><span>Zero-Knowledge Privacy Vault (zk-SNARKs)</span></div>
+<div class="aarrow"><i class="fas fa-arrow-down"></i></div>
+<div class="alayer"><i class="fas fa-video"></i><span>Virtual ODR | WebRTC Mediation</span></div>
+<div class="aarrow"><i class="fas fa-arrow-down"></i></div>
+<div class="alayer"><i class="fas fa-check-circle"></i><span>Automated Settlement &amp; Merkle Audit</span></div>
+<div class="aarrow"><i class="fas fa-arrow-down"></i></div>
+<div class="alayer"><i class="fas fa-mobile"></i><span>MFS Honorarium | bKash Auto-Payout</span></div>
+</div><div class="sol-feat reveal rd2">
+<div class="sfeat"><div class="sficon" style="background:rgba(14,165,233,.15);color:#0ea5e9"><i class="fas fa-microphone"></i></div><div><h4>Voice-First Bengali AI</h4><p>Dialect-adaptive agents for Chittagonian, Sylheti, Rangpuri.</p></div></div>
+<div class="sfeat"><div class="sficon" style="background:rgba(99,102,241,.15);color:#6366f1"><i class="fas fa-eye"></i></div><div><h4>Vision AI Parser</h4><p>Transformer OCR on handwritten Bengali land deeds, 94%+ accuracy.</p></div></div>
+<div class="sfeat"><div class="sficon" style="background:rgba(236,72,153,.15);color:#ec4899"><i class="fas fa-lock"></i></div><div><h4>Zero-Knowledge Privacy</h4><p>zk-SNARK proofs protect GBV survivors without exposing details.</p></div></div>
+<div class="sfeat"><div class="sficon" style="background:rgba(245,158,11,.15);color:#f59e0b"><i class="fas fa-wifi"></i></div><div><h4>14-Day Offline</h4><p>CRDT-powered edge kiosks operate fully offline.</p></div></div>
+</div></div></div></section>
+
+<section id="features"><div class="container"><div class="section-header"><div class="section-tag">Core Capabilities</div><h2>Four Pillars of Autonomous Justice</h2><p>Engineered for sovereignty, privacy, and scale.</p></div><div class="fgrid">
+<div class="fcard reveal"><div class="fiwrap" style="background:rgba(14,165,233,.15);color:#0ea5e9"><i class="fas fa-comment-dots"></i></div><h3>Autonomous Intake</h3><p>Voice AI, Vision AI, offline kiosks, and WhatsApp assistant deployed across all 64 districts.</p><div class="ftags"><span class="ftag">Whisper ASR</span><span class="ftag">FastSpeech2</span><span class="ftag">USSD</span></div></div>
+<div class="fcard reveal rd1"><div class="fiwrap" style="background:rgba(99,102,241,.15);color:#6366f1"><i class="fas fa-brain"></i></div><h3>Cognitive Intelligence</h3><p>Legal merit classification and conflict-of-interest checks for cases in any district.</p><div class="ftags"><span class="ftag">Legal-SLM</span><span class="ftag">Neo4j</span><span class="ftag">RAG</span></div></div>
+<div class="fcard reveal rd2"><div class="fiwrap" style="background:rgba(16,185,129,.15);color:#10b981"><i class="fas fa-handshake"></i></div><h3>Virtual ODR</h3><p>Low-bandwidth WebRTC mediation with AI sentiment co-pilot, accessible from any district.</p><div class="ftags"><span class="ftag">WebRTC</span><span class="ftag">LiveKit</span><span class="ftag">Sentiment</span></div></div>
+<div class="fcard reveal rd3"><div class="fiwrap" style="background:rgba(245,158,11,.15);color:#f59e0b"><i class="fas fa-shield-alt"></i></div><h3>Sovereign Trust</h3><p>ZK proofs, post-quantum crypto, Merkle audit trails.</p><div class="ftags"><span class="ftag">zk-SNARKs</span><span class="ftag">ML-KEM</span><span class="ftag">Merkle</span></div></div>
+<div class="fcard reveal rd4"><div class="fiwrap" style="background:rgba(236,72,153,.15);color:#ec4899"><i class="fas fa-map-marked-alt"></i></div><h3>Spatial Analytics</h3><p>Geospatial heatmaps and legal desert detection across all 64 districts.</p><div class="ftags"><span class="ftag">GIS</span><span class="ftag">Night-Light</span><span class="ftag">Predictive</span></div></div>
+<div class="fcard reveal rd5"><div class="fiwrap" style="background:rgba(168,85,247,.15);color:#a855f7"><i class="fas fa-wallet"></i></div><h3>Auto Honorarium</h3><p>Micro-disbursements to bKash/Nagad wallets.</p><div class="ftags"><span class="ftag">bKash</span><span class="ftag">Nagad</span><span class="ftag">Escrow</span></div></div>
+</div></div></section>
+
+<section id="personas" style="background:rgba(2,6,23,.5)"><div class="container"><div class="section-header"><div class="section-tag">Human Stories</div><h2>Designed for Real People</h2><p>Built around the lived experiences of vulnerable citizens across all 64 districts.</p></div><div class="persgrid">
+<div class="percard reveal"><div class="pavatar" style="background:rgba(236,72,153,.1);color:#ec4899">👩</div><h3>Rokeya Begum</h3><div class="prole">Rural Woman | Illiterate</div><p>38, Kurigram. Dials 16430 and voice AI handles everything.</p><div class="pchannel"><i class="fas fas fa-phone-alt"></i> Voice IVR</div></div>
+<div class="percard reveal rd1"><div class="pavatar" style="background:rgba(14,165,233,.1);color:#0ea5e9">🧑</div><h3>Santona Murmu</h3><div class="prole">Indigenous Youth</div><p>21, Dinajpur. Scans 1965 deed with Vision AI.</p><div class="pchannel"><i class="fas fas fa-mobile-alt"></i> PWA</div></div>
+<div class="percard reveal rd2"><div class="pavatar" style="background:rgba(245,158,11,.1);color:#f59e0b">🛡</div><h3>Shampa Akhter</h3><div class="prole">GBV Survivor</div><p>27, Gazipur. Calculator app for ZK emergency shelter.</p><div class="pchannel"><i class="fas fas fa-calculator"></i> Stealth App</div></div>
+<div class="percard reveal rd3"><div class="pavatar" style="background:rgba(99,102,241,.1);color:#6366f1">⚖</div><h3>Adv. Anisur Rahman</h3><div class="prole">Panel Lawyer</div><p>44, District Bar. AI briefs and auto-payment.</p><div class="pchannel"><i class="fas fas fa-laptop"></i> Lawyer Copilot</div></div>
+<div class="percard reveal rd4"><div class="pavatar" style="background:rgba(16,185,129,.1);color:#10b981">🤝</div><h3>Sharmin Sultana</h3><div class="prole">Special Mediator</div><p>52, Union Parishad. Low-bandwidth ODR with AI.</p><div class="pchannel"><i class="fas fas fa-video"></i> WebRTC ODR</div></div>
+<div class="percard reveal rd5"><div class="pavatar" style="background:rgba(168,85,247,.1);color:#a855f7">📊</div><h3>DBLA Director</h3><div class="prole">Justice Leadership</div><p>Real-time heatmap and EU donor reports.</p><div class="pchannel"><i class="fas fas fa-satellite-dish"></i> Analytics</div></div>
+</div></div></section>
+
+<section class="sstats" id="impact"><div class="container"><div class="section-header"><div class="section-tag">Target Impact</div><h2>Transformation at Scale</h2><p>Measurable outcomes across all 64 districts by 2030.</p></div><div class="sg">
+<div class="si reveal"><div class="sn" data-target="40" data-suffix="%" data-decimals="0">0%</div><div class="sl">Dispute Diversion to AI-ODR</div></div>
+<div class="si reveal rd1"><div class="sn" data-target="50000" data-suffix="+" data-decimals="0">0+</div><div class="sl">Concurrent Peak Sessions</div></div>
+<div class="si reveal rd2"><div class="sn" data-target="99.95" data-suffix="%" data-decimals="2">0%</div><div class="sl">System Uptime</div></div>
+<div class="si reveal rd3"><div class="sn">&lt;150ms</div><div class="sl">API P99 Response</div></div>
+</div></div></section>
+
+<section id="flow"><div class="container"><div class="section-header"><div class="section-tag">User Journey</div><h2>Voice-First Intake Flow</h2><p>How citizens like Rokeya access justice through a simple phone call in any district.</p></div><div class="fsteps">
+<div class="fstep reveal"><div class="fstepnum" style="background:linear-gradient(135deg,#0ea5e9,#0284c7)">1</div><div class="fstepc"><h3>Dials Toll-Free 16430</h3><p>Missed call triggers auto-callback in her local dialect.</p><div class="stch"><i class="fas fas fa-phone"></i> PSTN Voice Gateway</div></div></div>
+<div class="fstep reveal"><div class="fstepnum" style="background:linear-gradient(135deg,#6366f1,#4f46e5)">2</div><div class="fstepc"><h3>Conversational AI Intake</h3><p>Voice Agent gathers facts via natural speech.</p><div class="stch"><i class="fas fas fa-brain"></i> Whisper ASR</div></div></div>
+<div class="fstep reveal"><div class="fstepnum" style="background:linear-gradient(135deg,#10b981,#059669)">3</div><div class="fstepc"><h3>Automated Triage</h3><p>AI runs means-test and routes to Village Court.</p><div class="stch"><i class="fas fas fa-check-double"></i> Auto-Triage</div></div></div>
+<div class="fstep reveal"><div class="fstepnum" style="background:linear-gradient(135deg,#f59e0b,#d97706)">4</div><div class="fstepc"><h3>Case Minted</h3><p>Cryptographically minted case with officer alert.</p><div class="stch"><i class="fas fas fa-certificate"></i> Merkle Trail</div></div></div>
+<div class="fstep reveal"><div class="fstepnum" style="background:linear-gradient(135deg,#ec4899,#db2777)">5</div><div class="fstepc"><h3>Confirmation</h3><p>Voice confirmation and SMS sent.</p><div class="stch"><i class="fas fas fa-sms"></i> Voice + SMS</div></div></div>
+</div></div></section>
+
+<section id="roadmap" style="background:rgba(2,6,23,.5)"><div class="container"><div class="section-header"><div class="section-tag">Strategic Roadmap</div><h2>2025-2030 Transformation</h2><p>Phased rollout from pilot unions to all 64 districts nationwide.</p></div><div class="tl">
+<div class="tlitem reveal"><div class="tlcontent"><div class="tlyear">Phase 1 | May-Dec 2025</div><h3>Foundation &amp; Cognitive Pilot</h3><p>Architecture, sovereign cloud, CMS MVP.</p></div><div class="tldot"></div></div>
+<div class="tlitem reveal rd1"><div class="tlcontent"><div class="tlyear">Phase 1.5 | Nov 2025-Apr 2026</div><h3>50-Union Pilot</h3><p>Deployment across 50 high-vulnerability unions.</p></div><div class="tldot"></div></div>
+<div class="tlitem reveal rd2"><div class="tlcontent"><div class="tlyear">Phase 2 | May-Nov 2026</div><h3>Scale to 300 Unions</h3><p>ODR chambers, sentiment co-pilot, 1,000+ actors.</p></div><div class="tldot"></div></div>
+<div class="tlitem reveal rd3"><div class="tlcontent"><div class="tlyear">Phase 3 | May-Nov 2027</div><h3>National Grid Sync</h3><p>Supreme Court MIS, post-quantum cryptography.</p></div><div class="tldot"></div></div>
+<div class="tlitem reveal rd4"><div class="tlcontent"><div class="tlyear">Phase 3.5 | Jan-Apr 2028</div><h3>Autonomous Handover</h3><p>Full DBLA handover across all 64 districts.</p></div><div class="tldot"></div></div>
+</div></div></section>
+
+<section id="partners"><div class="container"><div class="section-header"><div class="section-tag">Strategic Partners</div><h2>Backed by Global Institutions</h2></div><div class="pg">
+<div class="part reveal"><div class="plogo">🇪🇺</div><div class="pname">European Union</div><div style="color:#475569;font-size:.75rem">Funding Partner</div></div>
+<div class="part reveal rd1"><div class="plogo">🇺🇳</div><div class="pname">UNDP Bangladesh</div><div style="color:#475569;font-size:.75rem">Technical Partner</div></div>
+<div class="part reveal rd2"><div class="plogo">⚖</div><div class="pname">DBLA / MoLJPA</div><div style="color:#475569;font-size:.75rem">Executing Entity</div></div>
+<div class="part reveal rd3"><div class="plogo">🇧🇦</div><div class="pname">Bangladesh Government</div><div style="color:#475569;font-size:.75rem">Infrastructure</div></div>
+</div></div></section>
+
+<section id="nationwide" style="background:linear-gradient(135deg,rgba(14,165,233,.06),rgba(99,102,241,.06))"><div class="container"><div class="section-header"><div class="section-tag">Nationwide Reach</div><h2>Covering All 64 Districts of Bangladesh</h2><p>From coastal Cox's Bazar to hill-tracted Rangamati, from metropolitan Dhaka to remote haor regions - A ai reaches every corner.</p></div><div class="pgrid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem"><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Dhaka</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Chattogram</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Sylhet</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Rajshahi</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Khulna</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Barishal</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Rangpur</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Mymensingh</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Comilla</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Gazipur</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Narayanganj</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Brahmanbaria</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Chandpur</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Lakshmipur</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Noakhali</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Feni</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Cox's Bazar</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Bandarban</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Rangamati</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Khagrachari</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Habiganj</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Moulvibazar</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Sunamganj</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Tangail</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Jamalpur</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Sherpur</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Netrakona</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Kishoreganj</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Narsingdi</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Manikganj</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Munshiganj</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Faridpur</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Gopalganj</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Madarpur</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Rajbari</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Shariatpur</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Narail</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Magura</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Jhenaidah</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Kushtia</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Chuadanga</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Meherpur</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Satkhira</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Bagerhat</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Pirojpur</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Jhalokathi</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Patuakhali</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Barguna</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Bogura</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Joypurhat</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Naogaon</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Natore</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Chapainawabganj</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Sirajganj</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Pabna</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Kurigram</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Dinajpur</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Thakurgaon</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Nilphamari</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Lalmonirhat</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Gaibandha</span></div><div style="background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:.75rem 1rem;text-align:center;transition:all .3s;cursor:default" onmouseover="this.style.borderColor='var(--pri)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gb)';this.style.transform='none'"><span style="font-size:.85rem;color:#e2e8f0;font-weight:500">Panchagarh</span></div></div></div></section>
+
+<section id="vision" style="background:rgba(2,6,23,.5)"><div class="container"><div class="section-header"><div class="section-tag">Our Vision</div><h2>Democratizing Access to Justice</h2><p>Leveraging AI to make legal information, assistance, and dispute resolution affordable, transparent, and accessible to every citizen.</p></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;max-width:900px;margin:0 auto"><div class="pcard reveal" style="text-align:center"><div class="picon" style="background:rgba(14,165,233,.15);color:#0ea5e9;margin:0 auto 1.25rem"><i class="fas fa-eye"></i></div><h3>Vision</h3><p>To democratize access to justice in Bangladesh by leveraging AI, making legal information affordable and accessible to every citizen, regardless of language, literacy, or economic status.</p></div><div class="pcard reveal rd1" style="text-align:center"><div class="picon" style="background:rgba(99,102,241,.15);color:#6366f1;margin:0 auto 1.25rem"><i class="fas fa-rocket"></i></div><h3>Mission</h3><p>Build a user-centric digital platform integrating AI to bridge citizens and the legal system, empowering individuals with knowledge, tools, and connections to resolve legal issues efficiently.</p></div></div></div></section>
+<button class="back-to-top" id="backToTop" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+<footer><div class="fgrid"><div><a href="index.html" class="nav-logo" style="margin-bottom:1rem;display:inline-flex"><span>A ai</span></a><p>Next-Gen Digital Legal Aid - Access to justice for 682,500+ citizens across all 64 districts.</p></div><div class="fcol"><h4>Platform</h4><a href="ai.html">A ai AI Platform</a><a href="justice.html">Justice Map</a><a href="sheguard.html">SheGuard X</a><a href="july.html">July 2024</a></div><div class="fcol"><h4>Government</h4><a href="government.html">Structure &amp; e-Services</a><a href="blueprints.html">Visionary Blueprints</a><a href="contact.html">Complaints</a><a href="contact.html">Contact</a></div><div class="fcol"><h4>Resources</h4><a href="justice.html#emergency-helplines">Emergency Helplines</a><a href="justice.html#constitution-full">Constitution</a><a href="government.html#govt-services">e-Services Portals</a><a href="justice.html#interactive-map">Districts Map</a></div></div><div class="fb"><span>© 2025 A ai | EU / UNDP / DBLA</span><span>Accelerating Digital Legal Aid in Bangladesh</span></div></footer>
+<div class="auth-overlay" id="authOverlay">
+<div class="auth-modal">
+<button class="auth-close" onclick="closeAuthModal()"><i class="fas fa-times"></i></button>
+<div class="auth-success" id="authSuccess">
+<div class="as-ring"><svg viewBox="0 0 52 52"><circle class="as-circle" cx="26" cy="26" r="24" fill="none"/><path class="as-check" fill="none" d="M14 27l8 8 16-16"/></svg></div>
+<div class="as-confetti"><i style="--dx:85px;--dy:0px;--d:0.86s;--sp:260deg;background:#0e9f6e"></i><i style="--dx:62px;--dy:62px;--d:0.90s;--sp:320deg;background:#fbbf24"></i><i style="--dx:0px;--dy:85px;--d:0.94s;--sp:240deg;background:#2dd4a7"></i><i style="--dx:-62px;--dy:62px;--d:0.98s;--sp:300deg;background:#f97316"></i><i style="--dx:-85px;--dy:0px;--d:1.02s;--sp:220deg;background:#a3e635"></i><i style="--dx:-62px;--dy:-62px;--d:1.06s;--sp:340deg;background:#14b8a6"></i><i style="--dx:0px;--dy:-85px;--d:1.10s;--sp:280deg;background:#f59e0b"></i><i style="--dx:62px;--dy:-62px;--d:1.14s;--sp:310deg;background:#0e9f6e"></i><i style="--dx:60px;--dy:0px;--d:0.92s;--sp:-260deg;background:#f97316"></i><i style="--dx:42px;--dy:42px;--d:0.96s;--sp:-320deg;background:#a3e635"></i><i style="--dx:0px;--dy:60px;--d:1.00s;--sp:-240deg;background:#14b8a6"></i><i style="--dx:-42px;--dy:42px;--d:1.04s;--sp:-300deg;background:#f59e0b"></i><i style="--dx:-60px;--dy:0px;--d:1.08s;--sp:-220deg;background:#0e9f6e"></i><i style="--dx:-42px;--dy:-42px;--d:1.12s;--sp:-340deg;background:#0e9f6e"></i><i style="--dx:0px;--dy:-60px;--d:1.16s;--sp:-280deg;background:#fbbf24"></i><i style="--dx:42px;--dy:-42px;--d:1.20s;--sp:-310deg;background:#2dd4a7"></i></div>
+<h3 id="asTitle">Signed In Successfully!</h3>
+<p id="asSub">Welcome back - your legal dashboard is ready.</p>
+<div class="as-user" id="asUser">
+<span class="as-chip" id="asRole"><i class="fas fa-user" id="asRoleIcon"></i><span id="asRoleTxt">General User</span></span>
+<span class="as-chip" id="asLoc"><i class="fas fa-map-marker-alt"></i><span id="asLocTxt">-</span></span>
+</div>
+<div class="as-actions" id="asActions">
+<button class="as-shortcut" onclick="successGo('complaints')"><i class="fas fa-file-alt"></i> My Complaints</button>
+<button class="as-shortcut" onclick="successGo('sheguard-live')"><i class="fas fa-shield-alt"></i> SheGuard X</button>
+<button class="as-shortcut" onclick="successGo('contact')"><i class="fas fa-headset"></i> Get Help</button>
+</div>
+<button class="as-continue" onclick="document.getElementById('authSuccess').className='auth-success';closeAuthModal()">Continue <i class="fas fa-arrow-right"></i></button>
+</div>
+<div class="auth-header">
+<div class="auth-icon"><i class="fas fa-balance-scale"></i></div>
+<h2 id="authTitle">Welcome to A ai</h2>
+<p id="authSub">Sign in to access your legal dashboard</p>
+</div>
+<div class="auth-tabs">
+<button class="auth-tab" onclick="switchAuthTab('login')" id="tabLogin">Sign In</button>
+<button class="auth-tab" onclick="switchAuthTab('signup')" id="tabSignup">Sign Up</button>
+</div>
+
+<!-- LOGIN FORM -->
+<form class="auth-form" id="loginForm" onsubmit="return handleLogin(event)">
+<div class="form-group">
+<label>NID Card Number *</label>
+<input type="text" id="loginNid" placeholder="Enter your NID number" required="" maxlength="17" pattern="[0-9]{10,17}">
+<div class="form-hint">10 or 17 digit National ID number</div>
+</div>
+<div class="form-group">
+<label>Phone Number *</label>
+<input type="tel" id="loginPhone" placeholder="01XXXXXXXXX" required="" pattern="01[3-9][0-9]{8}">
+<div class="form-hint">11-digit Bangladeshi mobile number</div>
+</div>
+<button type="submit" class="submit-btn"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+</form>
+
+<!-- SIGNUP FORM -->
+<form class="auth-form" id="signupForm" style="display:none" onsubmit="return handleSignup(event)">
+<div class="auth-wsteps-bar" id="wsBar">
+<div class="ws-dot active" data-s="1" onclick="wsGo(1)"><span>1</span><b>Role</b></div>
+<div class="ws-line"></div>
+<div class="ws-dot" data-s="2" onclick="wsGo(2)"><span>2</span><b>Identity</b></div>
+<div class="ws-line"></div>
+<div class="ws-dot" data-s="3" onclick="wsGo(3)"><span>3</span><b>Address</b></div>
+<div class="ws-line"></div>
+<div class="ws-dot" data-s="4" onclick="wsGo(4)"><span>4</span><b>Photo</b></div>
+</div>
+<div class="auth-wsteps" id="wsSteps" dir="fwd">
+<div class="auth-wstep active" data-step="1">
+
+<div class="form-group">
+<label>Select Your Role *</label>
+<div class="role-select">
+<div class="role-card selected" onclick="selectRole('general')" id="roleGeneral">
+<i class="fas fa-user"></i>
+<span>General User</span>
+</div>
+<div class="role-card" onclick="selectRole('officer')" id="roleOfficer">
+<i class="fas fa-user-tie"></i>
+<span>Officer / Official</span>
+</div>
+</div>
+</div>
+<button type="button" class="btn-ws btn-next" onclick="wsNext()">Next <i class="fas fa-arrow-right"></i></button>
+</div>
+<div class="auth-wstep" data-step="2">
+<div class="form-group">
+<label>Full Name (as per NID) *</label>
+<input type="text" id="signupName" placeholder="Enter full name" required="">
+</div>
+<div class="form-row">
+<div class="form-group">
+<label>NID Card Number *</label>
+<input type="text" id="signupNid" placeholder="NID number" required="" maxlength="17" pattern="[0-9]{10,17}">
+</div>
+<div class="form-group">
+<label>Phone Number *</label>
+<input type="tel" id="signupPhone" placeholder="01XXXXXXXXX" required="" pattern="01[3-9][0-9]{8}">
+</div>
+</div>
+<div class="ws-nav"><button type="button" class="btn-ws btn-back" onclick="wsBack()"><i class="fas fa-arrow-left"></i> Back</button><button type="button" class="btn-ws btn-next" onclick="wsNext()">Next <i class="fas fa-arrow-right"></i></button></div>
+</div>
+<div class="auth-wstep" data-step="3">
+<div class="form-row">
+<div class="form-group">
+<label>Division *</label>
+<select id="signupDivision" required="" onchange="updateDistricts()">
+<option value="">Select Division</option>
+<option>Barishal</option><option>Chattogram</option><option>Dhaka</option>
+<option>Khulna</option><option>Mymensingh</option><option>Rajshahi</option>
+<option>Rangpur</option><option>Sylhet</option>
+</select>
+</div>
+<div class="form-group">
+<label>District (Zila) *</label>
+<select id="signupDistrict" required="" onchange="updateUpazilas()">
+<option value="">Select District</option>
+</select>
+</div>
+</div>
+<div class="form-row">
+<div class="form-group">
+<label>Upazila *</label>
+<select id="signupUpazila" required="">
+<option value="">Select Upazila</option>
+</select>
+</div>
+<div class="form-group">
+<label>Union *</label>
+<input type="text" id="signupUnion" placeholder="Enter union name" required="">
+</div>
+</div>
+<div class="ws-nav"><button type="button" class="btn-ws btn-back" onclick="wsBack()"><i class="fas fa-arrow-left"></i> Back</button><button type="button" class="btn-ws btn-next" onclick="wsNext()">Next <i class="fas fa-arrow-right"></i></button></div>
+</div>
+<div class="auth-wstep" data-step="4">
+<div class="form-group">
+<label>Your Photo *</label>
+<div class="photo-upload" onclick="document.getElementById('signupPhoto').click()">
+<i class="fas fa-camera"></i>
+<span>Click to upload passport-size photo</span>
+<input type="file" id="signupPhoto" accept="image/*" style="display:none" onchange="previewPhoto(this,'photoPreview')">
+</div>
+<div id="photoPreview" style="margin-top:.5rem"></div>
+</div>
+<div class="officer-fields" id="officerFields">
+<div class="form-group">
+<label>Designation / Post *</label>
+<input type="text" id="signupDesignation" placeholder="e.g. Upazila Nirbahi Officer">
+</div>
+<div class="form-group">
+<label>Office Name *</label>
+<input type="text" id="signupOffice" placeholder="e.g. Office of the UNO, Dhaka">
+</div>
+<div class="form-group">
+<label>Signature Image *</label>
+<div class="photo-upload" onclick="document.getElementById('signupSig').click()">
+<i class="fas fa-pen-nib"></i>
+<span>Click to upload signature image</span>
+<input type="file" id="signupSig" accept="image/*" style="display:none" onchange="previewPhoto(this,'sigPreview')">
+</div>
+<div id="sigPreview" style="margin-top:.5rem"></div>
+</div>
+</div>
+<button type="submit" class="submit-btn"><i class="fas fa-user-plus"></i> Create Account</button>
+</form>
+<div class="ws-nav"><button type="button" class="btn-ws btn-back" onclick="wsBack()"><i class="fas fa-arrow-left"></i> Back</button></div>
+</div>
+</div>
+</form>
+</div>
+</div>
+
+<!-- Toast -->
+<div class="auth-toast" id="authToast"></div>
+<div class="chatbot-fab" id="chatFab" onclick="toggleCB()"><i class="fas fa-robot"></i><span>A ai</span></div>
+<div class="chatbot-win" id="chatWin">
+<div class="cb-head"><div class="cb-avatar"><i class="fas fa-robot"></i></div><div class="cb-info"><h4>A ai Legal Assistant</h4><span>Online - Ready to help</span></div><div class="cb-dot"></div><div class="cb-mem" id="cbMem" title="Active conversation topic"><i class="fas fa-brain"></i><span id="cbMemTxt">General</span><button class="cb-mem-x" onclick="resetMemChip()" title="Reset conversation memory"><i class="fas fa-times"></i></button></div><button class="cb-close" onclick="toggleCB()"><i class="fas fa-times"></i></button></div>
+<div class="cb-msgs" id="chatMsgs"><div class="cb-msg bot">Assalamu Alaikum! I am <b>A ai</b>, your AI legal assistant powered by the Constitution of Bangladesh and public administration knowledge. I can help with:<br><br>- <b>Legal Information</b> - Bengali/English<br>- <b>Constitutional Rights</b> - Articles 27-44<br>- <b>Public Administration</b> - Reforms &amp; governance<br>- <b>Court Procedures</b> - All 64 districts<br>- <b>Corruption &amp; Accountability</b> - Anti-corruption<br>- <b>Case Status</b> - Real-time tracking<br><br>How can I assist you today?</div>
+<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:.3rem;padding:0 .3rem">
+<span class="cb-followup" onclick="document.getElementById('chatIn').value='সংবিধান';sendMsg()" style="cursor:pointer;font-size:.7rem">সংবিধান</span>
+<span class="cb-followup" onclick="document.getElementById('chatIn').value='মৌলিক অধিকার';sendMsg()" style="cursor:pointer;font-size:.7rem">মৌলিক অধিকার</span>
+<span class="cb-followup" onclick="document.getElementById('chatIn').value='আদালত';sendMsg()" style="cursor:pointer;font-size:.7rem">আদালত</span>
+<span class="cb-followup" onclick="document.getElementById('chatIn').value='পুলিশ কমপ্লেইন';sendMsg()" style="cursor:pointer;font-size:.7rem">পুলিশ কমপ্লেইন</span>
+</div></div>
+<div class="cb-input"><input type="text" id="chatIn" placeholder="Type in English or Bengali... / ইংরেজি বা বাংলায় লিখুন..." onkeypress="if(event.key==='Enter')sendMsg()"><button onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button></div>
+</div>
+
+<script>
+const pc=document.getElementById('particles');for(let i=0;i<30;i++){const p=document.createElement('div');p.className='particle';const s=Math.random()*4+1;p.style.cssText='width:'+s+'px;height:'+s+'px;top:'+Math.random()*100+'%;left:'+Math.random()*100+'%;animation-delay:'+Math.random()*15+'s;animation-duration:'+(10+Math.random()*20)+'s';pc.appendChild(p)}
+// Typing animation for hero headline
+(function(){
+  const line1=document.getElementById('typingLine1');
+  const line2=document.getElementById('typingLine2');
+  const lines=[
+    {el:line1,text:'AI-Powered',speed:80},
+    {el:line2,text:'Justice for Every Bangladeshi Citizen',speed:50}
+  ];
+  let lineIdx=0,charIdx=0;
+  function typeNext(){
+    if(lineIdx>=lines.length)return;
+    const current=lines[lineIdx];
+    if(charIdx<current.text.length){
+      current.el.textContent+=current.text[charIdx];
+      charIdx++;
+      setTimeout(typeNext,current.speed);
+    }else{
+      lineIdx++;
+      charIdx=0;
+      if(lineIdx<lines.length)setTimeout(typeNext,400);
+    }
+  }
+  setTimeout(typeNext,800);
+})();
+
+// Parallax scrolling for hero particles
+(function(){
+  const particles=document.getElementById('particles');
+  const heroBg=document.querySelector('.hero-bg');
+  const hero=document.querySelector('.hero');
+  if(!particles||!hero)return;
+  
+  // Create additional parallax layers
+  const layer1=document.createElement('div');
+  layer1.className='parallax-layer';
+  layer1.style.cssText='position:absolute;inset:0;z-index:0;will-change:transform';
+  
+  // Add floating orbs with different sizes and speeds
+  const orbs=[
+    {size:120,color:'rgba(14,165,233,0.08)',x:10,y:20,speed:0.3},
+    {size:80,color:'rgba(99,102,241,0.06)',x:70,y:30,speed:0.5},
+    {size:60,color:'rgba(245,158,11,0.05)',x:85,y:70,speed:0.2},
+    {size:100,color:'rgba(14,165,233,0.06)',x:20,y:80,speed:0.4},
+    {size:50,color:'rgba(99,102,241,0.07)',x:60,y:15,speed:0.35},
+  ];
+  
+  orbs.forEach(orb=>{
+    const el=document.createElement('div');
+    el.style.cssText='position:absolute;border-radius:50%;background:'+orb.color+';width:'+orb.size+'px;height:'+orb.size+'px;left:'+orb.x+'%;top:'+orb.y+'%;filter:blur(30px);will-change:transform;transition:transform .1s linear';
+    el.dataset.speed=orb.speed;
+    layer1.appendChild(el);
+  });
+  particles.appendChild(layer1);
+  
+  // Track scroll for parallax
+  let ticking=false;
+  window.addEventListener('scroll',()=>{
+    if(!ticking){
+      requestAnimationFrame(()=>{
+        const scrollY=window.scrollY;
+        const heroHeight=hero.offsetHeight;
+        
+        if(scrollY<heroHeight*1.5){
+          // Parallax effect: particles move slower than scroll
+          const orbs=layer1.querySelectorAll('div');
+          orbs.forEach(orb=>{
+            const speed=parseFloat(orb.dataset.speed);
+            const yOffset=scrollY*speed;
+            const xOffset=scrollY*speed*0.2;
+            orb.style.transform='translate3d('+xOffset+'px,'+(-yOffset)+'px,0)';
+          });
+          
+          // Fade hero content on scroll
+          const heroContent=document.querySelector('.hero-content');
+          if(heroContent){
+            const fadeStart=heroHeight*0.1;
+            const fadeEnd=heroHeight*0.6;
+            const opacity=scrollY<fadeStart?1:scrollY>fadeEnd?0:1-(scrollY-fadeStart)/(fadeEnd-fadeStart);
+            heroContent.style.opacity=opacity;
+            heroContent.style.transform='translateY('+(scrollY*0.15)+'px)';
+          }
+          
+          // Parallax on hero background gradient
+          if(heroBg){
+            heroBg.style.transform='translateY('+(scrollY*0.3)+'px)';
+          }
+        }
+        ticking=false;
+      });
+      ticking=true;
+    }
+  });
+})();
+</script>
+<script src="assets/app.js?v=app57"></script>
+</body>
+</html>

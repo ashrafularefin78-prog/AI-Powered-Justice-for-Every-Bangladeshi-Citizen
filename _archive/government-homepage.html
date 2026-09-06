@@ -1,0 +1,307 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Official gateway to Government of Bangladesh services, information and resources."><title>Government of Bangladesh — Official Portal</title><style>
+*,*:before,*:after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#ffffff;--bg-soft:#f7faf8;--bg-pale:#eef6f1;
+--green:#2d6a4f;--green-2:#40916c;--green-3:#74c69d;--green-pale:#d8f3dc;
+--ink:#17352b;--text:#2f3e38;--muted:#5b6b64;--line:#e3ebe6;
+--shadow-sm:0 1px 2px rgba(23,53,43,.06);--shadow-md:0 6px 24px -8px rgba(23,53,43,.14);
+--radius:10px;--maxw:1160px;
+--fs-2xl:2.5rem;--fs-xl:1.6rem;--fs-lg:1.15rem;--fs-base:1rem;--fs-sm:.9rem;--fs-xs:.78rem;
+--track:.06em}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:var(--fs-base)}
+img,svg{display:block;max-width:100%}
+a{color:var(--green);text-decoration:none}
+a:hover{color:var(--green-2)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.eyebrow{display:inline-block;font-size:var(--fs-xs);letter-spacing:var(--track);text-transform:uppercase;color:var(--green);font-weight:700;margin-bottom:14px}
+:focus-visible{outline:3px solid var(--green-2);outline-offset:2px;border-radius:4px}
+::selection{background:var(--green-pale)}
+/* Skip link */
+.skip{position:absolute;left:-9999px;top:0;background:var(--green);color:#fff;padding:10px 18px;border-radius:0 0 8px 0;font-weight:600;z-index:1000}
+.skip:focus{left:0;color:#fff}
+/* Top bar */
+.tb{background:var(--green);color:#eaf6ef;font-size:var(--fs-xs)}
+.tb .wrap{display:flex;justify-content:space-between;gap:12px;padding-top:7px;padding-bottom:7px}
+.tb a{color:#fff;font-weight:600}
+.tb a:hover{text-decoration:underline}
+/* Header */
+.hd{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.hd .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-top:14px;padding-bottom:14px}
+.brand{display:flex;align-items:center;gap:14px;min-width:0}
+.emblem{width:46px;height:46px;border-radius:50%;background:var(--green-pale);display:grid;place-items:center;font-weight:800;font-size:1rem;color:var(--green);letter-spacing:.02em;flex-shrink:0}
+.brand h1{font-size:1.05rem;line-height:1.25;color:var(--ink);font-weight:700}
+.brand p{font-size:var(--fs-xs);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.nav{display:flex;align-items:center;gap:2px;flex-wrap:wrap}
+.nav a{padding:8px 13px;border-radius:8px;font-size:var(--fs-sm);font-weight:500;color:var(--text)}
+.nav a:hover{background:var(--bg-pale);color:var(--green)}
+.nav a[aria-current]{background:var(--bg-pale);color:var(--green);font-weight:600}
+/* Hero */
+.hero{background:linear-gradient(160deg,var(--bg-pale) 0%,var(--bg) 46%,#fff 100%);padding:84px 0 72px;text-align:center;border-bottom:1px solid var(--line)}
+.hero h2{font-size:clamp(1.9rem,4.5vw,var(--fs-2xl));font-weight:800;color:var(--ink);line-height:1.15;letter-spacing:-.01em;max-width:760px;margin:0 auto 14px}
+.hero h2 .hi{color:var(--green)}
+.hero .lead{font-size:clamp(1rem,2vw,1.12rem);color:var(--muted);max-width:560px;margin:0 auto 34px}
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:38px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 26px;border-radius:999px;font-size:var(--fs-sm);font-weight:600;border:0;cursor:pointer;transition:background .18s ease,box-shadow .18s ease}
+.btn-p{background:var(--green);color:#fff}
+.btn-p:hover{background:var(--green-2);color:#fff}
+.btn-s{background:#fff;color:var(--green);box-shadow:inset 0 0 0 1.5px var(--green-3)}
+.btn-s:hover{background:var(--bg-pale);color:var(--green)}
+/* Search */
+.search{position:relative;max-width:520px;margin:0 auto}
+.search input{width:100%;padding:15px 54px 15px 22px;border:1.5px solid var(--line);border-radius:999px;font-size:var(--fs-base);color:var(--text);background:#fff;transition:border-color .18s ease,box-shadow .18s ease}
+.search input:focus{outline:none;border-color:var(--green-2);box-shadow:0 0 0 4px var(--bg-pale)}
+.search button{position:absolute;right:6px;top:50%;translate:0 -50%;width:42px;height:42px;border:0;border-radius:50%;background:var(--green);color:#fff;font-size:1.05rem;cursor:pointer;display:grid;place-items:center;transition:background .18s ease}
+.search button:hover{background:var(--green-2)}
+.search .hint{display:block;text-align:left;color:var(--muted);font-size:var(--fs-xs);margin:10px 6px 0}
+.search [role=listbox]{display:none}
+/* Sections */
+section{padding:70px 0}
+.sec-head{text-align:center;max-width:620px;margin:0 auto 44px}
+.sec-head h2{font-size:clamp(1.4rem,3vw,1.9rem);color:var(--ink);font-weight:750;letter-spacing:-.01em}
+.sec-head p{color:var(--muted);margin-top:10px}
+/* Quick access */
+.quick{background:var(--bg)}
+.qa{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;max-width:960px;margin:0 auto}
+.qa a{display:flex;flex-direction:column;align-items:center;gap:10px;padding:26px 14px 22px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);text-align:center;transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease}
+.qa a:hover{border-color:var(--green-3);box-shadow:var(--shadow-md);transform:translateY(-2px);color:var(--green)}
+.qa .ic{width:50px;height:50px;border-radius:14px;background:var(--bg-pale);display:grid;place-items:center;font-size:1.45rem}
+.qa a:hover .ic{background:var(--green-pale)}
+.qa span{font-size:var(--fs-sm);font-weight:600;color:var(--text)}
+/* Services */
+.services{background:var(--bg-soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.svc{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
+.svc .card{display:block;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px;transition:border-color .18s ease,box-shadow .18s ease}
+.svc .card:hover{border-color:var(--green-3);box-shadow:var(--shadow-md)}
+.svc .card h3{font-size:var(--fs-lg);color:var(--ink);display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.svc .card h3 .ic{width:34px;height:34px;border-radius:10px;background:var(--bg-pale);display:grid;place-items:center;font-size:1.05rem;flex-shrink:0}
+.svc .card p{font-size:var(--fs-sm);color:var(--muted)}
+.svc .card .tag{display:inline-block;margin-top:14px;padding:3px 12px;border-radius:999px;background:var(--bg-pale);color:var(--green);font-size:var(--fs-xs);font-weight:700}
+.svc .card:focus-within{outline:3px solid var(--green-3);outline-offset:2px}
+/* Divisions */
+.divs{background:var(--bg)}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:12px}
+.dgrid button{display:flex;flex-direction:column;gap:2px;padding:18px 12px;border:1px solid var(--line);border-radius:var(--radius);background:#fff;cursor:pointer;text-align:center;transition:border-color .18s ease,background .18s ease}
+.dgrid button:hover{border-color:var(--green-3);background:var(--bg-pale)}
+.dgrid button strong{font-size:var(--fs-sm);color:var(--green)}
+.dgrid button span{font-size:var(--fs-xs);color:var(--muted)}
+/* Stats */
+.stats{background:var(--green);color:#fff}
+.stats .wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:28px;text-align:center}
+.stats .stat strong{display:block;font-size:clamp(1.6rem,3vw,2.1rem);font-weight:800;line-height:1.1}
+.stats .stat span{font-size:var(--fs-xs);letter-spacing:.06em;text-transform:uppercase;opacity:.85}
+/* News */
+.news{background:var(--bg-soft);border-top:1px solid var(--line)}
+.newsgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.newsgrid article{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px;display:flex;flex-direction:column;gap:8px}
+.newsgrid time{font-size:var(--fs-xs);color:var(--green);font-weight:700;text-transform:uppercase;letter-spaci
+ng:var(--fs-xs);color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.newsgrid h3{font-size:var(--fs-base);color:var(--ink);line-height:1.4}
+.newsgrid p{font-size:var(--fs-sm);color:var(--muted);flex:1}
+.newsgrid a{font-size:var(--fs-sm);font-weight:600}
+.help{background:var(--bg-pale);border-bottom:1px solid var(--line)}
+.help .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.help h2{font-size:var(--fs-xl);color:var(--ink);margin-bottom:4px}
+.help p{color:var(--muted);font-size:var(--fs-sm)}
+.help .phones{display:flex;gap:10px;flex-wrap:wrap}
+.help .phones a{background:#fff;border:1px solid var(--green-3);color:var(--green);padding:10px 18px;border-radius:999px;font-weight:700;font-size:var(--fs-sm);display:inline-flex;align-items:center;gap:8px}
+.help .phones a:hover{background:var(--green);color:#fff;border-color:var(--green)}
+footer{background:#123127;color:#cfe0d8;padding:60px 0 26px}
+.fg{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:36px;margin-bottom:40px}
+.fg h2{color:#fff;font-size:1rem;letter-spacing:.05em;text-transform:uppercase;margin-bottom:16px}
+.fg .about p{font-size:var(--fs-sm);line-height:1.7;margin-top:10px;opacity:.85}
+.fg ul{list-style:none}
+.fg li{margin:7px 0}
+.fg a{color:#cfe0d8;font-size:var(--fs-sm)}
+.fg a:hover{color:#fff;text-decoration:underline}
+.fbot{border-top:1px solid rgba(255,255,255,.14);padding-top:20px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:var(--fs-xs);opacity:.75}
+.status{position:absolute;left:-9999px}
+@media(max-width:880px){.fg{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.hd .wrap{flex-direction:column;align-items:flex-start;gap:8px}.nav{width:100%;overflow-x:auto;padding-bottom:2px}.hero{padding:56px 0 48px}section{padding:54px 0}.fg{grid-template-columns:1fr}.help .wrap{flex-direction:column;align-items:flex-start}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+</style></head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="tb" role="region" aria-label="Official notice and emergency numbers">
+<div class="wrap"><span>Official portal of the Government of the People&#8217;s Republic of Bangladesh</span><span>Emergency: <a href="tel:999">999</a> &nbsp;|&nbsp; <a href="tel:16430">Legal Aid 16430</a></span></div>
+</div>
+<header class="hd">
+<div class="wrap">
+<div class="brand">
+<div class="emblem" aria-hidden="true">BD</div>
+<div><h1>Government of Bangladesh</h1><p>People&#8217;s Republic of Bangladesh</p></div>
+</div>
+<nav class="nav" aria-label="Primary">
+<a href="#main" aria-current="page">Home</a>
+<a href="#services">Services</a>
+<a href="#divisions">Divisions</a>
+<a href="#news">News</a>
+<a href="#contact">Contact</a>
+</nav>
+</div>
+</header>
+<main id="main">
+<section class="hero" aria-labelledby="hero-title">
+<div class="wrap">
+<span class="eyebrow">Bangladesh National Portal</span>
+<h2 id="hero-title">Welcome to the gateway of <span class="hi">government services</span> for every citizen</h2>
+<p class="lead">One place to find public services, official information and help — available in Bangla and English for all 64 districts.</p>
+<div class="hero-cta">
+<a class="btn btn-p" href="#services">Explore services</a>
+<a class="btn btn-s" href="#news">Latest updates</a>
+</div>
+<div class="search" role="search">
+<label class="status" for="gov-search">Search services</label>
+<input id="gov-search" type="search" placeholder="Search services, e.g. passport, land, tax&#8230;" autocomplete="off" aria-describedby="search-hint">
+<button type="button" aria-label="Search">&#128269;</button>
+<span class="hint" id="search-hint">Try &#8220;passport&#8221;, &#8220;NID&#8221;, &#8220;land&#8221; or &#8220;tax&#8221;</span>
+<p class="status" id="search-status" role="status"></p>
+</div>
+</div>
+</section>
+<section class="quick" aria-labelledby="qa-title">
+<div class="wrap">
+<div class="sec-head">
+<span class="eyebrow">Quick access</span>
+<h2 id="qa-title">Popular services</h2>
+<p>Common services, one click away.</p>
+</div>
+<div class="qa">
+<a href="https://ecs.pdr.gov.bd/" target="_blank" rel="noopener"><span class="ic" aria-hidden="true">&#129680;</span><span>NID Services</span></a>
+<a href="https://www.passport.gov.bd/" target="_blank" rel="noopener"><span class="ic" aria-hidden="true">&#128482;</span><span>Passport</span></a>
+<a href="https://nbr.gov.bd/" target="_blank" rel="noopener"><span class="ic" aria-hidden="true">&#128176;</span><span>Tax &amp; e-TIN</span></a>
+<a href="https://land.gov.bd/" target="_blank" rel="noopener"><span class="ic" aria-hidden="true">&#128506;</span><span>Land Records</span></a>
+<a href="https://brta.gov.bd/" target="_blank" rel="noopener"><span class="ic" aria-hidden="true">&#128663;</span><span>Vehicle &amp; Licence</span></a>
+<a href="https://edistrict.gov.bd/" target="_blank" rel="noopener"><span class="ic" aria-hidden="true">&#127760;</span><span>e-District Services</span></a>
+<a href="female-safety.html"><span class="ic" aria-hidden="true">&#128737;&#65039;</span><span>Women Safety</span></a>
+</div>
+</div>
+</section>
+<section class="services" id="services" aria-labelledby="svc-title">
+<div class="wrap">
+<div class="sec-head">
+<span class="eyebrow">Government services</span>
+<h2 id="svc-title">Services for citizens</h2>
+<p>Apply, track and verify essential public services online.</p>
+</div>
+<div class="svc" data-cards>
+<a class="card" href="https://ecs.pdr.gov.bd/" target="_blank" rel="noopener"><h3><span class="ic" aria-hidden="true">&#129680;</span>National ID (NID)</h3><p>Apply for or correct your NID, and verify identity through the Election Commission.</p><span class="tag">e-Service</span></a>
+<a class="card" href="https://www.passport.gov.bd/" target="_blank" rel="noopener"><h3><span class="ic" aria-hidden="true">&#128482;</span>Passport</h3><p>Apply for an e-passport or MRP and track your application status online.</p><span class="tag">e-Service</span></a>
+<a class="card" href="https://nbr.gov.bd/" target="_blank" rel="noopener"><h3><span class="ic" aria-hidden="true">&#128176;</span>Tax &amp; TIN</h3><p>Register for e-TIN, file income tax returns and check refunds at NBR.</p><span class="tag">NBR</span></a>
+<a class="card" href="https://land.gov.bd/" target="_blank" rel="noopener"><h3><span class="ic" aria-hidden="true">&#128506;</span>Land Services</h3><p>View khatian records, check mutation status and pay land development tax.</p><span class="tag">Digital</span></a>
+<a class="card" href="https://brta.gov.bd/" target="_blank" rel="noopener"><h3><span class="ic" aria-hidden="true">&#128663;</span>Vehicle &amp; Driving</h3><p>Book driving tests, renew licences, vehicle fitness and tax tokens at BRTA.</p><span class="tag">BRTA</span></a>
+<a class="card" href="https://edistrict.gov.bd/" target="_blank" rel="noopener"><h3><span class="ic" aria-hidden="true">&#127963;&#65039;</span>Business &amp; Trade</h3><p>Register companies and trade licences through RJSC and local authorities.</p><span class="tag">RJSC</span></a>
+<a class="card" href="https://www.lawjusticediv.gov.bd/" target="_blank" rel="noopener"><h3><span class="ic" aria-hidden="true">&#9878;&#65039;</span>Legal Aid</h3><p>Free legal aid and advice for eligible citizens; hotline 16430.</p><span class="tag">Free</span></a>
+<a class="card" href="https://bdris.gov.bd/" target="_blank" rel="noopener"><h3><span class="ic" aria-hidden="true">&#128118;</span>Birth &amp; Death</h3><p>Register births and deaths, and download certificates online.</p><span class="tag">e-Service</span></a>
+</div>
+</div>
+</section>
+<section class="divs" id="divisions" aria-labelledby="div-title">
+<div class="wrap">
+<div class="sec-head">
+<span class="eyebrow">Administrative map</span>
+<h2 id="div-title">8 divisions, 64 districts</h2>
+<p>Serving 170 million citizens across the country.</p>
+</div>
+<div class="dgrid">
+<button type="button" data-div="Dhaka"><strong>Dhaka</strong><span>13 districts</span></button>
+<button type="button" data-div="Chattogram"><strong>Chattogram</strong><span>11 districts</span></button>
+<button type="button" data-div="Rajshahi"><strong>Rajshahi</strong><span>8 districts</span></button>
+<button type="button" data-div="Khulna"><strong>Khulna</strong><span>10 districts</span></button>
+<button type="button" data-div="Barishal"><strong>Barishal</strong><span>6 districts</span></button>
+<button type="button" data-div="Sylhet"><strong>Sylhet</strong><span>4 districts</span></button>
+<button type="button" data-div="Rangpur"><strong>Rangpur</strong><span>8 districts</span></button>
+<button type="button" data-div="Mymensingh"><strong>Mymensingh</strong><span>4 districts</span></button>
+</div>
+</div>
+</section>
+<section class="stats" aria-label="Bangladesh in numbers">
+<div class="wrap">
+<div class="stat"><strong>170M+</strong><span>Citizens</span></div>
+<div class="stat"><strong>64</strong><span>Districts</span></div>
+<div class="stat"><strong>503</strong><span>Upazilas</span></div>
+<div class="stat"><strong>4,588</strong><span>Union Parishads</span></div>
+</div>
+</section>
+<section class="news" id="news" aria-labelledby="news-title">
+<div class="wrap">
+<div class="sec-head">
+<span class="eyebrow">Official updates</span>
+<h2 id="news-title">Latest news</h2>
+<p>Recent announcements from the government.</p>
+</div>
+<div class="newsgrid">
+<article><time datetime="2024-08-08">August 2024</time><h3>Interim government takes office</h3><p>Dr. Muhammad Yunus sworn in as Chief Adviser of the interim government.</p><a href="https://bangladesh.gov.bd/" target="_blank" rel="noopener">Read more &#8594;</a></article>
+<article><time datetime="2024-07-21">July 2024</time><h3>Supreme Court ruling on quotas</h3><p>Recruitment quotas reformed after nationwide student movement.</p><a href="https://bangladesh.gov.bd/" target="_blank" rel="noopener">Read more &#8594;</a></article>
+<article><time datetime="2025-01-01">2025</time><h3>Reform commissions begin work</h3><p>Commissions on elections, judiciary, police and constitution established.</p><a href="https://bangladesh.gov.bd/" target="_blank" rel="noopener">Read more &#8594;</a></article>
+</div>
+</div>
+</section>
+<section class="help" aria-labelledby="help-title">
+<div class="wrap">
+<div><span class="eyebrow">24/7 citizen services</span><h2 id="help-title">Need help right now?</h2><p>Call a government helpline — free from any phone.</p></div>
+<div class="phones">
+<a href="tel:999">&#9742; National Emergency 999</a>
+<a href="tel:102">&#128293; Fire Service 102</a>
+<a href="tel:109">&#128105;&#8205;&#128105; Women Helpline 109</a>
+<a href="tel:16430">&#9878;&#65039; Free Legal Aid 16430</a>
+<a href="tel:333">&#128421;&#65039; Cyber Support 333</a>
+</div>
+</div>
+</section>
+</main>
+<footer id="contact">
+<div class="wrap">
+<div class="fg">
+<div class="about">
+<h2>Government of Bangladesh</h2>
+<p>Official portal of the Government of the People&#8217;s Republic of Bangladesh, committed to transparency, accessibility and public service for all citizens.</p>
+</div>
+<div>
+<h2>Services</h2>
+<ul>
+<li><a href="https://ecs.pdr.gov.bd/" target="_blank" rel="noopener">NID Services</a></li>
+<li><a href="https://www.passport.gov.bd/" target="_blank" rel="noopener">Passport</a></li>
+<li><a href="https://nbr.gov.bd/" target="_blank" rel="noopener">Tax &amp; TIN</a></li>
+<li><a href="https://edistrict.gov.bd/" target="_blank" rel="noopener">e-District</a></li>
+</ul>
+</div>
+<div>
+<h2>Resources</h2>
+<ul>
+<li><a href="https://bangladesh.gov.bd/" target="_blank" rel="noopener">National Portal</a></li>
+<li><a href="https://www.moedu.gov.bd/" target="_blank" rel="noopener">Education</a></li>
+<li><a href="https://www.mohfw.gov.bd/" target="_blank" rel="noopener">Health</a></li>
+<li><a href="female-safety.html">Women Safety</a></li>
+</ul>
+</div>
+<div>
+<h2>Emergency numbers</h2>
+<ul>
+<li><a href="tel:999">Police / Ambulance: 999</a></li>
+<li><a href="tel:102">Fire Service: 102</a></li>
+<li><a href="tel:109">Women Helpline: 109</a></li>
+<li><a href="tel:16430">Free Legal Aid: 16430</a></li>
+</ul>
+</div>
+</div>
+<div class="fbot"><span>&#169; 2025 Government of Bangladesh</span><span>All rights reserved</span></div>
+</div>
+</footer>
+<script>
+(function(){
+var inp=document.getElementById('gov-search'),btn=document.querySelector('.search button'),st=document.getElementById('search-status');
+var cards=Array.prototype.slice.call(document.querySelectorAll('[data-cards] .card'));
+var terms=cards.map(function(c){return c.textContent.toLowerCase();});
+function go(){
+var q=inp.value.trim().toLowerCase();if(!q){announce('Type a service name to search.');return;}
+for(var i=0;i<terms.length;i++){if(terms[i].indexOf(q)!==-1){cards[i].scrollIntoView({behavior:'smooth',block:'center'});cards[i].focus();announce('Opened matching service: '+cards[i].querySelector('h3').textContent);return;}}
+announce('No service found for '+q+'. Try NID, passport, tax, land or driving.');}
+function announce(m){st.textContent=m;}
+inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();go();}});
+btn.addEventListener('click',go);
+var dbs=document.querySelectorAll('.dgrid button');
+dbs.forEach(function(b){b.addEventListener('click',function(){announce(b.dataset.div+' division: '+b.querySelector('span').textContent);});});
+})();
+</script>
+</body></html>

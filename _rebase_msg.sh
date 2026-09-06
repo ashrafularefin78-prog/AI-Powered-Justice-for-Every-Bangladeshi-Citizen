@@ -1,0 +1,18 @@
+#!/bin/sh
+# git commit-message editor for rebase --continue
+cat > "$1" << 'MSGEOF'
+Initial commit: A ai - Digital Legal Aid Bangladesh
+
+Complete multi-page static site: 8 content pages + 2 printable memorial
+records (Abrar, Sayeedi), self-contained standalone home (index.html) and
+whole-site all-in-one.html test artifact, red/green theme, July 2024
+uprising memorial page with canvas monsoon/storm FX, opt-in rumble audio,
+chatbot knowledge base with 16 data-driven figures (bilingual entries,
+aliases, portraits, extras), Quantum Shield security layer (AES-256-GCM,
+SHA-256 asset integrity), and the FIGURES corruption guard (check_figures.py).
+
+Includes this session's repairs: conflict-marker scrub after the botched
+merge/rebase (index.html, build_site.py, run.md), FIGURES double-escape and
+stray-quote repair, skyline silhouette removal, favicon-in-title fix on all
+interior pages, SHA sync (5e78fd2a), cache tokens v=app70.
+MSGEOF

@@ -145,9 +145,9 @@ QUICK_ACCESS = '''
 <section id="quick-access" style="padding:4rem 0"><div class="container">
   <div class="section-header"><div class="section-tag">Start Here</div><h2>What do you need help with?</h2><p>Choose a path - every service is free, confidential, and available in Bangla and English.</p></div>
   <div class="pgrid">
-    <a href="contact.html" class="pcard reveal"><div class="picon" style="background:rgba(14,165,233,.15);color:#0ea5e9"><i class="fas fa-life-ring"></i></div><h3>Get Legal Help</h3><p>Apply for free legal aid or reach a case officer. Call <b>16430</b> or file online.</p><span class="shl" style="background:rgba(14,165,233,.12);color:#0ea5e9">Start application</span></a>
+    <a href="contact.html" class="pcard reveal"><div class="picon" style="background:rgba(16,185,129,.15);color:#10b981"><i class="fas fa-life-ring"></i></div><h3>Get Legal Help</h3><p>Apply for free legal aid or reach a case officer. Call <b>16430</b> or file online.</p><span class="shl" style="background:rgba(16,185,129,.12);color:#10b981">Start application</span></a>
     <a href="sheguard.html" class="pcard reveal rd1"><div class="picon" style="background:rgba(251,113,133,.15);color:#fb7185"><i class="fas fa-shield-alt"></i></div><h3>Women's Safety</h3><p>SheGuard X - discreet protection, emergency help and safe reporting for women.</p><span class="shl" style="background:rgba(251,113,133,.12);color:#fb7185">SheGuard X</span></a>
-    <a href="justice.html" class="pcard reveal rd2"><div class="picon" style="background:rgba(99,102,241,.15);color:#6366f1"><i class="fas fa-map-marked-alt"></i></div><h3>Find My District</h3><p>Locate courts, legal aid offices and emergency helplines across all 64 districts.</p><span class="shl" style="background:rgba(99,102,241,.12);color:#6366f1">Justice Map</span></a>
+    <a href="justice.html" class="pcard reveal rd2"><div class="picon" style="background:rgba(239,68,68,.15);color:#ef4444"><i class="fas fa-map-marked-alt"></i></div><h3>Find My District</h3><p>Locate courts, legal aid offices and emergency helplines across all 64 districts.</p><span class="shl" style="background:rgba(239,68,68,.12);color:#ef4444">Justice Map</span></a>
     <a href="government.html" class="pcard reveal rd3"><div class="picon" style="background:rgba(16,185,129,.15);color:#10b981"><i class="fas fa-landmark"></i></div><h3>Government e-Services</h3><p>Access structure, e-service portals and the grievance redressal system.</p><span class="shl" style="background:rgba(16,185,129,.12);color:#10b981">Government</span></a>
   </div>
 </div></section>
@@ -158,7 +158,7 @@ def compact_nationwide():
     d = sec('nationwide')
     names = re.findall(r'>([A-Z][a-zA-Z\'\-]+)</span>', d)
     chips = ''.join('<span class="dchip">%s</span>' % n for n in names)
-    return ('<section id="nationwide" style="background:linear-gradient(135deg,rgba(14,165,233,.06),rgba(99,102,241,.06))">'
+    return ('<section id="nationwide" style="background:linear-gradient(135deg,rgba(16,185,129,.06),rgba(239,68,68,.06))">'
             '<div class="container"><div class="section-header"><div class="section-tag">Nationwide Reach</div>'
             '<h2>Covering All 64 Districts of Bangladesh</h2>'
             '<p>From coastal Cox\'s Bazar to hill-tracted Rangamati, from metropolitan Dhaka to remote haor regions - A ai reaches every corner.</p></div>'
@@ -168,8 +168,8 @@ def compact_nationwide():
 def build_home():
     # static hero (typing animation needs the monolith's inline script; keep clean)
     hero = ('<section class="hero" id="hero"><div class="hero-bg"></div><div class="particles" id="particles"></div><div class="hero-content">'
-            '<div class="hero-badge"><span class="dot"></span>EU-Funded | UNDP Technical Partner | 2025-2030</div>'
-            '<h1><span>AI-Powered</span><br><span class="gt">Justice for Every Bangladeshi Citizen</span></h1>'
+            ''
+            '<h1><span>Smart</span><br><span class="gt">Justice for Every Bangladeshi Citizen</span></h1>'
             '<p>A ai is a next-generation, privacy-preserving legal aid platform bringing autonomous AI dispute resolution, '
             'voice-first Bengali intake, and zero-knowledge cryptography to 682,500+ vulnerable citizens across all 64 districts of Bangladesh.</p>'
             '<div class="hero-buttons"><a href="contact.html" class="btn-p"><i class="fas fa-life-ring"></i> Get Legal Help</a>'
@@ -204,8 +204,8 @@ def build_about():
         '<p>A ai is the next-generation digital legal aid ecosystem for Bangladesh, executed by the Directorate of Bangladesh Legal Aid (DBLA) '
         'under the Ministry of Law, Justice &amp; Parliamentary Affairs, with technical partnership from UNDP and funding from the European Union.</p></div>'
         '<div class="fgrid">'
-        '<div class="fcard"><div class="fiwrap" style="background:rgba(14,165,233,.15);color:#0ea5e9"><i class="fas fa-gavel"></i></div><h3>Our Mission</h3><p>Democratize access to justice by making legal information, assistance and dispute resolution affordable, transparent and accessible to every citizen - regardless of language, literacy or economic status.</p></div>'
-        '<div class="fcard"><div class="fiwrap" style="background:rgba(99,102,241,.15);color:#6366f1"><i class="fas fa-eye"></i></div><h3>Our Vision</h3><p>A Bangladesh where no one is denied justice. By 2030, autonomous AI-assisted services divert 40% of disputes to Online Dispute Resolution and reach 682,500+ vulnerable citizens.</p></div>'
+        '<div class="fcard"><div class="fiwrap" style="background:rgba(16,185,129,.15);color:#10b981"><i class="fas fa-gavel"></i></div><h3>Our Mission</h3><p>Democratize access to justice by making legal information, assistance and dispute resolution affordable, transparent and accessible to every citizen - regardless of language, literacy or economic status.</p></div>'
+        '<div class="fcard"><div class="fiwrap" style="background:rgba(239,68,68,.15);color:#ef4444"><i class="fas fa-eye"></i></div><h3>Our Vision</h3><p>A Bangladesh where no one is denied justice. By 2030, autonomous AI-assisted services divert 40% of disputes to Online Dispute Resolution and reach 682,500+ vulnerable citizens.</p></div>'
         '<div class="fcard"><div class="fiwrap" style="background:rgba(16,185,129,.15);color:#10b981"><i class="fas fa-users"></i></div><h3>Who Runs It</h3><p>Executed by DBLA / MoLJPA, with UNDP Bangladesh as technical partner and the European Union as funding partner - governed by an ethical AI oversight board.</p></div>'
         '</div></div></section>')
     sections = [institutional, sec('vision'), sec('roadmap')]
